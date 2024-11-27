@@ -1,4 +1,4 @@
-package org.huellas.salud.helper.exception;
+package org.huellas.salud.helper.exceptions;
 
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;

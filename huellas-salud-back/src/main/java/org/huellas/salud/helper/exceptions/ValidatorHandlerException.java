@@ -1,4 +1,4 @@
-package org.huellas.salud.helper.exception;
+package org.huellas.salud.helper.exceptions;
 
 import io.vertx.core.http.HttpServerRequest;
 import jakarta.inject.Inject;
@@ -19,6 +19,7 @@ public class ValidatorHandlerException implements ExceptionMapper<ConstraintViol
 
     @Override
     public Response toResponse(ConstraintViolationException exception) {
+
         ProblemException problemException = ProblemException.builder()
                 .host(httpServerRequestProvider.get().getHeader("Host"))
                 .title("Solicitud inválida")

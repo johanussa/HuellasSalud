@@ -1,4 +1,4 @@
-package org.huellas.salud.repository;
+package org.huellas.salud.repositories;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.panache.common.Sort;
@@ -14,19 +14,17 @@ public class UserRepository implements PanacheMongoRepository<UserMsg> {
 
     private final Logger LOG = Logger.getLogger(UserRepository.class);
 
-    public Optional<UserMsg> getDataUser(String documentNumber, String documentType) {
+    public Optional<UserMsg> getOneUserData(String emailUser) {
 
-        LOG.infof("@getDataUser REPO > Inicia consulta a mongo del registro de usuario con tipo de " +
-                "documento: %s y numero de documento: %s", documentType, documentNumber);
+        LOG.infof("@getOneUserData REPO > Inicia consulta de registro de usuario con correo: %s en mongo", emailUser);
 
-        return find("data.numeroDocumento = ?1 and data.tipoDocumento = ?2", documentNumber, documentType)
-                .firstResultOptional();
+        return find("data.correo = ?1", emailUser).firstResultOptional();
     }
 
     public List<UserMsg> getRegisteredUsersMongo() {
 
         LOG.info("@getRegisteredUsersMongo REPO > Inicia obtencion de los usuarios registrados en mongo. estos se " +
-                "retornaran ordenados de manera descendente por fecha de creacion");
+                "retornaran ordenados de manera descendente por el campo de fecha de creacion");
 
         return listAll(Sort.descending("meta.fechaCreacion"));
     }

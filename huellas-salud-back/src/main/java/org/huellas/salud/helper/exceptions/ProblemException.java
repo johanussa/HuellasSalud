@@ -1,4 +1,4 @@
-package org.huellas.salud.helper.exception;
+package org.huellas.salud.helper.exceptions;
 
 import lombok.Builder;
 import lombok.Data;

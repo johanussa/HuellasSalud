@@ -6,8 +6,8 @@ import lombok.Getter;
 public enum UserRoleEnum {
 
     _0_ADMINISTRADOR("ADMINISTRADOR"),
-    _1_INSTRUCTOR("INSTRUCTOR"),
-    _2_FUNCIONARIO("FUNCIONARIO");
+    _1_VETERINARIO("VETERINARIO"),
+    _2_RECEPCIONISTA("RECEPCIONISTA");
 
     private final String value;
 
