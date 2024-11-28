@@ -29,19 +29,19 @@ public class UserRepository implements PanacheMongoRepository<UserMsg> {
         return listAll(Sort.descending("meta.fechaCreacion"));
     }
 
-    public Optional<UserMsg> findUserByDocumentNumber(String documentNumber) {
+    public Optional<UserMsg> findUserByEmailAndDocument(String documentNumber, String email) {
 
         LOG.infof("@findUserByDocumentNumber REPO > Inicia busqueda del registro del usuario con numero de " +
-                "documento: %s en mongo", documentNumber);
+                "documento: %s y correo: %s en mongo", documentNumber, email);
 
-        return find("data.numeroDocumento = ?1", documentNumber).firstResultOptional();
+        return find("data.numeroDocumento = ?1 and data.correo = ?2", documentNumber, email).firstResultOptional();
     }
 
-    public long deleteUserDataMongo(String documentType, String documentNumber) {
+    public long deleteUserDataMongo(String documentNumber, String emailUser) {
 
-        LOG.infof("@deleteUserDataMongo REPO > Inicia servicio de eliminacion de usuario con tipo de " +
-                "documento: %s y numero de documento: %s en mongo", documentType, documentNumber);
+        LOG.infof("@deleteUserDataMongo REPO > Inicia servicio de eliminacion del usuario con el numero de documento" +
+                ": %s y correo: %s en mongo", documentNumber, emailUser);
 
-        return delete("data.tipoDocumento = ?1 and data.numeroDocumento = ?2", documentType, documentNumber);
+        return delete("data.numeroDocumento = ?1 and data.correo = ?2", documentNumber, emailUser);
     }
 }

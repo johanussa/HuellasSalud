@@ -65,7 +65,7 @@ public class User implements Serializable {
     @BsonProperty("celular")
     @NotBlank(message = "El campo cellPhone no puede ser nulo o vacío", groups = {ValidationGroups.Post.class,
             ValidationGroups.Put.class})
-    @Pattern(regexp = "^(57-3-)\\d{9}", message = "El formato del número de celular para el usuario debe ser " +
+    @Pattern(regexp = "^(57-3-)\\d{9}", message = "El formato del número de celular del usuario debe ser " +
             "57-3-XXXXXXXXX", groups = {ValidationGroups.Post.class, ValidationGroups.Put.class})
     private String cellPhone;
 
@@ -90,16 +90,16 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User: { " +
-                "name: '" + name + '\'' +
-                ", lastName: '" + lastName + '\'' +
-                ", documentType: '" + documentType + '\'' +
-                ", documentNumber: '" + documentNumber + '\'' +
-                ", cellPhone: '" + cellPhone + '\'' +
-                ", address: '" + address + '\'' +
-                ", email: '" + email + '\'' +
-                ", active: '" + active + '\'' +
-                ", role: '" + role + '\'' +
-                " }";
+        return "{" +
+                "\"name\": \"" + name + "\"," +
+                "\"lastName\": \"" + lastName + "\"," +
+                "\"documentType\": \"" + documentType + "\"," +
+                "\"documentNumber\": \"" + documentNumber + "\"," +
+                "\"cellPhone\": \"" + cellPhone + "\"," +
+                "\"address\": \"" + address + "\"," +
+                "\"email\": \"" + email + "\"," +
+                "\"active\": " + active + "," +
+                "\"role\": \"" + role + "\"" +
+                "}";
     }
 }
