@@ -42,7 +42,8 @@ public class UserService {
             LOG.errorf("@getRegisteredUserInMongo SERV > No se encontro informacion del registro del usuario " +
                     "con el correo: %s en base de datos", userMsg.getData().getEmail());
 
-            return new HSException(Response.Status.NOT_FOUND, "No se encontró el recurso suministrado");
+            return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userMsg.getData().getEmail() +
+                    " No se encuentra registrado en la base de datos");
         });
 
         if (!BCrypt.checkpw(userMsg.getData().getPassword(), userMongo.getData().getPassword())) {
@@ -54,8 +55,8 @@ public class UserService {
         }
         userMongo.setData(getUserDto(userMongo));
 
-        LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio para obtener registro del " +
-                "usuario con el correo: %s", userMsg.getData().getEmail());
+        LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio. La informacion del " +
+                "usuario que se obtuvo es: %s", userMongo);
 
         return userMongo;
     }
@@ -81,14 +82,13 @@ public class UserService {
 
         validateIfUserIsRegistered(userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza validacion del usuario si ya ha sido registrado " +
-                "previamente. Inicia servicio de verificacion de password del usuario con data: %s si ya ha " +
-                "sido encriptado", userMsg.getData());
+        LOG.infof("@saveUserDataInMongo SERV > Finaliza validacion de data del usuario si ya ha sido registrado " +
+                "previamente. Inicia servicio de encriptacion de password de usuario con data: %s", userMsg.getData());
 
-        validPasswordEncrypted(userMsg.getData());
+        validatePasswordEncrypted(userMsg.getData());
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza verificacion de password del usuario con data: " +
-                "%s. Inicia formato al nombre de usuario, el estado y la metadata", userMsg.getData());
+        LOG.infof("@saveUserDataInMongo SERV > Finaliza encriptacion de password del usuario con data: %s. " +
+                "Inicia formato al nombre de usuario, el estado y se agrega la metadata", userMsg.getData());
 
         formatUserDataToCreateUser(userMsg);
 
@@ -104,24 +104,30 @@ public class UserService {
 
     public void updateUserDataInMongo(UserMsg userMsg) throws HSException {
 
-        LOG.infof("@updateUserDataInMongo SERV > Inicia ejecucion de servicio de actualizacion de registro de " +
-                "usuario con documento: %s con la data: %s", userMsg.getData().getDocumentNumber(), userMsg.getData());
+        LOG.infof("@updateUserDataInMongo SERV > Inicia ejecucion de servicio de actualizacion de registro " +
+                "de usuario con la data: %s", userMsg.getData());
 
         String email = userMsg.getData().getEmail();
         String documentNumber = userMsg.getData().getDocumentNumber();
 
-        UserMsg userMsgMongo = userRepository.findUserByEmailAndDocument(documentNumber, email).orElseThrow(() -> {
+        UserMsg userMsgMongo = userRepository.findUserByDocumentNumber(documentNumber).orElseThrow(() -> {
 
             LOG.errorf("@updateUserDataInMongo SERV > El usuario con documento: %s y correo: %s NO esta " +
                     "registrado en mongo. Solicitud invalida no se puede editar registro", documentNumber, email);
 
-            return new HSException(Response.Status.NOT_FOUND, "No se encontró el recurso suministrado");
+            return new HSException(Response.Status.NOT_FOUND, "No se encontró el registro del usuario con numero de " +
+                    "documento: " + documentNumber + " y correo: " + email + " en base de datos");
         });
 
-        LOG.infof("@updateUserDataInMongo SERV > El usuario con documento: %s si esta registrado, se procede " +
-                "a realizar actualizacion del usuario en mongo. Inicia verificacion de password", documentNumber);
+        LOG.infof("@updateUserDataInMongo SERV > El usuario con documento: %s si esta registrado. Se procede " +
+                "a realizar validacion del correo si va a ser modificado", documentNumber);
 
-        validPasswordEncrypted(userMsg.getData());
+        validateUserEmail(email, userMsgMongo.getData().getEmail());
+
+        LOG.infof("@updateUserDataInMongo SERV > Finaliza validacion del correo a actualizar el correo: %s es " +
+                "valido. Inicia verificacion de password del usuario con documento: %s", email, documentNumber);
+
+        validatePasswordEncrypted(userMsg.getData());
 
         LOG.infof("@updateUserDataInMongo SERV > Finaliza verificacion de password del usuario con data: %s. " +
                 "Inicia actualizacion de la informacion del usuario con id: %s", userMsg.getData(), documentNumber);
@@ -158,6 +164,30 @@ public class UserService {
                 "%s registro de la base de datos", documentNumber, update);
     }
 
+    private void validateUserEmail(String emailUpdate, String emailMongo) throws HSException {
+
+        LOG.infof("@validateUserEmail SERV > Inicia validacion del email de usuario si se modifico. Correo " +
+                "actual: %s. Correo en solicitud de actualizacion: %s", emailMongo, emailUpdate);
+
+        if (emailUpdate != null && !emailUpdate.equals(emailMongo)) {
+
+            LOG.infof("@validateUserEmail SERV > El correo tambien se actualizara. Inicia validacion de que " +
+                    "no exista un registro con el correo a modificar: %s", emailUpdate);
+
+            if (userRepository.findUserDataByEmail(emailUpdate).isPresent()) {
+
+                LOG.errorf("@validateUserEmail SERV > Ya existe un usuario con el correo: %s. No se puede " +
+                        "actualizar el registro, se debe cambiar por otro correo que no exista en mongo", emailUpdate);
+
+                throw new HSException(Response.Status.BAD_REQUEST, "Ya existe un usuario con el correo: " + emailUpdate +
+                        ", por favor ingrese otro para poder actualizar los datos");
+            }
+
+            LOG.infof("@validateUserEmail SERV > No se encontro registro de usuario con correo: %s. Se continua " +
+                    "con la actualizacion de usuario. Correo antiguo: %s. Correo nuevo: %s", emailMongo, emailUpdate);
+        }
+    }
+
     private UserDTO getUserDto(UserMsg userMsg) {
 
         UserDTO userDTO = new UserDTO();
@@ -190,44 +220,45 @@ public class UserService {
         LOG.infof("@validateIfUserIsRegistered SERV > Inicia busqueda del registro del usuario identificado " +
                 "con numero de documento: %s y correo: %s", documentNumber, email);
 
-        if (userRepository.findUserByEmailAndDocument(documentNumber, email).isPresent()) {
+        if (userRepository.findUserByEmailOrDocument(documentNumber, email).isPresent()) {
 
             LOG.errorf("@validateIfUserIsRegistered SERV > El usuario identificado con numero de documento: " +
                     "%s y correo: %s ya se encuentra registrado en mongo. La solicitud es invalida, no se puede " +
                     "registrar el usuario", documentNumber, email);
 
-            throw new HSException(Response.Status.BAD_REQUEST, "Error en los recursos suministrados");
+            throw new HSException(Response.Status.BAD_REQUEST, "El usuario con correo: " + email + " y número de " +
+                    "documento: " + documentNumber + " ya se encuentra registrado en la base de datos");
         }
         LOG.infof("@validateIfUserIsRegistered SERV > Finaliza busqueda del registro del usuario. El usuario " +
                 "con numero de documento: %s y correo: %s No ha sido registrado previamente. Se continua proceso de " +
                 "registro en mongo", documentNumber, email);
     }
 
-    private void validPasswordEncrypted(User user) {
+    private void validatePasswordEncrypted(User user) {
 
-        LOG.info("@validPasswordEncrypted SERV > Inicia verificacion de la contraseña si ya esta encriptada");
+        LOG.info("@validatePasswordEncrypted SERV > Inicia verificacion del password si ya esta encriptado");
 
-        if (user.getPassword().length() < 25) {
+        if (user.getPassword() != null && user.getPassword().length() < 25) {
 
-            LOG.infof("@validPasswordEncrypted SERV > El password ingresado No esta encriptado. Inicia proceso " +
+            LOG.infof("@validatePasswordEncrypted SERV > El password ingresado No esta encriptado. Inicia proceso " +
                     "de encriptar el password del cliente con numero de documento: %s", user.getDocumentNumber());
 
             user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
-            LOG.info("@validPasswordEncrypted SERV > El password del usuario fue encriptado correctamente");
+            LOG.info("@validatePasswordEncrypted SERV > El password del usuario fue encriptado correctamente");
         }
 
-        LOG.info("@validPasswordEncrypted SERV > Finaliza verificacion del password si ya estaba encriptado");
+        LOG.info("@validatePasswordEncrypted SERV > Finaliza verificacion del password si ya estaba encriptado");
     }
 
     private void formatUserDataToCreateUser(UserMsg userMsg) throws UnknownHostException {
 
-        LOG.infof("@formatUserDataToCreateUser SERV > Inicia edicion de datos del usuario para ser " +
-                "almacenados en mongo. Los datos que se almacenaran son: %s", userMsg.getData());
+        LOG.infof("@formatUserDataToCreateUser SERV > Inicia formato de datos del usuario con numero de " +
+                "documento: %s para ser almacenados en mongo.", userMsg.getData().getDocumentNumber());
 
         User user = userMsg.getData();
 
-        user.setActive(false);
+        user.setActive(true);
         user.setName(capitalizeWords(user.getName()));
         user.setLastName(capitalizeWords(user.getLastName()));
 
@@ -237,7 +268,7 @@ public class UserService {
         userMsg.setMeta(getMetaToCreateUser());
 
         LOG.infof("@formatUserDataToCreateUser SERV > Finaliza estructura del objeto meta correctamente. " +
-                "Finaliza edicion de datos del usuario", userMsg);
+                "Finaliza formato de datos del usuario con correo: %s.", user.getEmail());
     }
 
     private String capitalizeWords(String input) {
@@ -269,6 +300,9 @@ public class UserService {
         User userMongo = userMsgMongo.getData();
 
         userMongo.setActive(editedUser.getActive());
+        userMongo.setEmail(editedUser.getEmail());
+        userMongo.setCellPhone(editedUser.getCellPhone());
+        userMongo.setAddress(editedUser.getAddress() != null ? editedUser.getAddress() : userMongo.getAddress());
         userMongo.setPassword(editedUser.getPassword());
         userMongo.setDocumentType(editedUser.getDocumentType());
         userMongo.setName(capitalizeWords(editedUser.getName()));

@@ -11,9 +11,13 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
@@ -44,7 +48,6 @@ public class UserApi {
             @RequestBody(
                     name = "userMsg",
                     description = "Información del usuario que se va a consultar",
-                    required = true,
                     content = @Content(example = """
                             {
                                 "data": {
@@ -70,11 +73,20 @@ public class UserApi {
     }
 
     @GET
-    @Path("/users-list")
+    @Path("/list-users")
     @Tag(name = "Gestión de usuarios")
+    @APIResponses(
+        value = {
+                @APIResponse(
+                    responseCode = "200",
+                    description = "Se retorna el listado de usuarios registrados correctamente",
+                    content = @Content(schema = @Schema(implementation = UserMsg.class, type = SchemaType.ARRAY))
+                )
+        }
+    )
     @Operation(
             summary = "Obtención de todos los usuarios registrados",
-            description = "Permite obtener un listado con la información de los usuario registrados en DB"
+            description = "Permite obtener un listado con la información de los usuario registrados en la base de datos"
     )
     public Response getListUsers() {
 
@@ -94,7 +106,7 @@ public class UserApi {
     @Tag(name = "Gestión de usuarios")
     @Operation(
             summary = "Creación de un usuario nuevo",
-            description = "Permite crear el registro de un usuario nuevo en la base de datos"
+            description = "Permite crear el registro de un usuario nuevo en la base de datos con la información dad"
     )
     public Response createUserData(
             @RequestBody(
@@ -121,11 +133,12 @@ public class UserApi {
             @Valid @ConvertGroup(to = ValidationGroups.Post.class) UserMsg userMsg
     ) throws UnknownHostException, HSException {
 
-        LOG.infof("@createUserData API > Inicia api de creacion de usuario con la data: %s", userMsg.getData());
+        LOG.infof("@createUserData API > Inicia ejecucion del servicio de creacion de usuario con la data: " +
+                "%s en la base de datos", userMsg.getData());
 
         userService.saveUserDataInMongo(userMsg);
 
-        LOG.infof("@createUserData API > Finaliza api de creacion de usuario con la data: %s", userMsg);
+        LOG.infof("@createUserData API > Finaliza ejecucion api de creacion de usuario con la data: %s", userMsg);
 
         return Response.ok()
                 .status(Response.Status.CREATED)
@@ -159,15 +172,13 @@ public class UserApi {
             @Valid @ConvertGroup(to = ValidationGroups.Put.class) UserMsg userMsg
     ) throws HSException {
 
-        LOG.infof("@updateUserData API > Inicia ejecucion de servicio de actualizacion de usuario con numero " +
-                "de documento: %s y correo: %s. Se actualiza usuario con la data: %s en mongo", userMsg.getData()
-                .getDocumentNumber(), userMsg.getData().getEmail(), userMsg.getData());
+        LOG.infof("@updateUserData API > Inicia ejecucion de servicio de actualizacion de usuario con la data" +
+                ": %s en mongo", userMsg.getData());
 
         userService.updateUserDataInMongo(userMsg);
 
-        LOG.infof("@updateUserData API > Finaliza ejecucion de servicio de actualizacion de usuario con " +
-                "numero de documento: %s y correo: %s. El registro se actualizo con la data: %s", userMsg.getData()
-                .getDocumentNumber(), userMsg);
+        LOG.infof("@updateUserData API > Finaliza ejecucion de servicio de actualizacion de usuario. El " +
+                "registro se actualizo con la data: %s", userMsg.getData().getDocumentNumber(), userMsg);
 
         return Response.ok()
                 .status(Response.Status.NO_CONTENT)

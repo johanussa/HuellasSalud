@@ -19,7 +19,7 @@ public class UserValidator implements ConstraintValidator<ValidUserInterface, Us
         if (Arrays.stream(UserDocumentTypeEnum.values())
                 .noneMatch(documentType -> documentType.getAcron().equals(value.getDocumentType()))) {
 
-            String message = "El tipo de documento ingresado: " + value.getDocumentType() + ", no es válido";
+            String message = "El tipo de documento ingresado: " + value.getDocumentType() + ", no es valido";
 
             Log.errorf("@isValid > %s", message);
 

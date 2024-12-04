@@ -27,8 +27,8 @@ public class HandlerException implements ExceptionMapper<Exception> {
 
     private Response mapExceptionToResponseHS(Exception exception) {
 
-        LOG.info("@mapExceptionToResponseMT EXCEPTION > Inicia manejo de exception presentada en el micro servicio " +
-                "de Midgard-Tech");
+        LOG.debug("@mapExceptionToResponseHS EXCEPTION > Inicia manejo de exception presentada en el micro servicio " +
+                "de Huellas-Salud");
 
         if (exception instanceof HSException hSException) {
 
@@ -47,7 +47,7 @@ public class HandlerException implements ExceptionMapper<Exception> {
 
             UUID idError = UUID.randomUUID();
 
-            LOG.errorf(exception, "@mapExceptionToResponseMT - Failed to process, idError: %s - request " +
+            LOG.errorf(exception, "@mapExceptionToResponseHS - Failed to process, idError: %s - request " +
                     "to: %s", idError, httpServerRequestProvider.get().absoluteURI());
 
             return Response

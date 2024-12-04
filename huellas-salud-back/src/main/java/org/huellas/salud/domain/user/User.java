@@ -19,16 +19,14 @@ public class User implements Serializable {
 
     @BsonProperty("tipoDocumento")
     @Schema(example = "CC")
-    @NotBlank(message = "El campo documentType no puede ser nulo o vacío", groups = {ValidationGroups.Put.class,
-            ValidationGroups.Post.class})
+    @NotBlank(message = "El campo documentType no puede ser nulo o vacío")
     @Null(message = "No debe ingresar el campo tipo de documento", groups = ValidationGroups.Post_Get.class)
     private String documentType;
 
     @BsonProperty("numeroDocumento")
     @Schema(example = "1023456789")
     @Size(min = 7, max = 20, message = "El campo documentNumber debe contener entre 7 y 20 caracteres")
-    @NotBlank(message = "El campo documentNumber no puede ser nulo o vacío", groups = {ValidationGroups.Put.class,
-            ValidationGroups.Post.class})
+    @NotBlank(message = "El campo documentNumber no puede ser nulo o vacío")
     @Null(message = "No debe ingresar el campo número de documento", groups = ValidationGroups.Post_Get.class)
     private String documentNumber;
 
@@ -52,8 +50,10 @@ public class User implements Serializable {
 
     @BsonProperty("correo")
     @Schema(example = "usuario@misena.edu.co")
-    @Email(message = "El formato del correo ingresado es incorrecto, revise por favor")
-    @NotBlank(message = "El campo email no puede ser nulo o vacío", groups = ValidationGroups.Post.class)
+    @Email(message = "El formato del correo ingresado es incorrecto, revise por favor", groups = {ValidationGroups
+            .Post_Get.class, ValidationGroups.Post.class})
+    @NotBlank(message = "El campo email no puede ser nulo o vacío", groups = {ValidationGroups.Post_Get.class,
+            ValidationGroups.Post.class, ValidationGroups.Put.class})
     private String email;
 
     @Schema(example = "password")
@@ -63,16 +63,13 @@ public class User implements Serializable {
     private String password;
 
     @BsonProperty("celular")
-    @NotBlank(message = "El campo cellPhone no puede ser nulo o vacío", groups = {ValidationGroups.Post.class,
-            ValidationGroups.Put.class})
-    @Pattern(regexp = "^(57-3-)\\d{9}", message = "El formato del número de celular del usuario debe ser " +
-            "57-3-XXXXXXXXX", groups = {ValidationGroups.Post.class, ValidationGroups.Put.class})
+    @NotBlank(message = "El campo cellPhone no puede ser nulo o vacío")
+    @Pattern(regexp = "^(57-3-)\\d{9}", message = "El formato del número de celular del usuario debe ser 57-3-XXXXXXXXX")
     private String cellPhone;
 
     @BsonProperty("domicilio")
     @Pattern(regexp = "^[a-zA-Z0-9 .\\-_#]+(\\s*[a-zA-Z0-9.\\-_#]*)+$", message = "El campo dirección no puede " +
-            "contener caracteres especiales (No puede contener tildes (´), coma (,), #, @, €, %, ñ y llaves)",
-            groups = {ValidationGroups.Post.class, ValidationGroups.Put.class})
+            "contener caracteres especiales (No puede contener tildes (´), coma (,), #, @, €, %, ñ y llaves)")
     private String address;
 
     @BsonProperty("rol")
