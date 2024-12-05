@@ -160,11 +160,14 @@ public class UserApi {
                     content = @Content(example = """
                             {
                                 "data": {
-                                    "name": "Otro nombre",
-                                    "lastName": "Otro apellido",
+                                    "name": "Juan Pablo",
+                                    "lastName": "Gomez",
                                     "documentType": "CC",
                                     "documentNumber": "1034567819",
                                     "password": "password",
+                                    "email": "juanpa@correo.com",
+                                    "cellPhone": "57-3-102548799",
+                                    "address": "calle falsa # 123",
                                     "active": "false"
                                 }
                             }""")
@@ -209,17 +212,17 @@ public class UserApi {
                     required = true
             )
             @NotBlank(message = "El valor para el campo email no puede ser nulo o vacío")
-            @Email(message = "El valor de campo email contiene un formato no válido. Corregir")
+            @Email(message = "El valor de campo email contiene un formato no válido. Corríjalo por favor")
             @QueryParam("emailUser") String emailUser
     ) throws HSException {
 
         LOG.infof("@deleteUserData API > Inicia ejecucion del servicio para eliminar el registro del usuario " +
-                "con identificador: %s en mongo", documentNumber);
+                "con numero de documento: %s y correo: %s en mongo", documentNumber, emailUser);
 
         userService.deleteUserDataInMongo(documentNumber, emailUser);
 
         LOG.infof("@deleteUserData API > Finaliza ejecucion del servicio para eliminar el registro del " +
-                "usuario con identificador: %s en mongo", documentNumber);
+                "usuario con numero de documento: %s y correo: %s en mongo", documentNumber, emailUser);
 
         return Response.ok()
                 .status(Response.Status.NO_CONTENT)

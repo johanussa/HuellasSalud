@@ -147,21 +147,22 @@ public class UserService {
     public void deleteUserDataInMongo(String documentNumber, String emailUser) throws HSException {
 
         LOG.infof("@deleteUserDataInMongo SERV > Inicia ejecucion del servicio para eliminar registro del " +
-                "usuario con id: %s de mongo", documentNumber);
+                "usuario con id: %s y correo: %s de mongo", documentNumber, emailUser);
 
-        long update = userRepository.deleteUserDataMongo(documentNumber, emailUser);
+        long deleted = userRepository.deleteUserDataMongo(documentNumber, emailUser);
 
-        if (update == 0) {
+        if (deleted == 0) {
 
             LOG.errorf("@deleteUserDataInMongo SERV > El registro de usuario con numero de documento: %s No " +
-                    "existe en mongo. No se realiza eliminacion. Registros eliminados: %s", documentNumber, update);
+                    "existe en mongo. No se realiza eliminacion. Registros eliminados: %s", documentNumber, deleted);
 
-            throw new HSException(Response.Status.NOT_FOUND, "No se encontró el recurso suministrado");
+            throw new HSException(Response.Status.NOT_FOUND, "El usuario con numero de documento: " + documentNumber +
+                    " y correo: " + emailUser + " No esta registrado en la base de datos");
         }
 
-        LOG.infof("@deleteUserDataInMongo SERV > El registro del usuario con numero de documento: %s se " +
-                "elimino correctamente de mongo. Finaliza ejecucion del servicio para eliminar usuario y se elimino " +
-                "%s registro de la base de datos", documentNumber, update);
+        LOG.infof("@deleteUserDataInMongo SERV > El registro del usuario con numero de documento: %s y correo: " +
+                "%s se elimino correctamente de mongo. Finaliza ejecucion del servicio para eliminar usuario y se " +
+                "elimino %s registro de la base de datos", documentNumber, emailUser, deleted);
     }
 
     private void validateUserEmail(String emailUpdate, String emailMongo) throws HSException {
@@ -183,7 +184,7 @@ public class UserService {
                         ", por favor ingrese otro para poder actualizar los datos");
             }
 
-            LOG.infof("@validateUserEmail SERV > No se encontro registro de usuario con correo: %s. Se continua " +
+            LOG.infof("@validateUserEmail SERV > No se encontro registro de usuario con ese correo. Se continua " +
                     "con la actualizacion de usuario. Correo antiguo: %s. Correo nuevo: %s", emailMongo, emailUpdate);
         }
     }
