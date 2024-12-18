@@ -1,25 +1,20 @@
 package org.huellas.salud.services;
 
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Provider;
 import jakarta.ws.rs.core.Response;
-import org.huellas.salud.domain.Meta;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
+import org.huellas.salud.helper.utils.Utils;
 import org.huellas.salud.repositories.UserRepository;
 import org.jboss.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class UserService {
@@ -27,10 +22,10 @@ public class UserService {
     private final Logger LOG = Logger.getLogger(UserService.class);
 
     @Inject
-    UserRepository userRepository;
+    Utils utils;
 
     @Inject
-    Provider<HttpServerRequest> httpServerRequestProvider;
+    UserRepository userRepository;
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
 
@@ -119,8 +114,8 @@ public class UserService {
                     "documento: " + documentNumber + " y correo: " + email + " en base de datos");
         });
 
-        LOG.infof("@updateUserDataInMongo SERV > El usuario con documento: %s si esta registrado. Se procede " +
-                "a realizar validacion del correo si va a ser modificado", documentNumber);
+        LOG.infof("@updateUserDataInMongo SERV > El usuario con documento: %s y correo: %s si esta registrado. " +
+                "Se procede a realizar validacion del correo si va a ser modificado", documentNumber, email);
 
         validateUserEmail(email, userMsgMongo.getData().getEmail());
 
@@ -260,38 +255,16 @@ public class UserService {
         User user = userMsg.getData();
 
         user.setActive(true);
-        user.setName(capitalizeWords(user.getName()));
-        user.setLastName(capitalizeWords(user.getLastName()));
+        user.setName(utils.capitalizeWords(user.getName()));
+        user.setLastName(utils.capitalizeWords(user.getLastName()));
 
         LOG.infof("@formatUserDataToCreateUser SERV > Finaliza formato al nombre del usuario con data: %s. " +
                 "Inicia estructura del objeto meta con la informacion de auditoria", userMsg.getData());
 
-        userMsg.setMeta(getMetaToCreateUser());
+        userMsg.setMeta(utils.getMetaToCreateUser());
 
         LOG.infof("@formatUserDataToCreateUser SERV > Finaliza estructura del objeto meta correctamente. " +
                 "Finaliza formato de datos del usuario con correo: %s.", user.getEmail());
-    }
-
-    private String capitalizeWords(String input) {
-
-        LOG.infof("@capitalizeWords SERV > Inicia formato capitalize al valor: %s", input);
-
-        return Arrays.stream(input.toLowerCase().split(" "))
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
-                .collect(Collectors.joining(" "));
-    }
-
-    private Meta getMetaToCreateUser() throws UnknownHostException {
-
-        LOG.info("@getMetaToCreateUser SERV > Inicia estructura de objeto meta con informacion de creacion de usuario");
-
-        // TODO - Falta tomar información de quien creó el usuario desde el token
-
-        return Meta.builder()
-                .creationDate(LocalDateTime.now())
-                .source(httpServerRequestProvider.get().absoluteURI())
-                .ipAddress(InetAddress.getLocalHost().getHostAddress())
-                .build();
     }
 
     private void updateUserDataInformation(UserMsg userMsgMongo, User editedUser, String idUser) {
@@ -306,8 +279,8 @@ public class UserService {
         userMongo.setAddress(editedUser.getAddress() != null ? editedUser.getAddress() : userMongo.getAddress());
         userMongo.setPassword(editedUser.getPassword());
         userMongo.setDocumentType(editedUser.getDocumentType());
-        userMongo.setName(capitalizeWords(editedUser.getName()));
-        userMongo.setLastName(capitalizeWords(editedUser.getLastName()));
+        userMongo.setName(utils.capitalizeWords(editedUser.getName()));
+        userMongo.setLastName(utils.capitalizeWords(editedUser.getLastName()));
 
         userMsgMongo.getMeta().setLastUpdate(LocalDateTime.now());
 
