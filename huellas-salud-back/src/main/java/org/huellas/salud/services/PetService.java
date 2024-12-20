@@ -12,7 +12,9 @@ import org.huellas.salud.repositories.PetRepository;
 import org.jboss.logging.Logger;
 
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @ApplicationScoped
 public class PetService {
@@ -49,6 +51,7 @@ public class PetService {
 
         petData.setName(utils.capitalizeWords(petData.getName()));
         petData.setBreed(Objects.requireNonNullElse(petData.getBreed(), defaultBreed));
+        petData.setIdPet(UUID.randomUUID().toString());
         petMsg.setMeta(utils.getMetaToCreateUser());
 
         LOG.infof("@savePetDataMongo SERV > Finaliza formato de la data. Se realiza el registro de la mascota " +
@@ -58,5 +61,31 @@ public class PetService {
 
         LOG.infof("@savePetDataMongo SERV > La mascota se registro exitosamente en la base de datos. Finaliza " +
                 "ejecucion de servicio para almacenar el registro de una mascota con la data: %s", petMsg);
+    }
+
+    public List<PetMsg> getListPetMsg() {
+
+        LOG.info("@getListPetMsg SERV > Inicia ejecucion del servicio para obtener listado de las mascotas desde " +
+                "mongo. Inicia consulta a mongo para obtener la informacion");
+
+        List<PetMsg> pets = petRepository.getListPetsFromMongo();
+
+        LOG.infof("@getListPetMsg SERV > Finaliza consulta en mongo. Finaliza ejecucion del servicio para " +
+                "obtener listado de las mascotas desde mongo. Se obtuvo: %s registros", pets.size());
+
+        return pets;
+    }
+
+    public List<PetMsg> getListPetsByOwner(String idOwner) {
+
+        LOG.infof("@getListPetsByOwner SERV > Inicia ejecucion del servicio para obtener el listado de las " +
+                "mascotas del propietario con numero de documento: %s. Inicia consulta a mongo", idOwner);
+
+        List<PetMsg> pets = petRepository.getListPetsByOwner(idOwner);
+
+        LOG.infof("@getListPetsByOwner SERV > Finaliza consulta de mascotas en mongo. Se obtuvo: %s registros " +
+                "de mascotas relacionadas al propietario con numero de documento: %s", pets.size(), idOwner);
+
+        return pets;
     }
 }

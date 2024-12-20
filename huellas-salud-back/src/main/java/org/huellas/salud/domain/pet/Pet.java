@@ -27,6 +27,10 @@ public class Pet implements Serializable {
     @Size(min = 7, max = 20, message = "El campo idOwner debe contener entre 7 y 20 caracteres")
     private String idOwner;
 
+    @BsonProperty("identificador")
+    @Null(message = "No debe enviar ningún valor en el campo idPet")
+    private String idPet;
+
     @BsonProperty("nombre")
     @Schema(example = "Rex")
     @NotBlank(message = "El campo name no puede ser nulo o vacío")

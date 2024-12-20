@@ -15,6 +15,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class UserService {
@@ -276,7 +277,7 @@ public class UserService {
         userMongo.setActive(editedUser.getActive());
         userMongo.setEmail(editedUser.getEmail());
         userMongo.setCellPhone(editedUser.getCellPhone());
-        userMongo.setAddress(editedUser.getAddress() != null ? editedUser.getAddress() : userMongo.getAddress());
+        userMongo.setAddress(Optional.ofNullable(editedUser.getAddress()).orElse(userMongo.getAddress()));
         userMongo.setPassword(editedUser.getPassword());
         userMongo.setDocumentType(editedUser.getDocumentType());
         userMongo.setName(utils.capitalizeWords(editedUser.getName()));
