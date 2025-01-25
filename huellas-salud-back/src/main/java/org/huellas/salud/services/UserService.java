@@ -128,7 +128,7 @@ public class UserService {
         LOG.infof("@updateUserDataInMongo SERV > Finaliza verificacion de password del usuario con data: %s. " +
                 "Inicia actualizacion de la informacion del usuario con id: %s", userMsg.getData(), documentNumber);
 
-        updateUserDataInformation(userMsgMongo, userMsg.getData(), documentNumber);
+        updateUserInformation(userMsgMongo, userMsg.getData(), documentNumber);
 
         LOG.infof("@updateUserDataInMongo SERV > Finaliza edicion de usuario con id: %s. Inicia actualizacion " +
                 "en mongo con la data: %s", documentNumber, userMsgMongo);
@@ -268,9 +268,9 @@ public class UserService {
                 "Finaliza formato de datos del usuario con correo: %s.", user.getEmail());
     }
 
-    private void updateUserDataInformation(UserMsg userMsgMongo, User editedUser, String idUser) {
+    private void updateUserInformation(UserMsg userMsgMongo, User editedUser, String idUser) {
 
-        LOG.infof("@updateUserDataInformation SERV > Inicia actualizacion de datos de usuario con id: %s", idUser);
+        LOG.infof("@updateUserInformation SERV > Inicia actualizacion de datos de usuario con id: %s", idUser);
 
         User userMongo = userMsgMongo.getData();
 

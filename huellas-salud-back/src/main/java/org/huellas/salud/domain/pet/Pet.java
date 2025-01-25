@@ -28,7 +28,7 @@ public class Pet implements Serializable {
     private String idOwner;
 
     @BsonProperty("identificador")
-    @Null(message = "No debe enviar ningún valor en el campo idPet")
+    @Null(message = "No debe enviar ningún valor en el campo idPet", groups = ValidationGroups.Post.class)
     private String idPet;
 
     @BsonProperty("nombre")

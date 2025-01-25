@@ -51,7 +51,7 @@ public class PetApi {
         LOG.debugf("@createPetData API > Finaliza ejecucion del servicio para crear el registro de una mascota " +
                 "en base de datos. Se registro la siguiente informacion: %s", petMsg);
 
-        return Response.ok().status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
@@ -90,12 +90,12 @@ public class PetApi {
         List<PetMsg> pets = petService.getListPetsByOwner(idOwner);
 
         LOG.debugf("@getListPetsOfOwner API > Finaliza ejecucion del servicio para obtener el listado de las " +
-                "mascotas del propietario con numero de documento: %s. Se obtuvo: %s resultados", idOwner, pets.size());
+                "mascotas del propietario con numero documento: %s. Se obtuvo: %s resultados", idOwner, pets.size());
 
         return Response.ok().entity(pets).build();
     }
 
-    @PATCH
+    @PUT
     @Path("/update")
     @Tag(name = "Gestión de mascotas")
     public Response updatePetData(
@@ -106,9 +106,49 @@ public class PetApi {
             )
             @NotNull(message = "Debe ingresar los datos que se actualizarán de la mascota")
             @ConvertGroup(to = ValidationGroups.Put.class) @Valid PetMsg petMsg
-    ) {
-        
-        return Response.ok().status(Response.Status.NO_CONTENT).build();
+    ) throws HSException {
+
+        LOG.debugf("@updatePetData API > Inicia ejecucion del servicio para actualizar la informacion de una " +
+                "mascota con la data: %s", petMsg.getData());
+
+        petService.updatePetDataInMongo(petMsg);
+
+        LOG.debugf("@updatePetData API > Finaliza ejecucion del servicio de actualizacion de la informacion de " +
+                "una mascota. Se actualizo con la siguiente informacion: %s", petMsg);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @DELETE
+    @Path("/delete")
+    @Tag(name = "Gestión de mascotas")
+    public Response deletePetData(
+            @Parameter(
+                    name = "identifierPet",
+                    description = "Identificador de la mascota",
+                    required = true,
+                    example = "26ec4a57-f43b-4230-a169-b0ef1fd6ade1"
+            )
+            @NotBlank(message = "Debe ingresar el identificador (identifierPet) de la mascota")
+            @QueryParam("identifierPet") String identifierPet,
+            @Parameter(
+                    name = "idOwner",
+                    description = "Identificador del propietario de la mascota",
+                    required = true,
+                    example = "1023456789"
+            )
+            @NotBlank(message = "Debe ingresar el identificador (idOwner) del propietario")
+            @QueryParam("idOwner") String idOwner
+    ) throws HSException {
+
+        LOG.debugf("@deletePetData API > Inicia ejecucion del servicio para eliminar el registro de la mascota " +
+                "con id: %s asociada al propietario con numero de documento: %s", identifierPet, idOwner);
+
+        petService.deletePetDataInMongo(identifierPet, idOwner);
+
+        LOG.debugf("@deletePetData API > Finaliza ejecucion del servicio para eliminar el registro de la mascota " +
+                "con id: %s asociada al propietario con numero de documento: %s", identifierPet, idOwner);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 }

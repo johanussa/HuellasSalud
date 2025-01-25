@@ -24,6 +24,13 @@ public class PetRepository implements PanacheMongoRepository<PetMsg> {
                 .firstResultOptional();
     }
 
+    public Optional<PetMsg> findPetById(String petId) {
+
+        LOG.debugf("@findPetById REPO > Inicia busqueda del registro de la mascota con identificador: %s", petId);
+
+        return find("data.identificador = ?1", petId).firstResultOptional();
+    }
+
     public List<PetMsg> getListPetsFromMongo() {
 
         LOG.debug("@getListPetsFromMongo REPO > Inicia obtencion del listado de mascotas registradas en mongo");
@@ -37,5 +44,13 @@ public class PetRepository implements PanacheMongoRepository<PetMsg> {
                 "con numero de documento: %s", idOwner);
 
         return list("data.idPropietario = ?1", idOwner);
+    }
+
+    public long deletePetDataMongo(String identifierPet, String idOwner) {
+
+        LOG.debugf("@deletePetDataMongo REPO > Inicia eleminacion del registro de la mascota con id: %s " +
+                "asociado al propietario con numero de documento: %s", identifierPet, idOwner);
+
+        return delete("data.identificador = ?1 and data.idPropietario = ?2", identifierPet, idOwner);
     }
 }
