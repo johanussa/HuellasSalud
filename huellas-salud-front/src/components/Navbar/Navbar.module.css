@@ -2,39 +2,95 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .containerNavbar {
     width: 100vw;
-    height: 65px;
     font-weight: 600;
     font-size: large;
+    box-shadow: 1px 1px 15px #00000030;
 }
 
 .containerList {
-    border: 1px solid red;
     height: 100%;
-    display: flex;
-    justify-content: space-between;
-    list-style: none;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    padding-bottom: 4px;
 }
 
-.containerList li {
+.containerList .liNav {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all .3s;
+    transition: all .1s;
 }
 
-.containerList li:hover {
-    background-color: rgba(82, 82, 82, 0.096);
+.asideRouts li:hover {
+    background-color: rgba(255, 64, 64, 0.096);
     border-radius: 6px;
+    scale: 1.1;
 }
 
 .containerList li a {
     padding: 20px;
+}
+
+.asideRouts {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.asideRouts li {
+    width: 100%;
+}
+
+.containerNav {
+    display: flex;
+    flex-direction: column;
+}
+
+.asideInput {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.asideInput input {
+    width: 50%;
+    padding: 7px;
+    border: 1px solid #00000030;
+    outline: none;
+}
+
+.asideInput button {
+    width: 80px;
+}
+
+.containerBtns {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    align-items: center;
+    text-align: center;
+}
+
+.asideButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.asideButtons button {
+    padding: 5px;
+    width: 120px;
+}
+
+.icons {
+    font-size: 30px;
 }
 
 .active {
