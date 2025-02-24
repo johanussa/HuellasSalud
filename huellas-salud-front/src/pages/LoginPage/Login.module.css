@@ -1,0 +1,78 @@
+.containerLogin {
+    color: #fff;
+    text-align: center;
+    padding-top: 115px;
+    width: 1000px;
+    height: 800px;
+    margin: 0 auto;
+    box-shadow: 0px 0px 5px #00000050;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    background: linear-gradient(to left, #17c4db, #2E2E2E);
+}
+
+.sectionRegister {
+    background-image: url('../../assets/FondoLogin.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.form_login {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.login__label {
+    display: block;
+    padding-left: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    font-size: .75rem;
+    margin-bottom: 1rem;
+}
+
+.logoLogin {
+    width: 300px;
+}
+
+.login__input {
+    color: white;
+    font-size: 1.15rem;
+    width: 100%;
+    padding: .5rem 1rem;
+    border: 2px solid transparent;
+    outline: none;
+    border-radius: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 1px;
+}
+
+.login__input:hover,
+.login__input:focus {
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+}
+
+.login__input+.login__label {
+    margin-top: 1.5rem;
+}
+
+.login__submit {
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1rem;
+    padding: .75rem;
+    border-radius: 2rem;
+    display: block;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    border: none;
+    cursor: pointer;
+}
+
+.login__submit:hover {
+    background-color: #00000080;
+}
