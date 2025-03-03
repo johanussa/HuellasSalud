@@ -3,13 +3,13 @@ import styles from "./Navbar.module.css";
 import imgHS1 from "../../assets/Huellas&Salud_4.png";
 
 type PropsCompLI = {
-    path: string;
-    name: string;
-    icon: string;
-    style?: boolean;
-  };
+  path: string;
+  name: string;
+  icon: string;
+  style?: boolean;
+};
 
-export const ComponentLI = (props: PropsCompLI) => (
+const ComponentLI = (props: PropsCompLI) => (
   <li className={styles.liNav}>
     <NavLink
       to={props.path}
@@ -22,21 +22,21 @@ export const ComponentLI = (props: PropsCompLI) => (
   </li>
 );
 
-export const Logo = () => (
+const Logo = () => (
   <picture>
     <img src={imgHS1} alt="Huellas&Salud" className={styles.logoImg} />
     <span className={styles.spanLogoNav}>Huellas & Salud 🐾</span>
   </picture>
 );
 
-export const SearchBar = () => (
+const SearchBar = () => (
   <aside className={styles.asideInput}>
-    <input type="search" placeholder="¿ Qué necesita tu mascota?" />
+    <input type="search" placeholder="¿Qué necesita tu mascota?" />
     <button>Buscar</button>
   </aside>
 );
 
-export const NavLinks = () => (
+const NavLinks = () => (
   <ul className={styles.containerUl}>
     <ComponentLI path="/" name="Inicio" icon="fa-solid fa-house-chimney" />
     <ComponentLI path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
@@ -48,13 +48,15 @@ export const NavLinks = () => (
   </ul>
 );
 
-export const AuthButtons = () => (
+const AuthButtons = () => (
   <aside className={styles.asideButtons}>
-    <button type="button">
-      <Link to={"/login"}>Iniciar Sesión</Link>
-    </button>
-    <button type="button">
-      <Link to={"/registro"}>Crear Cuenta</Link>
-    </button>
+    <Link to={"/login"}>
+      <button type="button">Iniciar sesión</button>
+    </Link>
+    <Link to={"/registro"}>
+      <button type="button">Crear cuenta</button>
+    </Link>
   </aside>
 );
+
+export { Logo, SearchBar, NavLinks, AuthButtons }

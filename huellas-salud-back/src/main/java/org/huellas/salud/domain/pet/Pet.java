@@ -64,8 +64,8 @@ public class Pet implements Serializable {
     @NotBlank(message = "El campo weight no puede ser nulo o vacío")
     private String weight;
 
-    @BsonProperty("esCastrado")
-    private boolean neutered;
+    @BsonProperty("esterilizado")
+    private boolean sterilized;
 
     @BsonProperty("discapacidad")
     @Schema(example = "Ninguna")

@@ -1,5 +1,10 @@
+:root {
+    --background-input: rgba(255, 255, 255, 0.25);
+    --color-label-transparent: rgba(255, 255, 255, 0.5);
+}
+
 .containerLogin {
-    color: #fff;
+    color: var(--color-font);
     text-align: center;
     padding-top: 115px;
     width: 1000px;
@@ -8,7 +13,7 @@
     box-shadow: 0px 0px 5px #00000050;
     display: grid;
     grid-template-columns: 35% 65%;
-    background: linear-gradient(to left, #17c4db, #2E2E2E);
+    background: linear-gradient(315deg, var(--color-principal), var(--color-secundario));
 }
 
 .sectionRegister {
@@ -17,62 +22,149 @@
     background-repeat: no-repeat;
 }
 
-.form_login {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
 }
 
-.login__label {
+.loginLabel {
     display: block;
-    padding-left: 1rem;
-    color: rgba(255, 255, 255, 0.5);
+    width: 50%;
+    color: var(--color-label-transparent);
     text-transform: uppercase;
-    font-size: .75rem;
-    margin-bottom: 1rem;
+    font-size: .8rem;
+    margin-bottom: .5rem;
 }
 
 .logoLogin {
-    width: 300px;
+    width: 220px;
+    margin-right: 20px;
 }
 
-.login__input {
-    color: white;
-    font-size: 1.15rem;
-    width: 100%;
-    padding: .5rem 1rem;
+.loginInput {
+    color: var(--color-font);
+    font-size: .8rem;
+    width: 50%;
+    padding: 5px 10px;
     border: 2px solid transparent;
     outline: none;
     border-radius: 1.5rem;
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: var(--background-input);
     letter-spacing: 1px;
+    transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
 }
 
-.login__input:hover,
-.login__input:focus {
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+.loginInput:hover,
+.loginInput:focus {
+    color: var(--color-font);
+    border: 2px solid var(--color-label-transparent);
     background-color: transparent;
 }
 
-.login__input+.login__label {
-    margin-top: 1.5rem;
+.loginInput+.loginLabel {
+    margin-top: 1rem;
 }
 
-.login__submit {
-    color: #ffffff;
-    font-size: 1rem;
-    font-family: 'Montserrat', sans-serif;
+.loginSubmit,
+.buttonCreate {
+    color: var(--color-font);
+    font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-top: 1rem;
-    padding: .75rem;
+    margin-top: 1.2rem;
+    padding: .5rem;
     border-radius: 2rem;
     display: block;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
+    width: 50%;
+    background-color: rgba(0, 0, 0);
     border: none;
     cursor: pointer;
+    transition: background-color .5s ease, box-shadow .5s ease;
 }
 
-.login__submit:hover {
-    background-color: #00000080;
+.loginSubmit:hover,
+.buttonCreate:hover {
+    background-color: #00000099;
+    box-shadow: 0px 0px 10px #000000;
+}
+
+.buttonCreate {
+    margin: 0 auto;
+}
+
+.forgetPass a {
+    text-decoration: none;
+}
+
+.forgetPass .linkForget {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    margin: 15px;
+}
+
+.forgetPass .linkForget:hover {
+    cursor: pointer;
+    color: #ffffff90;
+}
+
+.sectionOr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.rowLine {
+    height: 2px;
+    width: 145px;
+    border-bottom: 1px solid var(--color-font);
+}
+
+.loginGoogle button {
+    width: 35%;
+    font-size: 1rem;
+    padding: 6px 10px;
+    border-radius: 2rem;
+    border: 1px solid #00000060;
+    background-color: #ffffff90;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color, transform .6s ease;
+}
+
+.loginGoogle button:hover {
+    background-color: #ffffff;
+    color: black;
+    transform: scale(1.05);
+}
+
+.loginGoogle img {
+    width: 25px;
+    padding-right: 8px;
+    vertical-align: middle;
+}
+
+.socialMedia {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    gap: 10px;
+    margin-top: 15px;
+    height: 70px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+
+.socialMedia i {
+    font-size: 1.8rem;
+    transition: color .6s ease;
+}
+
+.socialMedia i:hover {
+    color: #00000080;
+    cursor: pointer;
 }
