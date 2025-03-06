@@ -6,14 +6,18 @@
 .containerLogin {
     color: var(--color-font);
     text-align: center;
-    padding-top: 115px;
     width: 1000px;
-    height: 800px;
-    margin: 0 auto;
+    height: 700px;
+    margin: 135px auto 0;
     box-shadow: 0px 0px 5px #00000050;
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 40% 60%;
     background: linear-gradient(315deg, var(--color-principal), var(--color-secundario));
+}
+
+.logoLogin {
+    width: 220px;
+    margin-right: 20px;
 }
 
 .sectionRegister {
@@ -29,24 +33,22 @@
     margin-top: 10px;
 }
 
+.inputContainer {
+    width: 100%;
+}
+
 .loginLabel {
     display: block;
-    width: 50%;
     color: var(--color-label-transparent);
     text-transform: uppercase;
     font-size: .8rem;
-    margin-bottom: .5rem;
-}
-
-.logoLogin {
-    width: 220px;
-    margin-right: 20px;
+    margin: .4rem 0;
 }
 
 .loginInput {
     color: var(--color-font);
     font-size: .8rem;
-    width: 50%;
+    width: 60%;
     padding: 5px 10px;
     border: 2px solid transparent;
     outline: none;
@@ -73,15 +75,14 @@
     font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-top: 1.2rem;
-    padding: .5rem;
+    padding: .6rem;
     border-radius: 2rem;
     display: block;
-    width: 50%;
+    width: 60%;
     background-color: rgba(0, 0, 0);
     border: none;
     cursor: pointer;
-    transition: background-color .5s ease, box-shadow .5s ease;
+    transition: background-color .3s ease, box-shadow .3s ease;
 }
 
 .loginSubmit:hover,
@@ -120,26 +121,25 @@
 
 .rowLine {
     height: 2px;
-    width: 145px;
+    width: 152px;
     border-bottom: 1px solid var(--color-font);
 }
 
 .loginGoogle button {
-    width: 35%;
-    font-size: 1rem;
+    width: 40%;
+    font-size: 1.1rem;
     padding: 6px 10px;
     border-radius: 2rem;
     border: 1px solid #00000060;
     background-color: #ffffff90;
     margin-top: 15px;
     cursor: pointer;
-    transition: background-color, transform .6s ease;
+    transition: background-color .3s ease, transform .3s ease;
 }
 
 .loginGoogle button:hover {
     background-color: #ffffff;
-    color: black;
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 .loginGoogle img {
@@ -153,10 +153,8 @@
     justify-content: end;
     align-items: end;
     gap: 10px;
-    margin-top: 15px;
-    height: 70px;
+    height: 85px;
     padding-right: 15px;
-    padding-bottom: 5px;
 }
 
 .socialMedia i {
@@ -167,4 +165,36 @@
 .socialMedia i:hover {
     color: #00000080;
     cursor: pointer;
+}
+
+.eyeDesable {
+    color: transparent;
+}
+
+.iconEye {
+    display: inline;
+    cursor: pointer;
+    position: relative;
+    right: 20px;
+    color: #ffffff90;
+}
+
+.inputPass {
+    padding-right: 36px;
+    position: relative;
+    left: 10px;
+}
+
+.inputContainer p {
+    padding: 6px;
+}
+
+.messageError {
+    font-weight: 600;
+    color: rgb(255, 101, 101);
+    text-shadow: 1px 1px 10px black;
+}
+
+.withoutError {
+    color: transparent;
 }

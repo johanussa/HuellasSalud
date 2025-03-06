@@ -2,39 +2,52 @@ import { Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import logoLogin from "../../assets/Huellas&Salud_3.png";
 import logoGoogle from "../../assets/logoGoogleG.png";
+import { SocialMediaIcons } from "../../components/Login/LoginComponents";
+import { serviceLogin } from "./serviceLogin";
 
 const Login = () => {
+
+  const { handleSubmit, handleInputChange, formState, showEyePass, validData, errorMsg } = serviceLogin();
+
   return (
     <>
       <main className={styles.containerLogin}>
         <section className={styles.sectionRegister} />
         <section>
           <picture>
-            <img
-              className={styles.logoLogin}
-              src={logoLogin}
-              alt="Huellas & Salud"
-            />
+            <img className={styles.logoLogin} src={logoLogin} alt="Huellas & Salud" />
           </picture>
           <h2>Inicio de Sesión</h2>
-          <form className={styles.formLogin}>
-            <label htmlFor="login-input-user" className={styles.loginLabel}>
-              Correo electrónico
-            </label>
-            <input
-              id="login-input-user"
-              className={styles.loginInput}
-              type="text"
-            />
-            <label htmlFor="login-input-password" className={styles.loginLabel}>
-              Contraseña
-            </label>
-            <input
-              id="login-input-password"
-              className={styles.loginInput}
-              type="password"
-            />
-            <button className={styles.loginSubmit} disabled>
+          <form className={styles.formLogin} onSubmit={handleSubmit}>
+            <aside className={styles.inputContainer}>
+              <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>
+                Correo o número de documento
+              </label>
+              <input
+                id="inputEmailOrDoc"
+                className={styles.loginInput}
+                type="text"
+                required
+                value={formState.inputEmailOrDoc}
+                onChange={handleInputChange}
+              />
+            </aside>
+            <aside className={styles.inputContainer}>
+              <label htmlFor="inputPassword" className={styles.loginLabel}>
+                Contraseña
+              </label>
+              <input
+                id="inputPassword"
+                className={[styles.loginInput, styles.inputPass].join(" ")}
+                type="password"
+                required
+                value={formState.inputPassword}
+                onChange={handleInputChange}
+              />
+              <i className={`fa-regular fa-eye-slash ${showEyePass ? styles.iconEye : styles.eyeDesable}`} />
+              <p className={validData ? styles.withoutError : styles.messageError}>{errorMsg}</p>
+            </aside>
+            <button className={styles.loginSubmit} type="submit" >
               Ingresar
             </button>
           </form>
@@ -61,12 +74,7 @@ const Login = () => {
             </aside>
           </section>
 
-          <section className={styles.socialMedia}>
-            <i className="fa-brands fa-instagram"></i>
-            <i className="fa-brands fa-whatsapp"></i>
-            <i className="fa-brands fa-facebook"></i>
-            <i className="fa-brands fa-twitter"></i>
-          </section>
+          <SocialMediaIcons />
         </section>
       </main>
     </>

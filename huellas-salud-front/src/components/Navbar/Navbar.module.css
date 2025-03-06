@@ -19,6 +19,8 @@
     font-weight: 600;
     text-align: center;
     position: fixed;
+    top: 0;
+    left: 0;
     display: grid;
     background: linear-gradient(to right, var(--color-principal), var(--color-secundario));
     grid-template-columns: 20% 60% 20%;
