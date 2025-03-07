@@ -127,8 +127,8 @@
 
 .loginGoogle button {
     width: 40%;
-    font-size: 1.1rem;
-    padding: 6px 10px;
+    font-size: 1rem;
+    padding: 5px 10px;
     border-radius: 2rem;
     border: 1px solid #00000060;
     background-color: #ffffff90;
@@ -154,11 +154,11 @@
     align-items: end;
     gap: 10px;
     height: 85px;
-    padding-right: 15px;
+    padding-right: 10px;
 }
 
 .socialMedia i {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     transition: color .6s ease;
 }
 
@@ -167,32 +167,39 @@
     cursor: pointer;
 }
 
-.eyeDesable {
-    color: transparent;
-}
-
-.iconEye {
-    display: inline;
-    cursor: pointer;
-    position: relative;
-    right: 20px;
-    color: #ffffff90;
-}
-
 .inputPass {
-    padding-right: 36px;
+    padding-right: 38px;
     position: relative;
     left: 10px;
+    user-select: none;
 }
 
 .inputContainer p {
-    padding: 6px;
+    padding: 8px;
+}
+
+.iconEye {
+    cursor: pointer;
+    position: relative;
+    right: 24px;
+    top: 3px;
+    color: #ffffff90;
+    background: transparent;
+    border: none;
+}
+
+.iconEye i {
+    font-size: 1.2rem;
+}
+
+.eyeDesable {
+    color: transparent;
 }
 
 .messageError {
     font-weight: 600;
     color: rgb(255, 101, 101);
-    text-shadow: 1px 1px 10px black;
+    text-shadow: 2px 2px 10px black;
 }
 
 .withoutError {

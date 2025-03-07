@@ -7,7 +7,8 @@ import { serviceLogin } from "./serviceLogin";
 
 const Login = () => {
 
-  const { handleSubmit, handleInputChange, formState, showEyePass, validData, errorMsg } = serviceLogin();
+  const { handleSubmit, handleInputChange, handleViewPassword, formState, 
+    showEyePass, validData, errorMsg, viewPass, loading } = serviceLogin();
 
   return (
     <>
@@ -17,12 +18,12 @@ const Login = () => {
           <picture>
             <img className={styles.logoLogin} src={logoLogin} alt="Huellas & Salud" />
           </picture>
+
           <h2>Inicio de Sesión</h2>
+
           <form className={styles.formLogin} onSubmit={handleSubmit}>
             <aside className={styles.inputContainer}>
-              <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>
-                Correo o número de documento
-              </label>
+              <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>Correo o número de documento</label>
               <input
                 id="inputEmailOrDoc"
                 className={styles.loginInput}
@@ -33,22 +34,24 @@ const Login = () => {
               />
             </aside>
             <aside className={styles.inputContainer}>
-              <label htmlFor="inputPassword" className={styles.loginLabel}>
-                Contraseña
-              </label>
+              <label htmlFor="inputPassword" className={styles.loginLabel}>Contraseña</label>
               <input
                 id="inputPassword"
-                className={[styles.loginInput, styles.inputPass].join(" ")}
-                type="password"
+                className={`${styles.loginInput} ${styles.inputPass}`}
+                type={viewPass ? "text" : "password"}
                 required
                 value={formState.inputPassword}
                 onChange={handleInputChange}
               />
-              <i className={`fa-regular fa-eye-slash ${showEyePass ? styles.iconEye : styles.eyeDesable}`} />
+              <button type="button" onClick={handleViewPassword}
+                className={`${styles.iconEye} ${!showEyePass && styles.eyeDesable}`}
+                aria-label="Mostrar/Ocultar contraseña">
+                <i className={`fa-regular fa-eye${viewPass ? "" : "-slash"}`} />
+              </button>
               <p className={validData ? styles.withoutError : styles.messageError}>{errorMsg}</p>
             </aside>
-            <button className={styles.loginSubmit} type="submit" >
-              Ingresar
+            <button className={styles.loginSubmit} type="submit" disabled={loading} >
+              {loading ? "Cargando..." : "Ingresar"}
             </button>
           </form>
 
@@ -59,7 +62,7 @@ const Login = () => {
           </section>
 
           <section className={styles.loginGoogle}>
-            <button>
+            <button disabled={loading}>
               <img src={logoGoogle} alt="Google" />
               <span>Continuar con Google</span>
             </button>
@@ -69,7 +72,7 @@ const Login = () => {
             <a className={styles.linkForget}>¿Olvidaste tu contraseña?</a>
             <aside>
               <Link to={"/registro"}>
-                <button className={styles.buttonCreate}>Crear cuenta</button>
+                <button className={styles.buttonCreate} disabled={loading}>Crear cuenta</button>
               </Link>
             </aside>
           </section>
