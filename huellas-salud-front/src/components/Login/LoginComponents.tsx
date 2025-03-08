@@ -4,7 +4,7 @@ const SocialMediaIcons = () => (
     <section className={styles.socialMedia} >
         {
             ["instagram", "whatsapp", "facebook", "twitter"].map((platform) => (
-                <i key={platform} className={`fa-brands fa-${platform}`} > </i>
+                <i key={platform} className={`fa-brands fa-${platform}`} title={platform} > </i>
             ))
         }
     </section>

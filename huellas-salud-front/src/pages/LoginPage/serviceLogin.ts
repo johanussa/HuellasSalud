@@ -56,7 +56,7 @@ export const serviceLogin = () => {
             });
 
             console.log("Response: " + response);
-            toast.success("¡Inicio de sesión exitoso! 🎉");
+            toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenido Fulanito`); // Cambiar por nombre de usuario
         } catch (error) {
 
             const errorMessage = axios.isAxiosError(error)

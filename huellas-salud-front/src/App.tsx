@@ -6,7 +6,7 @@ import Register from "./pages/RegisterPage/Register";
 import "react-toastify/dist/ReactToastify.css";
 
 const AppRoutes = () => {
-  
+
   const routes = useRoutes([
     { path: "/", element: <></> },
     { path: "/login", element: <Login /> },
@@ -21,7 +21,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <AppRoutes />
-      <ToastContainer />
+      <ToastContainer theme="dark" />
     </BrowserRouter>
   );
 }
