@@ -4,6 +4,7 @@ import logoLogin from "../../assets/Huellas&Salud_3.png";
 import logoGoogle from "../../assets/logoGoogleG.png";
 import { SocialMediaIcons } from "../../components/Login/LoginComponents";
 import { serviceLogin } from "./serviceLogin";
+import ButtonComponent from "../../components/Button/Button";
 
 const Login = () => {
 
@@ -50,9 +51,7 @@ const Login = () => {
               </button>
               <p className={validData ? styles.withoutError : styles.messageError}>{errorMsg}</p>
             </aside>
-            <button className={styles.loginSubmit} type="submit" disabled={loading} >
-              {loading ? "Cargando..." : "Ingresar"}
-            </button>
+            <ButtonComponent type="submit" loading={loading} contain={loading ? "CARGANDO..." : "INGRESAR"}/>
           </form>
 
           <section className={styles.sectionOr}>
@@ -71,8 +70,8 @@ const Login = () => {
           <section className={styles.forgetPass}>
             <a className={styles.linkForget}>¿Olvidaste tu contraseña?</a>
             <aside>
-              <Link to={"/registro"}>
-                <button className={styles.buttonCreate} disabled={loading}>Crear cuenta</button>
+              <Link to={loading ? "" : "/registro"} >
+                <ButtonComponent contain={"CREAR CUENTA"}/>
               </Link>
             </aside>
           </section>
