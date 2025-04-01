@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .filter-section {
+            margin-bottom: 15px;
+        }
+
+        .filter-title {
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-content {
+            display: none;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-list {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+
+        .checkbox-list label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <!-- Categoría -->
+        <div class="filter-section">
+            <div class="filter-title" onclick="toggleFilter('category')">
+                Categoría <span><i class="fa-solid fa-square-caret-down"></i></span>
+            </div>
+            <div id="category" class="filter-content">
+                <input type="text" class="search-box" placeholder="Buscar" onkeyup="filterList('category-list', this.value)">
+                <div class="checkbox-list" id="category-list">
+                    <label><input type="checkbox"> Comida</label>
+                    <label><input type="checkbox"> Cuidado e Higiene</label>
+                    <label><input type="checkbox"> Limpieza y Orina</label>
+                    <label><input type="checkbox"> Salud</label>
+                    <label><input type="checkbox"> Hogar Perros</label>
+                    <label><input type="checkbox"> Para Pasear</label>
+                    <label><input type="checkbox"> Comederos y Bebederos</label>
+                    <label><input type="checkbox"> Juguetes</label>
+                    <label><input type="checkbox"> Ropa y Accesorios</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marca -->
+        <div class="filter-section">
+            <div class="filter-title" onclick="toggleFilter('brand')">
+                Marca <span><i class="fa-solid fa-square-caret-down"></i></span>
+            </div>
+            <div id="brand" class="filter-content">
+                <input type="text" class="search-box" placeholder="Buscar" onkeyup="filterList('brand-list', this.value)">
+                <div class="checkbox-list" id="brand-list">
+                    <label><input type="checkbox"> 1st Choice</label>
+                    <label><input type="checkbox"> Agility Gold</label>
+                    <label><input type="checkbox"> Bravecto</label>
+                    <label><input type="checkbox"> Chunky</label>
+                    <label><input type="checkbox"> Diamond</label>
+                    <label><input type="checkbox"> Dog Chow</label>
+                    <label><input type="checkbox"> Equilibrio</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFilter(id) {
+            let content = document.getElementById(id);
+            content.style.display = (content.style.display === "block") ? "none" : "block";
+        }
+
+        function filterList(listId, searchText) {
+            let list = document.getElementById(listId);
+            let items = list.getElementsByTagName("label");
+
+            for (let item of items) {
+                let text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchText.toLowerCase()) ? "block" : "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

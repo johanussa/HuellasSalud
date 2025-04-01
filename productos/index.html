@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="./styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <section id="productos">
+            <h1>Productos</h1>
+            <div id="contenedor" class="producto">
+                <div>
+                    <div class="filtros">
+                        <div class="seccionFiltrar">
+                            <div class="tituloFiltro" onclick="cambiarFiltro('categoria')">
+                                Categoría<span><i class="fa-solid fa-square-caret-down"></i></span>
+                            </div>
+                            <div id="categoria" class="filtrarContenido">
+                                <input type="text" class="buscar" placeholder="Buscar..." onkeyup="filtrarLista('listaCategoria', this.value)">
+                                <div class="listaCheckbox" id="listaCategoria">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="seccionFiltrar">
+                            <div class="tituloFiltro" onclick="cambiarFiltro('marca')">
+                                Marca<span><i class="fa-solid fa-square-caret-down"></i></span>
+                            </div>
+                            <div id="marca" class="filtrarContenido">
+                                <input type="text" class="buscar" placeholder="Buscar..." onkeyup="filtrarLista('listaMarca', this.value)">
+                                <div class="listaCheckbox" id="listaMarca">
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div id="articulos">
+                </div>
+                <div class="iconoCarrito" id="iconoCarrito" onclick="abrirCarrito()">
+                    <div class="cantidad" id="cantidad"></div>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+            </div>
+        </section>
+        <section class="seccionCarrito" >
+            <h2>Productos en el carrito <i class="fa-solid fa-bone"></i></h2>
+            <div id="carrito"></div>
+            <h3 id="total"></h3>
+            <div id="comprar"></div>
+            <button class="cerrarCarrito" onclick="cerrarCarrito()"><i class="fa-solid fa-rectangle-xmark"></i></button>
+        </section>
+        <script src="./script.js"></script>
+    </body>
+</html>
