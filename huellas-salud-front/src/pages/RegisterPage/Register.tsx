@@ -35,7 +35,7 @@ const Register = () => {
             <InputField nombre="Dirección de residencia" idInput="direccion" inputFull />
             <InputField nombre="Contraseña" type="password" idInput="password" required />
             <InputField nombre="Confirmar contraseña" type="password" idInput="confirmPass" required />
-            <p className={styles.inputFull}>⚠️ Mensaje de error</p>
+            <p className={styles.inputFull}>⚠️ Mensaje de error de validación ⚠️</p>
             <aside className={`${styles.containerButtons} ${styles.inputFull}`}>
               <ButtonComponent contain={"Cancelar"} />
               <ButtonComponent type="reset" contain={"Limpiar"} />

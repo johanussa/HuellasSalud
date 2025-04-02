@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 :root {
@@ -16,34 +16,30 @@
 .navbar {
     width: 100vw;
     height: 115px;
-    font-weight: 600;
     text-align: center;
     position: fixed;
     top: 0;
     left: 0;
     display: grid;
-    background: linear-gradient(to right, var(--color-principal), var(--color-secundario));
     grid-template-columns: 1fr 3fr 1fr;
-    color: var(--color-font);
     box-shadow: 0px 5px 15px #00000080;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Contenedor logo navbar */
-.navbar picture {
+.logoContain {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     transition: margin-right .5s ease;
 }
 
-.navbar picture span {
-    font-size: 1.2rem;
-}
-
-.logoImg {
+.logoContain img {
     width: 90px;
     height: 90px;
+}
+
+.logoContain span {
+    font-size: 1.2rem;
 }
 
 /* Input de búsqueda */
@@ -70,20 +66,15 @@
 }
 
 .asideInput button {
-    color: var(--color-font);
-    background-color: #00000060;
     font-weight: 600;
     width: 80px;
     height: 32px;
     border-radius: 0 15px 15px 0;
     border: 1px solid #00000040;
-}
-
-.asideInput button:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 10px var(--color-font);
 }
 
+/* Contenedor UL - Opciones Navbar */
 .containerUl {
     width: 100%;
     height: 42%;
@@ -103,40 +94,12 @@
 
 .liNav a {
     padding: 10px;
-    color: var(--color-font);
+    color: black;
 }
 
 .liNav i {
     font-size: 20px;
     padding-right: 6px;
-}
-
-.asideButtons {
-    height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-}
-
-.asideButtons button {
-    background-color: var(--background-btns-acount);
-    color: var(--color-font);
-    font-size: 1rem;
-    cursor: pointer;
-    border: 1px solid #00000040;
-    border-radius: 12px;
-    padding: 5px;
-    width: 120px;
-}
-
-.asideButtons button:hover {
-    box-shadow: 0px 0px 10px var(--color-font);
-}
-
-.asideButtons button a {
-    text-decoration: none;
-    color: inherit;
 }
 
 .active {
@@ -147,26 +110,42 @@
     text-decoration: none;
 }
 
+/* Botones inicio y registro */
+.asideButtons {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.asideButtons button {
+    font-size: 1rem;
+    cursor: pointer;
+    border: 1px solid #00000040;
+    border-radius: 12px;
+    padding: 5px;
+    width: 120px;
+}
+
 /* Diseño Responsivo */
 @media (max-width: 1355px) {
-
-    .asideButtons {
-        flex-direction: column;
-        justify-content: space-evenly;
-        gap: 0;
+    .navbar {
+        grid-template-columns: 1fr 4fr 1fr;
     }
 
     .asideInput input {
         width: 65%;
     }
 
-    .navbar {
-        grid-template-columns: 1fr 4fr 1fr;
+    .asideButtons {
+        flex-direction: column;
+        justify-content: space-evenly;
+        gap: 0;
     }
 }
 
 @media (max-width: 1100px) {
-
     .navbar {
         grid-template-columns: 1fr;
         height: auto;
@@ -180,7 +159,7 @@
     .navbar picture span {
         margin-left: 15px;
     }
-    
+
     .asideInput {
         padding: 8px;
         align-items: center;
@@ -200,10 +179,10 @@
         right: 40px;
         height: 38%;
         gap: 14px;
-    }    
+    }
 }
 
-@media (max-width: 605px) {
+@media (max-width: 650px) {
     .navbar picture {
         margin-right: 80px;
     }

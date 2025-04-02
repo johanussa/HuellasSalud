@@ -1,9 +1,9 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Navbar from "./components/Navbar/Navbar";
 import Login from "./pages/LoginPage/Login";
 import Register from "./pages/RegisterPage/Register";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "./modules/Navbar/Navbar";
 
 const AppRoutes = () => {
 
