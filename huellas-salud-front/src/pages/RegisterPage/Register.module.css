@@ -4,8 +4,8 @@
     margin: 135px auto 0;
     display: grid;
     grid-template-columns: 70% 30%;
-    background: linear-gradient(315deg, var(--color-principal), var(--color-secundario));
-    color: var(--color-font);
+    box-shadow: 0px 0px 10px 5px #00000050;
+    border-radius: 10px;
 }
 
 .containerForm {
@@ -15,9 +15,8 @@
 }
 
 .tittleRegister {
-    font-size: 1.9rem;
+    font-size: 1.6rem;
     font-weight: bold;
-    color: var(--color-font);
     /* background: linear-gradient(to right, #000, #494400);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; */
@@ -35,14 +34,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 15px 25px;
+    padding: 15px 35px;
 }
 
 .inputField label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    text-shadow: 1px 1px 4px rgba(5, 5, 5, 0.815);
+    text-shadow: 1px 1px 4px rgba(5, 5, 5, 0.5);
 }
 
 .inputField input,
@@ -50,7 +49,7 @@
     width: 100%;
     padding: 6px 10px;
     border-radius: 10px;
-    border: 1px solid transparent;
+    border: 1px solid #00000050;
     outline: none;
     font-size: 1rem;
 }
@@ -70,9 +69,12 @@
     border-radius: 10px;
 }
 
+/* Container Img */
 .containerImg {
     background-image: url("../../assets/FondoRegister.png");
     background-size: cover;
+    height: 99.2%;
+    border-radius: 0 10px 10px 0;
 }
 
 .inputFull {

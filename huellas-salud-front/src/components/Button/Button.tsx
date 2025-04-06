@@ -6,8 +6,7 @@ interface PropsButton {
     type?: "submit" | "button" | "reset" | undefined;
 }
 
-const ButtonComponent = (props: PropsButton) => {
-    const { loading, contain, type = "button" } = props;
+const ButtonComponent = ({ loading, contain, type = "button" }: PropsButton) => {
     return (
         <button className={styles.button} type={type} disabled={loading} >
             {contain}

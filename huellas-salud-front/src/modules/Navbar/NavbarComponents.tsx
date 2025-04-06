@@ -1,7 +1,7 @@
 import styles from "./navbar.module.css";
 import imgHS1 from "../../assets/Huellas&Salud_4.png";
-import { ListItemNavProps } from "./navbarTypes";
 import { Link, NavLink } from "react-router-dom";
+import { ListItemNavProps } from "../../services/typesHS";
 
 export const Logo = () => (
     <picture className={styles.logoContain}>

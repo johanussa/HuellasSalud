@@ -1,0 +1,182 @@
+/* Estilo contenedor Login */
+.containerLogin {
+    text-align: center;
+    width: 1000px;
+    height: 700px;
+    margin: 135px auto 0;
+    box-shadow: 0px 0px 10px 5px #00000050;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    border-radius: 10px;
+}
+
+/* Estilo section img */
+.sectionRegister {
+    background-image: url('../../assets/FondoLogin.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 10px 0 0 10px;
+}
+
+/* Estilo form Login */
+.logoLogin {
+    width: 220px;
+    margin-right: 20px;
+}
+
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.inputContainer {
+    width: 100%;
+}
+
+.inputContainer p {
+    padding: 8px;
+}
+
+.loginLabel {
+    display: block;
+    /* color: var(--color-label-transparent); */
+    text-transform: uppercase;
+    font-size: .8rem;
+    margin: .4rem 0;
+}
+
+.loginInput+.loginLabel {
+    margin-top: 1rem;
+}
+
+.loginInput {
+    color: black;
+    font-size: .8rem;
+    width: 60%;
+    padding: 5px 10px;
+    /* border: 2px solid transparent; */
+    outline: none;
+    border-radius: 1.5rem;
+    /* background-color: var(--background-input); */
+    letter-spacing: 1px;
+    transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+}
+
+.loginInput:hover,
+.loginInput:focus {
+    /* color: var(--color-font); */
+    /* border: 2px solid var(--color-label-transparent); */
+    background-color: transparent;
+}
+
+.inputPass {
+    padding-right: 38px;
+    position: relative;
+    left: 10px;
+    user-select: none;
+}
+
+.iconEye {
+    cursor: pointer;
+    position: relative;
+    right: 24px;
+    top: 3px;
+    /* color: #ffffff90; */
+    background: transparent;
+    border: none;
+}
+
+.iconEye i {
+    font-size: 1.2rem;
+}
+
+.eyeDesable {
+    color: transparent;
+}
+
+.withoutError {
+    color: transparent;
+}
+
+.messageError {
+    font-weight: 600;
+    color: rgb(255, 101, 101);
+    text-shadow: 2px 2px 10px black;
+}
+
+/* Estilos Divider Comp */
+.sectionOr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.rowLine {
+    height: 2px;
+    width: 152px;
+    border-bottom: 1px solid var(--color-font);
+}
+
+/* Inicio sesion Google */
+.loginGoogle button {
+    width: 40%;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 2rem;
+    border: 1px solid #00000060;
+    background-color: #ffffff90;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color .3s ease, transform .3s ease;
+}
+
+.loginGoogle button:hover {
+    background-color: #ffffff;
+    transform: scale(1.04);
+}
+
+.loginGoogle img {
+    width: 25px;
+    padding-right: 8px;
+    vertical-align: middle;
+}
+
+/* Olvido contraseña */
+.forgetPass a {
+    text-decoration: none;
+}
+
+.forgetPass .linkForget {
+    text-decoration: none;
+    display: inline-block;
+    margin: 15px;
+}
+
+.forgetPass .linkForget:hover {
+    cursor: pointer;
+    color: #00000090;
+}
+
+/* Estilo Social media */
+.socialMedia {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    gap: 10px;
+    height: 74px;
+    padding-right: 10px;
+}
+
+.socialMedia i {
+    font-size: 1.6rem;
+    transition: color .6s ease;
+}
+
+.socialMedia i:hover {
+    color: #00000080;
+    cursor: pointer;
+}

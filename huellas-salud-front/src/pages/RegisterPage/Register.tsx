@@ -10,7 +10,7 @@ const Register = () => {
           <aside className={styles.header}>
             <img src={logoHS} alt="Huellas&Salud" />
             <p className={styles.tittleRegister}>
-              ¡Únete a la familia de Huellas y Salud! <i className="fa-solid fa-paw"></i>
+              ¡Únete a la familia de Huellas y Salud!
             </p>
           </aside>
           <form className={styles.formRegister}>
