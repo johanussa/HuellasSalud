@@ -4,6 +4,7 @@ import Register from "./pages/RegisterPage/Register";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./modules/Navbar/Navbar";
 import Login from "./modules/Login/Login";
+import Products from "./modules/Products/Products";
 
 const AppRoutes = () => {
 
@@ -11,6 +12,7 @@ const AppRoutes = () => {
     { path: "/", element: <></> },
     { path: "/login", element: <Login /> },
     { path: "/registro", element: <Register /> },
+    { path: "/productos", element: <Products /> },
   ]);
 
   return routes;
