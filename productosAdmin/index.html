@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Productos Admin</title>
+  </head>
+  <body>
+    <section class="seccionProductos">
+      <div class="titulo">
+        <h2>Sección de productos</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Valor</th>
+            <th>Unidades</th>
+            <th>Categoría</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody id="productos"></tbody>
+      </table>
+      <div class="btnAgregar">
+        <button onclick="agregarProducto()">Agregar Producto <i class="fa-solid fa-cart-plus"></i></button>
+      </div>
+    </section>
+    <section class="modalEditar" onclick="cerrarModal()">
+        <div class="editarProducto" onclick="event.stopPropagation()">
+            
+            <h1 class="tituloEdicion">Modificación del producto</h1>
+            <div class="imagen">
+                <div class="imagenProd">
+                    <img id="imagenProd" alt="">
+                </div>
+                <button>Cargar imagen</button>
+            </div>
+            <div class="informacion"></div>
+            <div class="boton">
+              <button class="btnActualizar">Actualizar producto</button>
+            </div>
+            <div id="cerrarModal" onclick="cerrarModal()">
+              <i id="botonCerrar" class="fa-solid fa-square-xmark"></i>
+            </div>
+        </div>
+        <div class="eliminarProducto" onclick="event.stopPropagation()">
+            <h1>Eliminar producto</h1>
+            <h2 id="mensajeEliminar"></h2>
+            <div class="botones">
+                <button id="btnConfirmarEliminar">Sí, eliminar</button>
+                <button id="btnCancelarEliminar" onclick="cerrarModalEliminar()">No, cancelar</button>
+            </div>
+        </div>
+        <div class="agregarProducto">
+          <h1 class="tituloEdicion">Agregar producto</h1>
+          <div class="imagen">
+              <div class="imagenProd">
+                  <img id="imagenProd" alt="">
+              </div>
+              <button>Cargar imagen</button>
+          </div>
+          <div class="informacionAgregar"></div>
+          <div class="boton">
+            <button class="btnActualizar">Agregar producto</button>
+          </div>
+          <div id="cerrarModal" onclick="cerrarModal()">
+            <i id="botonCerrar" class="fa-solid fa-square-xmark"></i>
+          </div>
+        </div>
+    </section>
+    <script src="./script.js"></script>
+  </body>
+</html>
