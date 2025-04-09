@@ -240,6 +240,7 @@ function actualizarTotal() {
     });
 
     document.getElementById("total").innerText = `Total: ${formatoCOP.format(total)}`;
+    document.querySelector(".monto").innerText = `Total: ${formatoCOP.format(total)}`;
 
     let botonComprar = document.getElementById("botonComprar");
     const contenedorCarrito = document.getElementById("comprar"); // Cambiado a "carrito"
@@ -252,6 +253,7 @@ function actualizarTotal() {
             botonComprar.id = "botonComprar";
             botonComprar.innerText = "Comprar";
             botonComprar.classList.add("boton-comprar");
+            botonComprar.addEventListener("click", modalPago);
 
             // Agregar el botón al contenedor del carrito
             contenedorCarrito.appendChild(botonComprar);
@@ -294,6 +296,34 @@ function cerrarCarrito() {
     iconoCarrito.style.display = "flex"; // Mostrar icono
     seccionCarrito.style.display = "none"; // Ocultar carrito
 }
+
+function modalPago() {
+    document.getElementById("modalPago").style.display = "flex";
+  }
+
+  function cerrarModal() {
+    document.getElementById("modalPago").style.display = "none";
+  }
+
+  document.getElementById("formPago").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let tarjeta = document.getElementById("tarjetaComprador").value;
+    let nombre = document.getElementById("nombreComprador").value;
+    let fecha = document.getElementById("fechaVencimiento").value;
+    let cvv = document.getElementById("codigoSeguridad").value;
+    
+    if (tarjeta.length < 16 || nombre.trim() === "" || fecha.length < 5 || cvv.length < 3) {
+      alert("Por favor, complete todos los campos correctamente.");
+      return;
+    }
+    
+    alert("Pago realizado con éxito");
+    document.getElementById("tarjetaComprador").value = "";
+    document.getElementById("nombreComprador").value = "";
+    document.getElementById("fechaVencimiento").value = "";
+    document.getElementById("codigoSeguridad").value = "";
+    cerrarModal();
+  });
 
 
 
