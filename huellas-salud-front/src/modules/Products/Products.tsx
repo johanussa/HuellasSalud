@@ -2,6 +2,7 @@ import { carrito, categorias, marcas, productos } from './data';
 import styles from './products.module.css';
 import imgPrd from '../../assets/Huellas&Salud_3.png';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Products = () => {
 
@@ -49,6 +50,9 @@ const Products = () => {
             </div>
           </div>
         </div>
+        <Link to={"/productos-admin"}>
+          <button className={styles.managmentPrdBtn}>Gestión de productos</button>
+        </Link>
       </section>
       <section className={styles.productCardContainer}>
         {productos.map(prod => (

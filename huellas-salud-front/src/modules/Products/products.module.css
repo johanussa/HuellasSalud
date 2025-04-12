@@ -8,6 +8,7 @@
 /* Contenedor filtros */
 .containFilter {
     min-width: 350px;
+    text-align: center;
 }
 
 .sectionFilter {
@@ -98,7 +99,8 @@
 }
 
 .productBtn,
-.buyBtn {
+.buyBtn,
+.managmentPrdBtn {
     width: 90%;
     border-radius: 5px;
     padding: 8px 14px;
@@ -108,9 +110,16 @@
     cursor: pointer;
 }
 
-.productBtn:hover {
+.productBtn:hover,
+.buyBtn:hover,
+.managmentPrdBtn:hover {
     background-color: #166184;
     transition: .5s;
+}
+
+.managmentPrdBtn {
+    width: 60%;
+    margin-top: 20px;
 }
 
 /* boton carrito */
