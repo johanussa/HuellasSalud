@@ -7,7 +7,7 @@ export const productos = [{
 },
 {
     image: "../../assets/Huellas&Salud_1.png",
-    name: "Lazo",
+    name: "Lazo para perro",
     price: 1200,
     category: "Para pasear",
     brand: "Animal factor"
@@ -26,19 +26,10 @@ export const carrito = [{
     amount: 1
 }];
 
-export const categorias = [{
-    nombre: "Comida"
-},
-{
-    nombre: "Cuidado e higiene"
-}];
-
-export const marcas = [{
-    nombre: "Bravecto"
-},
-{
-    nombre: "Chunky"
-}]
+export const categorias = [
+    { nombre: "Comida" },
+    { nombre: "Cuidado e higiene" }
+];
 
 export const productosAdmin = [
     {
@@ -70,3 +61,8 @@ export const productosAdmin = [
         categoria: "Para pasear"
     }
 ]
+
+export const marcas = [
+    { nombre: "Bravecto" },
+    { nombre: "Chunky" }
+];
