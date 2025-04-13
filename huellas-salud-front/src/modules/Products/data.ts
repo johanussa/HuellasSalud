@@ -31,7 +31,22 @@ export const categorias = [
     { nombre: "Cuidado e higiene" }
 ];
 
-export const productosAdmin = [
+export interface Product {
+    nombre: string;
+    precio: number;
+    unidades: number;
+    categoria: string;
+    proveedor: string;
+    descripcion: string;
+    caducidad: string;
+    estado: string;
+    id: number;
+    imagen: string;
+    unidadMedida: string;
+    codigoBarras: number;
+}
+
+export const productosAdmin: Product[] = [
     {
         id: 1,
         imagen: "../productos/imagenes/dogchow.png",
@@ -43,7 +58,7 @@ export const productosAdmin = [
         unidadMedida: "Libras",
         caducidad: "2026-02-26",
         codigoBarras: 7501000123456,
-        estado: true,
+        estado: "true",
         categoria: "Comida"
     },
     {
@@ -57,12 +72,63 @@ export const productosAdmin = [
         unidadMedida: "Unidad",
         caducidad: "No aplica",
         codigoBarras: 7501000234567,
-        estado: true,
+        estado: "true",
         categoria: "Para pasear"
     }
-]
+];
 
 export const marcas = [
     { nombre: "Bravecto" },
     { nombre: "Chunky" }
+];
+
+export const fieldsForm = [
+    {
+        label: "Nombre",
+        type: "text",
+        id: "nombre",
+        placeholder: "Nombre producto"
+    },
+    {
+        label: "Precio",
+        type: "number",
+        id: "precio",
+        placeholder: "Precio"
+    },
+    {
+        label: "Unidades",
+        type: "number",
+        id: "unidades",
+        placeholder: "Unidades disponibles"
+    },
+    {
+        label: "Categoría",
+        type: "text",
+        id: "categoria",
+        placeholder: "Categoría"
+    },
+    {
+        label: "Proveedor",
+        type: "text",
+        id: "proveedor",
+        placeholder: "Proveedor"
+    },
+    {
+        label: "Caducidad",
+        type: "date",
+        id: "caducidad",
+        placeholder: "Caducidad"
+    },
+    {
+        label: "Estado",
+        type: "text",
+        id: "estado",
+        placeholder: "Estado"
+    },
+    {
+        label: "Descripción",
+        type: "textarea",
+        id: "descripcion",
+        placeholder: "Descripción del producto"
+    }
 ];
