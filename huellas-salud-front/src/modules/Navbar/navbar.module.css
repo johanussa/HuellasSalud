@@ -133,7 +133,7 @@
 }
 
 /* Diseño Responsivo */
-@media (max-width: 1355px) {
+@media (max-width: 1400px) {
     .navbar {
         grid-template-columns: 1fr 4fr 1fr;
     }

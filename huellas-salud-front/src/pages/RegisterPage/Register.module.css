@@ -63,17 +63,16 @@
 }
 
 .containerButtons button {
-    font-size: 1rem;
+    font-size: .9rem;
     width: 140px;
     margin: 0;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 /* Container Img */
 .containerImg {
     background-image: url("../../assets/FondoRegister.png");
     background-size: cover;
-    height: 99.2%;
     border-radius: 0 10px 10px 0;
 }
 

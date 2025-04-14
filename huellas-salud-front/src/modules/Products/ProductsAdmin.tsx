@@ -42,7 +42,7 @@ const ProductsAdmin = () => {
     <main>
       <section className={styles.productsSection}>
         <div className={styles.title}>
-          <h2>Listado de Productos</h2>
+          <h2>Panel de administración - Productos</h2>
         </div>
         <button className={styles.addBtn} onClick={() => { setShowAdd(true); }}>
           Agregar Producto <i className="fa-solid fa-cart-plus"></i>
