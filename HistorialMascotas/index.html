@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <section class="funciones">
+        <button class="btnVolver"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+        <button onclick="modal()" class="btnAgregar"><i class="fa-solid fa-paw"></i> Agregar Mascota</button>
+    </section>
+    <section class="contenedorMascotas">
+        <h1>Mascotas de Carlos Puentes</h1>
+        <div class="fichasMascotas"></div>
+    </section>
+    <section class="modalAgregar">
+        <div class="contenedorAgregar">
+            <span onclick="modal()" class="cerrar"><i class="fa-solid fa-xmark"></i></span>
+            <h1>Agregar Mascota</h1>
+            <div class="informacion">
+                <div class="fotoAgregar">
+                    <img src="./fotos/michifu.jpg" alt="">
+                </div>
+                <div class="datos">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" placeholder="Nombre"><br>
+                    <label for="especie">Especie</label>
+                    <input type="text" id="especie" placeholder="Especie"><br>
+                    <label for="raza">Raza</label>
+                    <input type="text" id="raza" placeholder="Raza"><br>
+                    <label for="peso">Peso</label>
+                    <input type="number" id="peso" placeholder="Peso"><br>
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" placeholder="Edad"><br>
+                    <button onclick="agregarMascota()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

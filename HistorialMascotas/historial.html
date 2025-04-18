@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="historial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <div class="boton">
+            <button class="btnVolver"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+        </div>
+        <div class="historial">
+            <div class="foto">
+                <h1 id="nombre"></h1>
+                <img id="foto" src="" alt="Foto" width="200">
+            </div>
+            <div class="informacion">
+                <div class="opciones">
+                    <ul>
+                        <li onclick="mostrarContenido('tratamientos')">Tratamientos</li>
+                        <li onclick="mostrarContenido('informacion')">Información</li>
+                        <li onclick="mostrarContenido('historial')">Historial</li>
+                        <li onclick="mostrarContenido('proceso')">Proceso</li>
+                    </ul>
+                </div>
+                <div class="opcion" id="opcion-contenido">
+                    <h1 >Selecciona alguna de las opciones...</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="historial.js"></script>
+</body>
+</html>

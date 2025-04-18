@@ -1,0 +1,201 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+}
+
+.boton {
+    width: 100vw;
+    padding: 10px 30px;
+    height: 8vh;
+}
+
+.btnVolver {
+    background-color: #207da7;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+.historial {
+    height: 92vh;
+    display: grid;
+    grid-template-columns: 1.5fr 3fr;
+    overflow: hidden;
+}
+
+.foto {
+    width: 100%;
+    height: 100%;
+    /* background-color: #207da7; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.foto h1{
+    font-size: 2rem;
+    padding-bottom: 20px;
+}
+
+.foto img {
+    height: 80%;
+    width: auto;
+    border-radius: 15px;
+}
+
+.informacion {
+    width: 100%;
+    height: 95%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid #207da7;
+}
+
+.opciones {
+    width: 100%;
+    height: 6%;
+}
+
+.opciones ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    background-color: #207da7;
+}
+
+.opciones ul li {
+    height: 50px;
+    width: 24%;
+    /* background-color: #06364d; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.opciones ul li:hover {
+    background-color: #166184;
+}
+
+.opcion {
+    width: 95%;
+    min-height: 90%;
+    max-height: 90%;
+    /* border: 3px solid black; */
+    margin: auto;
+    border-radius: 10px;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.opcion h2 {
+    padding: 10px 0;
+}
+
+#infoMascota label {
+    background-color: #207da7;
+    display: inline-flex;
+    width: 140px;
+    height: 35px;
+    border-radius: 10px;
+    margin: 5px 0;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#infoMascota input{
+    height: 35px;
+    width: 250px;
+    border-radius: 10px;
+    border: 3px solid #207da770;
+    outline: none;
+    text-align: center;
+}
+
+.proceso-contenedor {
+    background: #f3f3f3;
+    border: 2px solid #444;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.pasos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.paso {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.icono {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.linea {
+    width: 40px;
+    height: 3px;
+    margin: 0 10px;
+    border-radius: 2px;
+}
+
+.completado .icono {
+    color: green;
+}
+
+.incompleto .icono {
+    color: red;
+}
+
+.linea.completado {
+    background-color: green;
+}
+
+.linea.incompleto {
+    background-color: red;
+}
+
+.mensaje {
+    margin-top: 20px;
+    color: #333;
+}
+
+button {
+    background-color: #207da7;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #166184;
+}
