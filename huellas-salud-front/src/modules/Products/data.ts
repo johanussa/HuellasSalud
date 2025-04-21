@@ -1,3 +1,5 @@
+import { Product } from "../../services/typesHS";
+
 export const productos = [{
     image: "../../assets/Huellas&Salud_1.png",
     name: "Dog chow",
@@ -30,21 +32,6 @@ export const categorias = [
     { nombre: "Comida" },
     { nombre: "Cuidado e higiene" }
 ];
-
-export interface Product {
-    nombre: string;
-    precio: number;
-    unidades: number;
-    categoria: string;
-    proveedor: string;
-    descripcion: string;
-    caducidad: string;
-    estado: string;
-    id: number;
-    imagen: string;
-    unidadMedida: string;
-    codigoBarras: number;
-}
 
 export const productosAdmin: Product[] = [
     {

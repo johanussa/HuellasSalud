@@ -1,7 +1,238 @@
 .usersSection {
-    padding-top: 115px;
+    margin-top: 140px;
+    text-align: center;
+    padding: 0 10px 10px;
 }
 
 .title h2 {
     font-size: 1.7rem;
+}
+
+.addBtn {
+    width: 200px;
+    border-radius: 5px;
+    padding: 8px 14px;
+    background-color: #000;
+    color: white;
+    border: transparent;
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+.addBtn i {
+    font-size: 1rem;
+    padding-left: 8px;
+}
+
+.formGroup label {
+    width: 50%;
+    margin: 0 auto 10px;
+    text-align: start;
+    display: block;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.formGroup input {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.usersTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 1000px;
+}
+
+.actions button {
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    border: 2px solid #207da7;
+}
+
+.editBtn {
+    color: #207da7;
+}
+
+.deleteBtn {
+    color: #b92b27;
+}
+
+.modalEdit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000090;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteUser {
+    min-width: 450px;
+    height: 180px;
+    width: 30%;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: black;
+}
+
+.deleteMsg {
+    padding: 16px;
+    color: black;
+}
+
+.buttons button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.updateBtn,
+.image button,
+.btnConfirmDelete,
+.btnCancelDelete {
+    width: 200px;
+    border-radius: 5px;
+    padding: 8px 14px;
+    background-color: #000;
+    color: white;
+    border: transparent;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+.btnConfirmDelete {
+    background-color: #b92b27;
+}
+
+.btnConfirmDelete:hover {
+    background-color: #831511;
+    transition: .5s;
+}
+
+.updateBtn:hover,
+.image button:hover,
+.btnCancelDelete:hover {
+    background-color: #166184;
+    transition: .6s;
+}
+
+.editUser {
+    position: relative;
+    height: 500px;
+    min-width: 900px;
+    background-color: white;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1.5fr 2.5fr;
+    grid-template-rows: 0.2fr 3.7fr 0.2fr;
+}
+
+.editionTitle {
+    font-size: 1.5rem;
+    grid-column: span 2;
+    text-align: center;
+    padding-top: 15px;
+    height: 100%;
+}
+
+.image {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.imageUser {
+    height: 70%;
+    overflow: hidden;
+    display: flex;
+
+}
+
+.imageUser img {
+    height: 95%;
+}
+
+.information {
+    margin-top: 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.information label {
+    background-color: darkgray;
+    width: 220px;
+    height: 35px;
+    margin-right: 10px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 35px;
+}
+
+.information input {
+    height: 35px;
+    width: 400px;
+    border-radius: 5px;
+    padding: 2px 8px;
+    border: 3px solid #00000060;
+    outline: none;
+}
+
+.information input:focus {
+    border: 3px solid #000;
+}
+
+.dataForm {
+    width: 80%;
+    margin: 5px;
+    display: flex;
+}
+
+.button {
+    text-align: center;
+    grid-column: span 2;
+    margin-bottom: 15px;
+}
+
+.modalClose {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.btnClose {
+    margin: 5px 10px;
+    font-size: 2.2rem;
+    color: #b92b27;
+    cursor: pointer;
+}
+
+.btnClose:hover {
+    color: #831511;
 }

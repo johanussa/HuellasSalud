@@ -14,3 +14,30 @@ export interface LoginFormProps {
     setViewPass: (updater: (prevState: boolean) => boolean) => void;
     setChangeIconEye: (updater: (prevState: boolean) => boolean) => void;
 }
+
+export interface Product {
+    nombre: string;
+    precio: number;
+    unidades: number;
+    categoria: string;
+    proveedor: string;
+    descripcion: string;
+    caducidad: string;
+    estado: string;
+    id: number;
+    imagen: string;
+    unidadMedida: string;
+    codigoBarras: number;
+}
+
+export interface User {
+    id: number;
+    name: string;
+    documentType: string;
+    documentNumber: number;
+    address: string;
+    email: string;
+    phone: number;
+    role: string;
+    status: string;
+}
