@@ -1,7 +1,7 @@
 import { User } from "../../services/typesHS";
 
-export const userFieldsForm = [
-    "ID",
+export const userFieldsTable = [
+    "#",
     "Nombre",
     "Tipo Doc.",
     "N° Doc.",

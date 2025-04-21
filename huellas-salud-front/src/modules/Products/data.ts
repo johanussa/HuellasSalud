@@ -60,7 +60,7 @@ export const productosAdmin: Product[] = [
         caducidad: "No aplica",
         codigoBarras: 7501000234567,
         estado: "true",
-        categoria: "Para pasear"
+        categoria: "Accesorios"
     }
 ];
 

@@ -41,3 +41,18 @@ export interface User {
     role: string;
     status: string;
 }
+
+export interface Pet {
+    id: number;
+    name: string;
+    type: string;
+    breed: string;
+    age: number;
+    weight: number;
+    styrofoam: boolean;
+    description: string;
+    status: string;
+    vaccines: string;
+    surgeries: string;
+    treatments: string;
+}
