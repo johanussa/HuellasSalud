@@ -7,6 +7,7 @@ import Products from "./modules/Products/Products";
 import ProductsAdmin from "./modules/Products/ProductsAdmin";
 import Users from "./modules/Users/Users";
 import Pets from "./modules/Pets/Pets";
+import History from "./modules/History/History";
 
 const AppRoutes = () => {
 
@@ -18,6 +19,7 @@ const AppRoutes = () => {
     { path: "/productos-admin", element: <ProductsAdmin /> },
     { path: "/usuarios", element: <Users /> },
     { path: "/mascotas", element: <Pets /> },
+    { path: "/historial", element: <History /> },
   ]);
 
   return routes;
