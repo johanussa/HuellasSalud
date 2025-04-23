@@ -1,5 +1,5 @@
 import styles from "./history.module.css";
-import imgPet from "../../assets/Huellas&Salud_3.png";
+import imgPet from "../../assets/simba.webp";
 import { useState } from "react";
 
 const History = () => {

@@ -8,6 +8,9 @@ import ProductsAdmin from "./modules/Products/ProductsAdmin";
 import Users from "./modules/Users/Users";
 import Pets from "./modules/Pets/Pets";
 import History from "./modules/History/History";
+import Home from "./modules/Home/Home";
+import Contact from "./modules/Contact/Contact";
+import Services from "./modules/Services/Services";
 
 const AppRoutes = () => {
 
@@ -20,6 +23,9 @@ const AppRoutes = () => {
     { path: "/usuarios", element: <Users /> },
     { path: "/mascotas", element: <Pets /> },
     { path: "/historial", element: <History /> },
+    { path: "/inicio", element: <Home/>},
+    { path: "/contacto", element: <Contact/>},
+    { path: "/servicios", element: <Services/>}
   ]);
 
   return routes;

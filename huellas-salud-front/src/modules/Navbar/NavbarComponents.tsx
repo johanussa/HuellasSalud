@@ -19,7 +19,7 @@ export const SearchBar = () => (
 
 export const NavLinks = () => (
     <ul className={styles.containerUl}>
-        <ListItemNav path="/" name="Inicio" icon="fa-solid fa-house-chimney" />
+        <ListItemNav path="/inicio" name="Inicio" icon="fa-solid fa-house-chimney" />
         <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
         <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
         <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
