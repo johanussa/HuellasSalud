@@ -8,7 +8,6 @@ export interface ListItemNavProps {
 export interface LoginFormProps {
     errorMsg: string;
     viewPass: boolean;
-    isValidData: boolean;
     changeIconEye: boolean;
     loading?: boolean;
     setViewPass: (updater: (prevState: boolean) => boolean) => void;
