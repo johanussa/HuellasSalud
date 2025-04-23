@@ -55,7 +55,7 @@ const Home = () => {
               </article>
             </div>
             <article className={styles.verMas}>
-              <button className={styles.btnVerMas} onClick={goToProductos}>Conocer más productos...</button>
+              <button className={styles.btnVerMas} onClick={goToProductos}>Conocer más productos ...</button>
             </article>
           </section>
 
@@ -72,7 +72,7 @@ const Home = () => {
               </article>
             </div>
             <article className={styles.verMas}>
-              <button className={styles.btnVerMas2} onClick={goToServicios}>Conocer más servicios...</button>
+              <button className={styles.btnVerMas2} onClick={goToServicios}>Conocer más servicios ...</button>
             </article>
           </section>
           <br />

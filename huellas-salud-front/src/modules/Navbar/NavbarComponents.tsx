@@ -36,7 +36,7 @@ const ListItemNav = ({ path, style, icon, name }: ListItemNavProps) => (
             className={({ isActive }) => (isActive ? styles.active : styles.disabled)}
             style={style ? { textDecoration: "none" } : {}}
         >
-            <i className={icon}></i>
+            <i className={icon} />
             {name}
         </NavLink>
     </li>

@@ -1,6 +1,6 @@
 import { fieldsForm, productosAdmin } from "./data";
 import styles from "./productsAdmin.module.css";
-import imgPrd from "../../assets/Huellas&Salud_3.png";
+import imgPrd from "../../assets/Comida_Gato.webp";
 import { useState } from "react";
 import { Product } from "../../services/typesHS";
 
@@ -60,10 +60,17 @@ const ProductsAdmin = () => {
                 <td>{prod.unidades}</td>
                 <td>{prod.categoria}</td>
                 <td className={styles.options}>
-                  <button className={styles.editBtn} onClick={() => { setPrdSelected(prod); setShowEdit(true); }}>
+                  <button
+                    className={styles.editBtn}
+                    onClick={() => { setPrdSelected(prod); setShowEdit(true); }}
+                    title="Editar producto"
+                  >
                     <i className="fa-solid fa-pencil" />
                   </button>
-                  <button className={styles.deleteBtn}>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => { setShowDelete(true); }}
+                    title="Eliminar producto">
                     <i className="fa-solid fa-trash" />
                   </button>
                 </td>
