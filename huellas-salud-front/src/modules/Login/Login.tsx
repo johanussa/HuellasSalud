@@ -6,8 +6,6 @@ import { Divider, ForgotPasswordSection, GoogleLoginButton, LoginForm, SocialMed
 const Login = () => {
 
   const [viewPass, setViewPass] = useState(false);
-  const [isValidData, setIsValidData] = useState(true);
-  const [loading, setLoading] = useState(false);
 
   return (
     <main className={styles.containerLogin}>
@@ -20,15 +18,13 @@ const Login = () => {
         <LoginForm
           viewPass={viewPass}
           setViewPass={setViewPass}
-          isValidData={isValidData}
           changeIconEye={true}
           setChangeIconEye={() => {}}
           errorMsg="---"
-          loading={loading}
         />
         <Divider />
-        <GoogleLoginButton loading={loading} />
-        <ForgotPasswordSection loading={loading} />
+        <GoogleLoginButton loading={false} />
+        <ForgotPasswordSection loading={false} />
         <SocialMediaIcons />
       </section>
     </main>

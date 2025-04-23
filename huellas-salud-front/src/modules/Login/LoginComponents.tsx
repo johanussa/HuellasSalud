@@ -4,19 +4,18 @@ import { Link } from 'react-router-dom';
 import ButtonComponent from '../../components/Button/Button';
 import { LoginFormProps } from '../../services/typesHS';
 
-export const LoginForm = ({ viewPass, setViewPass, errorMsg, isValidData, changeIconEye, setChangeIconEye, loading }: LoginFormProps) => {
+export const LoginForm = ({ viewPass, setViewPass, errorMsg, changeIconEye, setChangeIconEye }: LoginFormProps) => {
     return (
         <form className={styles.formLogin}>
             <InputField />
             <PasswordField
                 viewPass={viewPass}
                 setViewPass={setViewPass}
-                isValidData={isValidData}
                 changeIconEye={changeIconEye}
                 errorMsg={errorMsg}
                 setChangeIconEye={setChangeIconEye}
             />
-            <ButtonComponent type="submit" loading={loading} contain={loading ? "CARGANDO..." : "INGRESAR"} />
+            <ButtonComponent type="submit" contain={"INGRESAR"} />
         </form>
     )
 }
@@ -35,7 +34,8 @@ const InputField = () => {
     );
 }
 
-const PasswordField = ({ viewPass, setViewPass, isValidData, changeIconEye, errorMsg }: LoginFormProps) => {
+const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg }: LoginFormProps) => {
+    const isValidData = true;
     return (
         <aside className={styles.inputContainer}>
             <label htmlFor="inputPassword" className={styles.loginLabel}>Contraseña</label>
