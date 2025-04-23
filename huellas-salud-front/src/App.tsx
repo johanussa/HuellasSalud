@@ -15,7 +15,7 @@ import Services from "./modules/Services/Services";
 const AppRoutes = () => {
 
   const routes = useRoutes([
-    { path: "/", element: <></> },
+    { path: "/", element: <Home/> },
     { path: "/login", element: <Login /> },
     { path: "/registro", element: <Register /> },
     { path: "/productos", element: <Products /> },
