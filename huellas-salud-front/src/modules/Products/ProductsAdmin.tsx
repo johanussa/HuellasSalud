@@ -1,23 +1,14 @@
-import { fieldsForm, Product, productosAdmin } from "./data";
+import { fieldsForm, productosAdmin } from "./data";
 import styles from "./productsAdmin.module.css";
-import imgPrd from "../../assets/Huellas&Salud_3.png";
+import imgPrd from "../../assets/Comida_Gato.webp";
 import { useState } from "react";
+import { Product } from "../../services/typesHS";
 
 const ProductsAdmin = () => {
 
   const [prdSelected, setPrdSelected] = useState<Product>({
-    id: 0,
-    imagen: "",
-    nombre: "",
-    precio: 0,
-    unidades: 0,
-    proveedor: "",
-    descripcion: "",
-    unidadMedida: "",
-    codigoBarras: 0,
-    categoria: "",
-    caducidad: "",
-    estado: ""
+    id: 0, imagen: "", nombre: "", precio: 0, unidades: 0, proveedor: "", descripcion: "",
+    unidadMedida: "", codigoBarras: 0, categoria: "", caducidad: "", estado: ""
   });
 
   const [showEdit, setShowEdit] = useState<boolean>(false);
@@ -45,7 +36,7 @@ const ProductsAdmin = () => {
           <h2>Panel de administración - Productos</h2>
         </div>
         <button className={styles.addBtn} onClick={() => { setShowAdd(true); }}>
-          Agregar Producto <i className="fa-solid fa-cart-plus"></i>
+          Agregar Producto <i className="fa-solid fa-cart-plus" />
         </button>
         <table>
           <thead>
@@ -69,11 +60,18 @@ const ProductsAdmin = () => {
                 <td>{prod.unidades}</td>
                 <td>{prod.categoria}</td>
                 <td className={styles.options}>
-                  <button className={styles.editBtn} onClick={() => { setPrdSelected(prod); setShowEdit(true); }}>
-                    <i id="editar" className="fa-solid fa-pencil" />
+                  <button
+                    className={styles.editBtn}
+                    onClick={() => { setPrdSelected(prod); setShowEdit(true); }}
+                    title="Editar producto"
+                  >
+                    <i className="fa-solid fa-pencil" />
                   </button>
-                  <button className={styles.deleteBtn} onClick={() => { setShowDelete(true); }}>
-                    <i id="eliminar" className="fa-solid fa-trash" />
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => { setShowDelete(true); }}
+                    title="Eliminar producto">
+                    <i className="fa-solid fa-trash" />
                   </button>
                 </td>
               </tr>
@@ -82,7 +80,7 @@ const ProductsAdmin = () => {
         </table>
       </section>
       <section className={(showEdit || showDelete || showAdd) ? styles.modalEdit : ""}>
-        {showEdit && <CompForm title="Modificación del producto" nameBtn="Actualizar producto" products={prdSelected} handlerCloseModal={handlerCloseModal} />}
+        {showEdit && <CompForm title="Modificación del producto" nameBtn="Actualizar producto" product={prdSelected} handlerCloseModal={handlerCloseModal} />}
         {showDelete && <div className={styles.deleteProduct} >
           <h1>Eliminar producto</h1>
           <h3 className={styles.deleteMsg}>¿Seguro que quieres eliminar el producto Comida de perro?</h3>
@@ -102,11 +100,11 @@ const ProductsAdmin = () => {
 interface CompFormProps {
   title: string;
   nameBtn: string;
-  products?: Product;
+  product?: Product;
   handlerCloseModal?: () => void;
 }
 
-const CompForm = ({ title, nameBtn, products, handlerCloseModal }: CompFormProps) => {
+const CompForm = ({ title, nameBtn, product, handlerCloseModal }: CompFormProps) => {
 
   return (
     <div className={styles.editProduct}>
@@ -126,13 +124,13 @@ const CompForm = ({ title, nameBtn, products, handlerCloseModal }: CompFormProps
                 <textarea
                   id={field.id}
                   placeholder={field.placeholder}
-                  value={products ? products[field.id as keyof Product] as string : ""} />
+                  value={product ? product[field.id as keyof Product] as string : ""} />
               ) : (
                 <input
                   type={field.type}
                   id={field.id}
                   placeholder={field.placeholder}
-                  value={products ? products[field.id as keyof Product] as string : ""} />
+                  value={product ? product[field.id as keyof Product] as string : ""} />
               )}
             </div>
           ))

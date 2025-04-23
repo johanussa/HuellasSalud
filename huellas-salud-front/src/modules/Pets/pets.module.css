@@ -1,4 +1,4 @@
-.usersSection {
+.petsSection {
     margin-top: 140px;
     text-align: center;
     padding: 0 15px 15px;
@@ -41,7 +41,7 @@
     font-size: 13px;
 }
 
-.usersTable {
+.petsTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
@@ -135,10 +135,11 @@
     transition: .6s;
 }
 
-.editUser {
+.editPet {
     position: relative;
-    height: 500px;
-    min-width: 900px;
+    height: 600px;
+    width: 1000px;
+    min-width: 870px;
     background-color: white;
     border-radius: 10px;
     display: grid;
@@ -164,14 +165,14 @@
     overflow: hidden;
 }
 
-.imageUser {
+.imagePet {
     height: 70%;
     overflow: hidden;
     display: flex;
 
 }
 
-.imageUser img {
+.imagePet img {
     height: 95%;
 }
 
@@ -185,7 +186,7 @@
 
 .information label {
     background-color: darkgray;
-    width: 220px;
+    width: 270px;
     height: 35px;
     margin-right: 10px;
     border-radius: 5px;

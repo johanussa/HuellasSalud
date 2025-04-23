@@ -1,14 +1,14 @@
 import { useState } from "react";
-import styles from "./users.module.css";
+import styles from "./pets.module.css";
 import imgPrd from "../../assets/Huellas&Salud_3.png";
-import { User } from "../../services/typesHS";
-import { fieldsFormUser, userFieldsTable, users } from "./data";
+import { Pet } from "../../services/typesHS";
+import { fieldsFormPet, petFieldsTable, pets } from "./dataPet";
 
-const Users = () => {
+const Pets = () => {
 
-  const [userSelected, setUserSelected] = useState<User>({
-    id: 0, name: "", documentType: "", documentNumber: 0,
-    address: "", email: "", phone: 0, role: "", status: ""
+  const [petSelected, setPetSelected] = useState<Pet>({
+    id: 0, name: "", type: "", breed: "", age: 0, weight: 0, treatments: "",
+    description: "", status: "", vaccines: "", surgeries: "", styrofoam: false
   });
 
   const [showEdit, setShowEdit] = useState<boolean>(false);
@@ -22,20 +22,20 @@ const Users = () => {
   }
 
   return (
-    <main className={styles.usersSection}>
+    <main className={styles.petsSection}>
       <div className={styles.title}>
-        <h2>Panel de administración - Usuarios</h2>
+        <h2>Panel de administración - Mascotas</h2>
       </div>
       <button className={styles.addBtn} onClick={() => { setShowAdd(true); }}>
-        Agregar Usuario <i className="fa-solid fa-users-gear" />
+        Agregar Mascota <i className="fa-solid fa-dog" />
       </button>
       <section>
         <div className={styles.formGroup}>
-          <label htmlFor="searchTerm">Buscar usuario</label>
+          <label htmlFor="searchTerm">Buscar mascota</label>
           <input
             type="text"
             id="searchTerm"
-            placeholder="Buscar por nombre, documento, rol, teléfono o correo"
+            placeholder="Buscar por nombre, tipo, raza o dueño"
           />
         </div>
         <aside>
@@ -43,35 +43,34 @@ const Users = () => {
             Buscar <i className="fa-solid fa-search" />
           </button>
           <button className={styles.addBtn}>
-            Mostrar todos <i className="fa-solid fa-user"></i>
+            Mostrar todos <i className="fa-solid fa-cat" />
           </button>
         </aside>
       </section>
       <section className={styles.tableContainer}>
-        <table className={styles.usersTable}>
+        <table className={styles.petsTable}>
           <thead>
             <tr>
-              {userFieldsTable.map((field) => (<th key={field}>{field}</th>))}
+              {petFieldsTable.map((field) => (<th key={field}>{field}</th>))}
             </tr>
           </thead>
           <tbody>
             {
-              users.map((user) => (
-                <tr key={user.id}>
-                  <td style={{ fontWeight: "bold" }}>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.documentType}</td>
-                  <td>{user.documentNumber}</td>
-                  <td>{user.role}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.address}</td>
-                  <td>{user.email}</td>
-                  <td>{user.status}</td>
+              pets.map((pet) => (
+                <tr key={pet.id}>
+                  <td style={{ fontWeight: "bold" }}>{pet.id}</td>
+                  <td>{pet.name}</td>
+                  <td>{pet.type}</td>
+                  <td>{pet.breed}</td>
+                  <td>{pet.age}</td>
+                  <td>{pet.weight}</td>
+                  <td>{pet.styrofoam ? "Si" : "No"}</td>
+                  <td>{pet.status}</td>
                   <td className={styles.actions}>
-                    <button className={styles.editBtn} title="Editar usuario" onClick={() => { setUserSelected(user); setShowEdit(true); }}>
+                    <button className={styles.editBtn} title="Editar mascota" onClick={() => { setPetSelected(pet); setShowEdit(true); }}>
                       <i className="fa-solid fa-pencil" />
                     </button>
-                    <button className={styles.deleteBtn} title="Eliminar usuario" onClick={() => { setShowDelete(true); }}>
+                    <button className={styles.deleteBtn} title="Eliminar mascota" onClick={() => { setShowDelete(true); }}>
                       <i className="fa-solid fa-trash" />
                     </button>
                     <button className={styles.editBtn} title="Cambiar estado">
@@ -85,18 +84,16 @@ const Users = () => {
         </table>
       </section>
       <section className={(showEdit || showDelete || showAdd) ? styles.modalEdit : ""}>
-        {showEdit && <CompForm title="Edición de usuario" nameBtn="Actualizar usuario" user={userSelected} handlerCloseModal={handlerCloseModal} />}
+        {showEdit && <CompForm title="Edición de mascota" nameBtn="Actualizar mascota" pet={petSelected} handlerCloseModal={handlerCloseModal} />}
         {showDelete && <div className={styles.deleteUser} >
-          <h1>Eliminar usuario</h1>
-          <h3 className={styles.deleteMsg}>¿Seguro que quieres eliminar al usuario de nombre Juan Pérez?</h3>
+          <h1>Eliminar mascota</h1>
+          <h3 className={styles.deleteMsg}>¿Seguro que quieres eliminar la mascota de nombre Firulais?</h3>
           <div className={styles.buttons}>
             <button className={styles.btnConfirmDelete}>Sí, eliminar</button>
-            <button className={styles.btnCancelDelete} onClick={() => { setShowDelete(prev => !prev) }} >
-              No, cancelar
-            </button>
+            <button className={styles.btnCancelDelete} onClick={() => { setShowDelete(prev => !prev) }} >No, cancelar</button>
           </div>
         </div>}
-        {showAdd && <CompForm title="Crear usuario" nameBtn="Crear usuario" handlerCloseModal={handlerCloseModal} />}
+        {showAdd && <CompForm title="Crear mascota" nameBtn="Crear mascota" handlerCloseModal={handlerCloseModal} />}
       </section>
     </main>
   );
@@ -105,31 +102,31 @@ const Users = () => {
 interface CompFormProps {
   title: string;
   nameBtn: string;
-  user?: User;
+  pet?: Pet;
   handlerCloseModal?: () => void;
 }
 
-const CompForm = ({ title, nameBtn, user, handlerCloseModal }: CompFormProps) => {
+const CompForm = ({ title, nameBtn, pet, handlerCloseModal }: CompFormProps) => {
 
   return (
-    <div className={styles.editUser}>
+    <div className={styles.editPet}>
       <h1 className={styles.editionTitle}>{title}</h1>
       <div className={styles.image}>
-        <div className={styles.imageUser}>
+        <div className={styles.imagePet}>
           <img src={imgPrd} alt="ImageProduct" />
         </div>
         <button>Cargar imagen</button>
       </div>
       <div className={styles.information}>
         {
-          fieldsFormUser.map((field) => (
+          fieldsFormPet.map((field) => (
             <div key={field.id} className={styles.dataForm}>
               <label htmlFor={field.id}>{field.label}</label>
               <input
                 type={field.type}
                 id={field.id}
                 placeholder={field.placeholder}
-                value={user ? user[field.id as keyof User] as string : ""} />
+                value={pet ? pet[field.id as keyof Pet] as string : ""} />
             </div>
           ))
         }
@@ -144,4 +141,4 @@ const CompForm = ({ title, nameBtn, user, handlerCloseModal }: CompFormProps) =>
   );
 }
 
-export default Users;
+export default Pets;

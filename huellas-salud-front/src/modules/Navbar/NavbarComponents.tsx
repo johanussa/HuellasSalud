@@ -19,12 +19,12 @@ export const SearchBar = () => (
 
 export const NavLinks = () => (
     <ul className={styles.containerUl}>
-        <ListItemNav path="/" name="Inicio" icon="fa-solid fa-house-chimney" />
+        <ListItemNav path="/inicio" name="Inicio" icon="fa-solid fa-house-chimney" />
         <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
         <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
         <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
         <ListItemNav path="/mascotas" name="Mascotas" icon="fa-solid fa-paw" />
-        <ListItemNav path="/ventas" name="Ventas" icon="fa-solid fa-money-bill-trend-up" />
+        <ListItemNav path="/historial" name="Historial" icon="fa-solid fa-notes-medical" />
         <ListItemNav path="/contacto" name="Contacto" icon="fa-solid fa-mobile-screen-button" />
     </ul>
 );
@@ -36,7 +36,7 @@ const ListItemNav = ({ path, style, icon, name }: ListItemNavProps) => (
             className={({ isActive }) => (isActive ? styles.active : styles.disabled)}
             style={style ? { textDecoration: "none" } : {}}
         >
-            <i className={icon}></i>
+            <i className={icon} />
             {name}
         </NavLink>
     </li>

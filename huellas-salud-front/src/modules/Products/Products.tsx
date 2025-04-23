@@ -1,6 +1,7 @@
 import { carrito, categorias, marcas, productos } from './data';
 import styles from './products.module.css';
-import imgPrd from '../../assets/Huellas&Salud_3.png';
+import imgComida from '../../assets/dogchow.webp';
+import imgLazo from '../../assets/lazo.webp';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -57,7 +58,7 @@ const Products = () => {
       <section className={styles.productCardContainer}>
         {productos.map(prod => (
           <div className={styles.cardProduct} key={prod.name}>
-            <img src={imgPrd} alt={prod.name} />
+            <img src={imgComida} alt={prod.name} />
             <div className={styles.productName}><h1>{prod.name}</h1></div>
             <h3 className={styles.productPrice}>Precio: {handlerFormatCoin(prod.price)}</h3>
             <h4>Cantidad:
@@ -81,7 +82,7 @@ const Products = () => {
           <div>
             {carrito.map((prod) => (
               <div className={styles.cartItem} key={prod.name}>
-                <img src={imgPrd} alt={prod.name} />
+                <img src={imgComida} alt={prod.name} />
                 <p>{prod.name}<br />{handlerFormatCoin(prod.price)} x
                   {/* <input className="cantCarrito" type="number" min="1" value="${cantidad}" onchange="actualizarCantidad('${nombre}', this.value)" /> */}
                   <input className={styles.amountCart} type="number" min="1" value={prod.amount} />
