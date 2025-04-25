@@ -1,12 +1,11 @@
 import styles from "./navbar.module.css";
-import imgHS1 from "../../assets/Huellas&Salud_4.png";
+import imgHS1 from "../../assets/HS_LOGO_WHITE.jpg";
 import { Link, NavLink } from "react-router-dom";
 import { ListItemNavProps } from "../../services/typesHS";
 
 export const Logo = () => (
     <picture className={styles.logoContain}>
         <img src={imgHS1} alt="Huellas&Salud" />
-        <span>Huellas & Salud 🐾</span>
     </picture>
 );
 
