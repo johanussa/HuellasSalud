@@ -5,7 +5,9 @@ import { ListItemNavProps } from "../../services/typesHS";
 
 export const Logo = () => (
     <picture className={styles.logoContain}>
-        <img src={imgHS1} alt="Huellas&Salud" />
+        <Link to={"/inicio"}>
+            <img src={imgHS1} alt="Huellas&Salud" />
+        </Link>
     </picture>
 );
 
@@ -18,7 +20,7 @@ export const SearchBar = () => (
 
 export const NavLinks = () => (
     <ul className={styles.containerUl}>
-        <ListItemNav path="/inicio" name="Inicio" icon="fa-solid fa-house-chimney" />
+        <ListItemNav path="/mascotas/perros" name="Perros" icon="fa-solid fa-dog" />
         <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
         <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
         <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
