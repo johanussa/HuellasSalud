@@ -55,3 +55,13 @@ export interface Pet {
     surgeries: string;
     treatments: string;
 }
+
+export interface ListCategoriesObj {
+    name: string;
+    img: string;
+}
+
+export interface CategoryOption {
+    name: string;
+    options: string[];
+}

@@ -131,14 +131,14 @@
     border-bottom: 10px solid;
     border-radius: 0 0 14px 14px;
     width: 65%;
-    min-width: 1100px;
-    height: 455px;
+    min-width: 1150px;
+    height: 465px;
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 21% 79%;
 }
 
 .optionCategory {
-    height: 330px;
+    height: 340px;
     border-right: 1px solid #00000010;
 }
 
@@ -181,6 +181,19 @@
 
 .optionMain section {
     width: 200px;
+}
+
+.optionMain section h3 {
+    padding: 6px 0;
+}
+
+.optionMain section ul {
+    list-style: none;
+}
+
+.optionMain section ul li {
+    color: #00000090;
+    font-size: .9rem;
 }
 
 .optionBrands {
