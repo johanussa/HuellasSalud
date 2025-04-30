@@ -24,7 +24,7 @@
     top: 0;
     left: 0;
     display: grid;
-    grid-template-columns: 1fr 4fr 1.2fr;
+    grid-template-columns: .8fr 4fr 1.2fr;
 }
 
 /* Contenedor logo navbar */
@@ -213,6 +213,7 @@
 .optionBrands ul li {
     padding: 10px;
     cursor: pointer;
+    text-align: center;
     transition: transform .3s;
 }
 

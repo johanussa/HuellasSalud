@@ -1,18 +1,23 @@
+import { useState } from "react";
 import styles from "./navbar.module.css";
 import { BtnsLogRegister, Logo, NavLinks, SearchBar, SubMenu } from "./NavbarComponents";
 
 const Navbar = () => {
+
+  const [showSubMenu, setShowSubMenu] = useState<boolean>(false);
+  const [optionHover, setOptionHover] = useState<string>("");
+
   return (
     <>
       <nav className={styles.navbar}>
         <Logo />
         <aside>
           <SearchBar />
-          <NavLinks />
+          <NavLinks setOptionHover={setOptionHover} setShowSubMenu={setShowSubMenu} />
         </aside>
         <BtnsLogRegister />
       </nav>
-      <SubMenu />
+      {showSubMenu && <SubMenu option={optionHover} />}
     </>
   );
 }

@@ -1,5 +1,7 @@
 import { CategoryOption, ListCategoriesObj } from "../../services/typesHS";
-import prdPopular from "../../assets/Comida_Gato.webp";
+import prdPopularCat from "../../assets/Comida_Gato.webp";
+import prdPopularDog from "../../assets/TratamientosEspecializados.webp";
+import prdPopularOther from "../../assets/PeluqueriaBienestar.webp";
 
 export const listDogCategories: ListCategoriesObj[] = [
     { name: "Comida", img: "fa-solid fa-bowl-food" },
@@ -15,10 +17,18 @@ export const listCatCategories: ListCategoriesObj[] = [
     { name: "Comida", img: "fa-solid fa-bowl-food" },
     { name: "Salud", img: "fa-solid fa-suitcase-medical" },
     { name: "Gimnasios", img: "fa-solid fa-dumbbell" },
-    { name: "Arena y Areneras", img: "fa-hourglass-half" },
+    { name: "Arena y Areneras", img: "fa-solid fa-hourglass-half" },
     { name: "Accesorios", img: "fa-solid fa-bone" },
     { name: "Cuidado e Higiene", img: "fa-solid fa-spray-can-sparkles" },
     { name: "Juguetes", img: "fa-solid fa-baseball" },
+];
+
+export const listOtherCategories: ListCategoriesObj[] = [
+    { name: "Peces", img: "fa-solid fa-fish-fins" },
+    { name: "Aves", img: "fa-solid fa-crow" },
+    { name: "Roedores", img: "fa-solid fa-otter" },
+    { name: "Conejos", img: "fa-solid fa-paw" },
+    { name: "Caballos", img: "fa-solid fa-horse" },
 ];
 
 export const dogCategoryOptions: CategoryOption[] = [
@@ -104,13 +114,156 @@ export const dogCategoryOptions: CategoryOption[] = [
     }
 ];
 
+export const catCategoryOptions: CategoryOption[] = [
+    {
+        name: "Comida",
+        options: [
+            "Concentrados",
+            "Alimento humedo",
+            "Alimento medicado",
+            "Snacks y galletas",
+            "Natural"
+        ],
+    },
+    {
+        name: "Farmacia",
+        options: [
+            "Desparasitantes",
+            "Suplementos y Vitaminas",
+            "Analgésicos",
+            "Antibióticos",
+            "Digestivos",
+        ],
+    },
+    {
+        name: "Gimnasios",
+        options: [
+            "Gimnasios y Rascadores",
+            "Casitas y Camas",
+            "Colchonetas y mantas",
+            "Guacales y Maletines",
+            "Comederos y Bebederos",
+        ],
+    },
+    {
+        name: "Arena y Areneras",
+        options: [
+            "Areneras",
+            "Arena",
+            "Desinfectantes",
+            "Ambientadores",
+            "Cuidado oral",
+        ],
+    },
+    {
+        name: "Cuidado e Higiene",
+        options: [
+            "Shampoos y Jabones",
+            "Estimulantes",
+            "Cuidado de piel",
+            "Colonias",
+            "Cepillos y Peines",
+        ],
+    },
+    {
+        name: "Accesorios",
+        options: [
+            "Correas y Placas",
+            "Arneses y Pecheras",
+            "Collares",
+            "Bozales",
+            "Protectores",
+        ],
+    },
+    {
+        name: "Salud",
+        options: [
+            "Medicamentos y Antibióticos",
+            "Suplementos",
+            "Vitaminas",
+            "Antipulgas y garrapatas",
+            "Desparasitantes",
+        ],
+    },
+    {
+        name: "Juguetes",
+        options: [
+            "Pelotas y Lanzadores",
+            "Ratones y Huesos",
+            "Peluches",
+            "Sonajeros",
+            "Túneles",
+        ],
+    }
+];
+
+export const otherCategoryOptions: CategoryOption[] = [
+    {
+        name: "Peces",
+        options: [
+            "Alimento",
+            "Acuarios y Peceras",
+            "Medicamentos",
+            "Vitaminas",
+            "Otros",
+        ],
+    },
+    {
+        name: "Aves",
+        options: [
+            "Alimento",
+            "Jaulas",
+            "Comederos y Bebederos",
+            "Salud e Higiene",
+            "Accesorios y Juguetes"
+        ],
+    },
+    {
+        name: "Roedores",
+        options: [
+            "Alimento y Vitaminas",
+            "Casas y Jaulas",
+            "Comederos y Bebederos",
+            "Salud e Higiene",
+            "Accesorios y Juguetes"
+        ],
+    },
+    {
+        name: "Caballos",
+        options: [
+            "Alimento",
+            "Vitaminas y Suplementos",
+            "Salud",
+            "Cuidado e Higiene",
+            "Accesorios"
+        ],
+    }
+];
+
 export const popularDogBreeds: ListCategoriesObj[] = [
-    { name: "Royal Canin", img: prdPopular },
-    { name: "Purina", img: prdPopular },
-    { name: "Pedigree", img: prdPopular },
-    { name: "Whiskas", img: prdPopular },
-    { name: "Hills", img: prdPopular },
-    { name: "Proplan", img: prdPopular },
-    { name: "Nutra Nuggets", img: prdPopular },
-    { name: "Taste of the Wild", img: prdPopular }
+    { name: "Royal Canin", img: prdPopularDog },
+    { name: "Purina", img: prdPopularDog },
+    { name: "Pedigree", img: prdPopularDog },
+    { name: "Whiskas", img: prdPopularDog },
+    { name: "Hills", img: prdPopularDog },
+    { name: "Proplan", img: prdPopularDog },
+    { name: "Nutra Nuggets", img: prdPopularDog },
+    { name: "Taste of the Wild", img: prdPopularDog }
+];
+
+export const popularCatBreeds: ListCategoriesObj[] = [
+    { name: "Royal Canin", img: prdPopularCat },
+    { name: "Purina", img: prdPopularCat },
+    { name: "Whiskas", img: prdPopularCat },
+    { name: "Hills", img: prdPopularCat },
+    { name: "Proplan", img: prdPopularCat },
+    { name: "Nutra Nuggets", img: prdPopularCat },
+    { name: "Taste of the Wild", img: prdPopularCat }
+];
+
+export const popularOtherBreeds: ListCategoriesObj[] = [
+    { name: "Piamontina", img: prdPopularOther },
+    { name: "Incros", img: prdPopularOther },
+    { name: "Omega One", img: prdPopularOther },
+    { name: "Agrinal", img: prdPopularOther },
 ];

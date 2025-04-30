@@ -3,6 +3,8 @@ export interface ListItemNavProps {
     name: string;
     icon: string;
     style?: boolean;
+    setOptionHover?: (option: string) => void;
+    setShowSubMenu?: (show: boolean) => void;
 };
 
 export interface LoginFormProps {
@@ -64,4 +66,9 @@ export interface ListCategoriesObj {
 export interface CategoryOption {
     name: string;
     options: string[];
+}
+
+export interface NavLinkProps {
+    setOptionHover?: (option: string) => void;
+    setShowSubMenu?: (show: boolean) => void;
 }
