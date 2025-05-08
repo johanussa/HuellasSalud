@@ -1,8 +1,10 @@
 import styles from "./navbar.module.css";
 import imgHS1 from "../../assets/HS_LOGO_WHITE.jpg";
+import imgHS2 from "../../assets/simba.webp";
 import { Link, NavLink } from "react-router-dom";
-import { CategoryOption, ListCategoriesObj, ListItemNavProps, NavLinkProps } from "../../services/typesHS";
-import { popularDogBreeds, dogCategoryOptions, listDogCategories, catCategoryOptions, listCatCategories, popularCatBreeds, listOtherCategories, otherCategoryOptions, popularOtherBreeds } from "./navbarData";
+import { ListItemNavProps, NavLinkProps, SubMenuProps } from "../../services/typesHS";
+import { MENU_DATA } from "./navbarData";
+import { useMemo } from "react";
 
 export const Logo = () => (
     <picture className={styles.logoContain}>
@@ -89,39 +91,21 @@ export const BtnsLogRegister = () => (
     </aside>
 );
 
-export const SubMenu = ({ option }: { option: string }) => {
+export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
 
-    // REFACTOR 
+    const data = useMemo(() => MENU_DATA[option as keyof typeof MENU_DATA], [option]);
 
-    let categories: ListCategoriesObj[] = [];
-    let categoryOptions: CategoryOption[] = [];
-    let popularBreeds: ListCategoriesObj[] = [];
-
-    switch (option) {
-        case "Perros":
-            categories = listDogCategories;
-            categoryOptions = dogCategoryOptions;
-            popularBreeds = popularDogBreeds;
-            break;
-        case "Gatos":
-            categories = listCatCategories;
-            categoryOptions = catCategoryOptions;
-            popularBreeds = popularCatBreeds;
-            break;
-        case "Otras Mascotas":
-            categories = listOtherCategories;
-            categoryOptions = otherCategoryOptions;
-            popularBreeds = popularOtherBreeds;
-            break;
-        default: return;
-    }
+    const handleMouse = (show: boolean) => setShowSubMenu?.(show);
 
     return (
-        <section className={styles.optionMenu}>
+        <section className={styles.optionMenu}
+            onMouseEnter={() => handleMouse(true)}
+            onMouseLeave={() => handleMouse(false)}
+        >
             <aside className={styles.optionCategory}>
                 <ul>
-                    {categories.map((category) => (
-                        <li><i className={category.img} /> {category.name}</li>
+                    {data.categories.map((category) => (
+                        <li key={category.name}><i className={category.img} /> {category.name}</li>
                     ))}
                     <li>
                         <Link to={"/productos"}>
@@ -132,11 +116,12 @@ export const SubMenu = ({ option }: { option: string }) => {
                 </ul>
             </aside>
             <aside className={styles.optionMain}>
-                {categoryOptions.map((category) => (
-                    <section key={category.name}>
-                        <h3>{category.name}</h3>
+                {data.options.map((optCat) => (
+                    <section key={optCat.name}>
+                        {option === "Otras Mascotas" && (<img src={imgHS2} alt={optCat.name} />)}
+                        <h3>{optCat.name}</h3>
                         <ul>
-                            {category.options.map((option) => (<li key={option}>{option}</li>))}
+                            {optCat.options.map((option) => (<li key={option}>{option}</li>))}
                         </ul>
                     </section>
                 ))}
@@ -144,7 +129,7 @@ export const SubMenu = ({ option }: { option: string }) => {
             <aside className={styles.optionBrands}>
                 <ul>
                     <b>Marcas populares</b>
-                    {popularBreeds.map((brand) => (
+                    {data.popular.map((brand) => (
                         <li key={brand.name}>
                             <picture><img src={brand.img} alt={brand.name} /></picture>
                         </li>

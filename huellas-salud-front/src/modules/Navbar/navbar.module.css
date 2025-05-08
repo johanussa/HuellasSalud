@@ -90,7 +90,7 @@
 }
 
 .liNav a {
-    padding: 10px;
+    padding: 10px 12px 25px;
     color: white;
 }
 
@@ -126,6 +126,9 @@
 
 /* Diseño opciones menú */
 .optionMenu {
+    position: absolute;
+    top: 0;
+    left: 10%;
     margin: 125px auto 0;
     box-shadow: 0px 0px 5px 2px #00000040;
     border-bottom: 10px solid;
@@ -134,6 +137,7 @@
     min-width: 1150px;
     height: 465px;
     display: grid;
+    background-color: #fff;
     grid-template-columns: 21% 79%;
 }
 
@@ -183,6 +187,11 @@
     width: 200px;
 }
 
+.optionMain section img {
+    cursor: pointer;
+    width: 140px;
+}
+
 .optionMain section h3 {
     padding: 6px 0;
 }
@@ -192,8 +201,14 @@
 }
 
 .optionMain section ul li {
-    color: #00000090;
+    color: #00000080;
     font-size: .9rem;
+}
+
+.optionMain section ul li:hover {
+    list-style-type: disc;
+    color: #000000;
+    cursor: pointer;
 }
 
 .optionBrands {

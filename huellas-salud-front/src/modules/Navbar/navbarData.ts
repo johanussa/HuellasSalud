@@ -1,4 +1,4 @@
-import { CategoryOption, ListCategoriesObj } from "../../services/typesHS";
+import { CategoryOption, ListCategoriesObj, SubMenuProps } from "../../services/typesHS";
 import prdPopularCat from "../../assets/Comida_Gato.webp";
 import prdPopularDog from "../../assets/TratamientosEspecializados.webp";
 import prdPopularOther from "../../assets/PeluqueriaBienestar.webp";
@@ -267,3 +267,27 @@ export const popularOtherBreeds: ListCategoriesObj[] = [
     { name: "Omega One", img: prdPopularOther },
     { name: "Agrinal", img: prdPopularOther },
 ];
+
+export const MENU_DATA: Record<
+    SubMenuProps["option"], {
+        categories: ListCategoriesObj[];
+        options: CategoryOption[];
+        popular: ListCategoriesObj[];
+    }
+> = {
+    Perros: {
+        categories: listDogCategories,
+        options: dogCategoryOptions,
+        popular: popularDogBreeds,
+    },
+    Gatos: {
+        categories: listCatCategories,
+        options: catCategoryOptions,
+        popular: popularCatBreeds,
+    },
+    "Otras Mascotas": {
+        categories: listOtherCategories,
+        options: otherCategoryOptions,
+        popular: popularOtherBreeds,
+    },
+};

@@ -72,3 +72,8 @@ export interface NavLinkProps {
     setOptionHover?: (option: string) => void;
     setShowSubMenu?: (show: boolean) => void;
 }
+
+export interface SubMenuProps {
+    option: string;
+    setShowSubMenu?: (show: boolean) => void;
+}
