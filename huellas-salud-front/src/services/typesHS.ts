@@ -9,11 +9,12 @@ export interface ListItemNavProps {
 
 export interface LoginFormProps {
     errorMsg: string;
-    viewPass: boolean;
+    viewPass?: boolean;
     changeIconEye: boolean;
     loading?: boolean;
-    setViewPass: (updater: (prevState: boolean) => boolean) => void;
+    setViewPass?: (updater: (prevState: boolean) => boolean) => void;
     setChangeIconEye: (updater: (prevState: boolean) => boolean) => void;
+    handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface Product {
@@ -75,5 +76,9 @@ export interface NavLinkProps {
 
 export interface SubMenuProps {
     option: string;
-    setShowSubMenu?: (show: boolean) => void;
+    setShowSubMenu: (show: boolean) => void;
+}
+
+export interface InputFieldProps {
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

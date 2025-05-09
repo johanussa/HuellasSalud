@@ -95,6 +95,8 @@ export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
 
     const data = useMemo(() => MENU_DATA[option as keyof typeof MENU_DATA], [option]);
 
+    if (!data) return null;
+    
     const handleMouse = (show: boolean) => setShowSubMenu?.(show);
 
     return (
@@ -121,14 +123,14 @@ export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
                         {option === "Otras Mascotas" && (<img src={imgHS2} alt={optCat.name} />)}
                         <h3>{optCat.name}</h3>
                         <ul>
-                            {optCat.options.map((option) => (<li key={option}>{option}</li>))}
+                            {optCat.options.map((opt) => (<li key={opt}>{opt}</li>))}
                         </ul>
                     </section>
                 ))}
             </aside>
             <aside className={styles.optionBrands}>
                 <ul>
-                    <b>Marcas populares</b>
+                    <li><strong>Marcas populares</strong></li>
                     {data.popular.map((brand) => (
                         <li key={brand.name}>
                             <picture><img src={brand.img} alt={brand.name} /></picture>

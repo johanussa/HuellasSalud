@@ -2,30 +2,38 @@ import styles from './login.module.css';
 import logoGoogle from "../../assets/logoGoogleG.png";
 import { Link } from 'react-router-dom';
 import ButtonComponent from '../../components/Button/Button';
-import { LoginFormProps } from '../../services/typesHS';
+import { InputFieldProps, LoginFormProps } from '../../services/typesHS';
+import { serviceLogin } from '../../services/serviceLogin';
 
-export const LoginForm = ({ viewPass, setViewPass, errorMsg, changeIconEye, setChangeIconEye }: LoginFormProps) => {
+export const LoginForm = ({ errorMsg, changeIconEye, setChangeIconEye }: LoginFormProps) => {
+
+    const { handleSubmit, handleInputChange, viewPass, handleViewPassword } = serviceLogin();
+
     return (
-        <form className={styles.formLogin}>
-            <InputField />
+        <form className={styles.formLogin} onSubmit={handleSubmit}>
+            <InputField handleInputChange={handleInputChange} />
             <PasswordField
                 viewPass={viewPass}
-                setViewPass={setViewPass}
+                setViewPass={handleViewPassword}
                 changeIconEye={changeIconEye}
                 errorMsg={errorMsg}
                 setChangeIconEye={setChangeIconEye}
+                handleInputChange={handleInputChange}
             />
             <ButtonComponent type="submit" contain={"INGRESAR"} />
         </form>
-    )
+    );
 }
 
-const InputField = () => {
+const InputField = ({ handleInputChange }: InputFieldProps) => {
     return (
         <aside className={styles.inputContainer}>
-            <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>Correo o número de documento</label>
+            <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>
+                Correo o número de documento
+            </label>
             <input
                 id="inputEmailOrDoc"
+                onChange={handleInputChange}
                 className={styles.loginInput}
                 type="text"
                 required
@@ -34,7 +42,7 @@ const InputField = () => {
     );
 }
 
-const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg }: LoginFormProps) => {
+const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg, handleInputChange }: LoginFormProps) => {
     const isValidData = true;
     return (
         <aside className={styles.inputContainer}>
@@ -43,11 +51,15 @@ const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg }: Login
                 id="inputPassword"
                 className={`${styles.loginInput} ${styles.inputPass}`}
                 type={viewPass ? "text" : "password"}
+                onChange={handleInputChange}
                 required
             />
-            <button type="button" onClick={() => setViewPass(prev => !prev)}
+            <button
+                type="button"
+                onClick={() => setViewPass?.(prev => !prev)}
                 className={`${styles.iconEye} ${!changeIconEye && styles.eyeDesable}`}
-                aria-label="Mostrar/Ocultar contraseña">
+                aria-label="Mostrar/Ocultar contraseña"
+            >
                 <i className={`fa-regular fa-eye${viewPass ? "" : "-slash"}`} />
             </button>
             <p className={isValidData ? styles.withoutError : styles.messageError}>{errorMsg}</p>

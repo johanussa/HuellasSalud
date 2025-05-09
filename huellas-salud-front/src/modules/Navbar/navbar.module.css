@@ -129,6 +129,7 @@
     position: absolute;
     top: 0;
     left: 10%;
+    z-index: 1;
     margin: 125px auto 0;
     box-shadow: 0px 0px 5px 2px #00000040;
     border-bottom: 10px solid;

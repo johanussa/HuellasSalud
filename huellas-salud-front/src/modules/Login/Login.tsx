@@ -1,12 +1,8 @@
 import styles from './login.module.css';
 import logoLogin from "../../assets/Huellas&Salud_3.png";
-import { useState } from 'react';
 import { Divider, ForgotPasswordSection, GoogleLoginButton, LoginForm, SocialMediaIcons } from './LoginComponents';
 
 const Login = () => {
-
-  const [viewPass, setViewPass] = useState(false);
-
   return (
     <main className={styles.containerLogin}>
       <section className={styles.sectionRegister} />
@@ -16,11 +12,9 @@ const Login = () => {
         </picture>
         <h2>Inicio de Sesión</h2>
         <LoginForm
-          viewPass={viewPass}
-          setViewPass={setViewPass}
           changeIconEye={true}
-          setChangeIconEye={() => {}}
-          errorMsg="---"
+          setChangeIconEye={() => { }}
+          errorMsg="ㅤ"
         />
         <Divider />
         <GoogleLoginButton loading={false} />

@@ -41,7 +41,7 @@
 
 .loginLabel {
     display: block;
-    /* color: var(--color-label-transparent); */
+    color: #000;
     text-transform: uppercase;
     font-size: .8rem;
     margin: .4rem 0;
@@ -53,37 +53,34 @@
 
 .loginInput {
     color: black;
-    font-size: .8rem;
+    font-size: .9rem;
     width: 60%;
-    padding: 5px 10px;
-    /* border: 2px solid transparent; */
+    padding: 6px 10px;
+    border: 2px solid #00000020;
     outline: none;
     border-radius: 1.5rem;
-    /* background-color: var(--background-input); */
+    background-color: var(--background-input);
     letter-spacing: 1px;
     transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
 }
 
 .loginInput:hover,
 .loginInput:focus {
-    /* color: var(--color-font); */
-    /* border: 2px solid var(--color-label-transparent); */
-    background-color: transparent;
+    border: 2px solid #00000080;
 }
 
 .inputPass {
     padding-right: 38px;
-    position: relative;
-    left: 10px;
+    margin-left: 22px;
     user-select: none;
 }
 
 .iconEye {
     cursor: pointer;
     position: relative;
-    right: 24px;
-    top: 3px;
-    /* color: #ffffff90; */
+    right: 32px;
+    top: 2px;
+    color: #000;
     background: transparent;
     border: none;
 }
@@ -167,13 +164,13 @@
     justify-content: end;
     align-items: end;
     gap: 10px;
-    height: 74px;
+    height: 70px;
     padding-right: 10px;
 }
 
 .socialMedia i {
     font-size: 1.6rem;
-    transition: color .6s ease;
+    transition: color .3s ease;
 }
 
 .socialMedia i:hover {
