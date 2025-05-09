@@ -5,9 +5,9 @@ import ButtonComponent from '../../components/Button/Button';
 import { InputFieldProps, LoginFormProps } from '../../services/typesHS';
 import { serviceLogin } from '../../services/serviceLogin';
 
-export const LoginForm = ({ errorMsg, changeIconEye, setChangeIconEye }: LoginFormProps) => {
+export const LoginForm = () => {
 
-    const { handleSubmit, handleInputChange, viewPass, handleViewPassword } = serviceLogin();
+    const { handleSubmit, handleInputChange, viewPass, handleViewPassword, showEyePass, errorMsg, validData } = serviceLogin();
 
     return (
         <form className={styles.formLogin} onSubmit={handleSubmit}>
@@ -15,10 +15,10 @@ export const LoginForm = ({ errorMsg, changeIconEye, setChangeIconEye }: LoginFo
             <PasswordField
                 viewPass={viewPass}
                 setViewPass={handleViewPassword}
-                changeIconEye={changeIconEye}
+                showEyePass={showEyePass}
                 errorMsg={errorMsg}
-                setChangeIconEye={setChangeIconEye}
                 handleInputChange={handleInputChange}
+                validData={validData}
             />
             <ButtonComponent type="submit" contain={"INGRESAR"} />
         </form>
@@ -42,8 +42,7 @@ const InputField = ({ handleInputChange }: InputFieldProps) => {
     );
 }
 
-const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg, handleInputChange }: LoginFormProps) => {
-    const isValidData = true;
+const PasswordField = ({ viewPass, setViewPass, showEyePass, errorMsg, handleInputChange, validData }: LoginFormProps) => {
     return (
         <aside className={styles.inputContainer}>
             <label htmlFor="inputPassword" className={styles.loginLabel}>Contraseña</label>
@@ -57,12 +56,12 @@ const PasswordField = ({ viewPass, setViewPass, changeIconEye, errorMsg, handleI
             <button
                 type="button"
                 onClick={() => setViewPass?.(prev => !prev)}
-                className={`${styles.iconEye} ${!changeIconEye && styles.eyeDesable}`}
+                className={`${styles.iconEye} ${!showEyePass && styles.eyeDesable}`}
                 aria-label="Mostrar/Ocultar contraseña"
             >
                 <i className={`fa-regular fa-eye${viewPass ? "" : "-slash"}`} />
             </button>
-            <p className={isValidData ? styles.withoutError : styles.messageError}>{errorMsg}</p>
+            <p className={validData ? styles.withoutError : styles.messageError}>{errorMsg}</p>
         </aside>
     );
 }

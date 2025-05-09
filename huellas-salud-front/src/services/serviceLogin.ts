@@ -15,7 +15,7 @@ export const serviceLogin = () => {
     const [viewPass, setViewPass] = useState<boolean>(false);
     const [validData, setValidData] = useState<boolean>(true);
     const [showEyePass, setShowEyePass] = useState<boolean>(false);
-    const [errorMsg, setErrorMsg] = useState<string>("---");
+    const [errorMsg, setErrorMsg] = useState<string>("ㅤ");
     const [formState, setFormState] = useState<FormState>({ inputEmailOrDoc: "", inputPassword: "" });
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,7 +32,6 @@ export const serviceLogin = () => {
         setLoading(true);
 
         const { inputPassword, inputEmailOrDoc } = formState;
-        console.log(inputPassword.length);
 
         if (inputPassword.length < MIN_LENGTH) {
             setValidData(false);
@@ -47,7 +46,7 @@ export const serviceLogin = () => {
             return setErrorMsg("El correo o el documento deben tener tener mínimo 8 caracteres");
         }
         setValidData(true);
-        setErrorMsg("---");
+        setErrorMsg("ㅤ");
 
         try {
             toast.info("Enviando datos... ⏳");

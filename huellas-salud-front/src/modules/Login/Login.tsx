@@ -11,11 +11,7 @@ const Login = () => {
           <img className={styles.logoLogin} src={logoLogin} alt="Huellas & Salud" />
         </picture>
         <h2>Inicio de Sesión</h2>
-        <LoginForm
-          changeIconEye={true}
-          setChangeIconEye={() => { }}
-          errorMsg="ㅤ"
-        />
+        <LoginForm />
         <Divider />
         <GoogleLoginButton loading={false} />
         <ForgotPasswordSection loading={false} />
