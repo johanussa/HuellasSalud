@@ -1,70 +1,74 @@
-export interface ListItemNavProps {
+export interface ListItemNavProps extends NavLinkProps {
     path: string;
     name: string;
     icon: string;
     style?: boolean;
-    setOptionHover?: (option: string) => void;
-    setShowSubMenu?: (show: boolean) => void;
 };
 
-export interface LoginFormProps {
+export interface PasswordFieldProps extends React.HTMLAttributes<HTMLDivElement> {
     errorMsg: string;
     viewPass: boolean;
     validData: boolean;
     showEyePass: boolean;
-    loading?: boolean;
+    hasError: boolean;
     setViewPass: (updater: (prevState: boolean) => boolean) => void;
-    handleInputChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface InputFieldProps extends React.HTMLAttributes<HTMLDivElement> {
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    hasError: boolean;
 }
 
 export interface Product {
-    nombre: string;
-    precio: number;
-    unidades: number;
-    categoria: string;
-    proveedor: string;
-    descripcion: string;
-    caducidad: string;
-    estado: string;
-    id: number;
-    imagen: string;
-    unidadMedida: string;
-    codigoBarras: number;
+    id: string;
+    name: string;
+    price: number;
+    stock: number;
+    category: string;
+    supplier: string;
+    description: string;
+    expiration: Date | null;
+    status: 'activo' | 'inactivo' | 'agotado';
+    image: string;
+    unitMeasure: 'kg' | 'g' | 'l' | 'ml' | 'unidad';
+    barcode: number;
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
-    documentType: string;
-    documentNumber: number;
+    documentType: 'CC' | 'CE' | 'TI' | 'NIT' | 'PASAPORTE';
+    documentNumber: string;
     address: string;
     email: string;
-    phone: number;
-    role: string;
-    status: string;
+    phone: string;
+    role: 'admin' | 'veterinario' | 'cliente';
+    status: 'activo' | 'inactivo' | 'pendiente';
 }
 
 export interface Pet {
-    id: number;
+    id: string;
     name: string;
-    type: string;
+    type: 'perro' | 'gato' | 'ave' | 'roedor' | 'reptil' | 'otro';
     breed: string;
+    owner: User;
     age: number;
     weight: number;
     styrofoam: boolean;
     description: string;
-    status: string;
-    vaccines: string;
-    surgeries: string;
-    treatments: string;
+    status: 'activo' | 'inactivo' | 'pendiente';
+    vaccines: string[];
+    surgeries: string[];
+    treatments: string[];
 }
 
-export interface ListCategoriesObj {
+export interface CategoryCard {
     name: string;
     img: string;
 }
 
-export interface CategoryOption {
+export interface CategoryGroup {
     name: string;
     options: string[];
 }
@@ -79,6 +83,19 @@ export interface SubMenuProps {
     setShowSubMenu: (show: boolean) => void;
 }
 
-export interface InputFieldProps {
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+export interface LoginRequest {
+    data: {
+        emailOrDoc: string;
+        password: string;
+    };
+}
+
+export interface FormState {
+    inputEmailOrDoc: string;
+    inputPassword: string;
+}
+
+export interface InputErrors {
+    emailOrDoc: boolean;
+    password: boolean;
 }

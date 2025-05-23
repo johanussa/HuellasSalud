@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.huellas.salud.helper.utils.ConvertFormatJSON;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -39,9 +38,4 @@ public class Meta implements Serializable {
 
     @Schema(example = "usuario@correo.com")
     private String emailUser;
-
-    @Override
-    public String toString() {
-        return ConvertFormatJSON.toJson(this);
-    }
 }

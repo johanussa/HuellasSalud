@@ -7,8 +7,8 @@ import { Product } from "../../services/typesHS";
 const ProductsAdmin = () => {
 
   const [prdSelected, setPrdSelected] = useState<Product>({
-    id: 0, imagen: "", nombre: "", precio: 0, unidades: 0, proveedor: "", descripcion: "",
-    unidadMedida: "", codigoBarras: 0, categoria: "", caducidad: "", estado: ""
+    id: "0", image: "", name: "", price: 0, stock: 0, supplier: "", description: "",
+    unitMeasure: "l", barcode: 0, category: "", expiration: new Date(), status: "activo"
   });
 
   const [showEdit, setShowEdit] = useState<boolean>(false);
@@ -53,12 +53,12 @@ const ProductsAdmin = () => {
             {productosAdmin.map((prod) => (
               <tr key={prod.id}>
                 <td>
-                  <img src={imgPrd} alt={prod.nombre} />
+                  <img src={imgPrd} alt={prod.name} />
                 </td>
-                <td>{prod.nombre}</td>
-                <td>{handlerFormatCoin(prod.precio)}</td>
-                <td>{prod.unidades}</td>
-                <td>{prod.categoria}</td>
+                <td>{prod.name}</td>
+                <td>{handlerFormatCoin(prod.price)}</td>
+                <td>{prod.stock}</td>
+                <td>{prod.category}</td>
                 <td className={styles.options}>
                   <button
                     className={styles.editBtn}

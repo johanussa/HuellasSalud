@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.huellas.salud.helper.utils.ConvertFormatJSON;
 import org.huellas.salud.helper.validators.ValidPetInterface;
 import org.huellas.salud.helper.validators.ValidationGroups;
 
@@ -89,9 +88,4 @@ public class Pet implements Serializable {
 
     @BsonProperty("cirugias")
     private List<String> surgeries;
-
-    @Override
-    public String toString() {
-        return ConvertFormatJSON.toJson(this);
-    }
 }

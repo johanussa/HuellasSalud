@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.huellas.salud.domain.Meta;
+import org.huellas.salud.helper.utils.ConvertFormatJSON;
 import org.huellas.salud.helper.validators.ValidationGroups;
 
 import java.io.Serializable;
@@ -33,4 +34,9 @@ public class UserMsg implements Serializable {
     @Null(message = "No debe ingresar el campo meta", groups = {ValidationGroups.Post.class, ValidationGroups.Put.class,
             ValidationGroups.Post_Get.class})
     private Meta meta;
+
+    @Override
+    public String toString() {
+        return ConvertFormatJSON.toJson(this);
+    }
 }

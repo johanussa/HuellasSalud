@@ -37,6 +37,10 @@
 
 .inputContainer p {
     padding: 8px;
+    font-size: .9rem;
+    height: 35px;
+    font-weight: 600;
+    color: rgb(255, 101, 101);
 }
 
 .loginLabel {
@@ -60,7 +64,7 @@
     outline: none;
     border-radius: 1.5rem;
     background-color: var(--background-input);
-    letter-spacing: 1px;
+    letter-spacing: .8px;
     transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
 }
 
@@ -99,11 +103,19 @@
     color: transparent;
 }
 
-.messageError {
-    font-size: .9rem;
-    font-weight: 600;
-    color: rgb(255, 101, 101);
-    text-shadow: 1px 1px 10px 3px black;
+.hasError {
+    position: relative;
+}
+
+.errorInput {
+    border: 2px solid #ff4444 !important;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
 }
 
 /* Estilos Divider Comp */

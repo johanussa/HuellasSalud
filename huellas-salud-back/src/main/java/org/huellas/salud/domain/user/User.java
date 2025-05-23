@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.huellas.salud.helper.validators.ValidUserInterface;
@@ -49,13 +50,14 @@ public class User implements Serializable {
     private String lastName;
 
     @BsonProperty("correo")
-    @Schema(example = "usuario@misena.edu.co")
+    @Schema(example = "usuario@correo.edu.co")
     @Email(message = "El formato del correo ingresado es incorrecto, revise por favor", groups = {ValidationGroups
             .Post_Get.class, ValidationGroups.Post.class})
-    @NotBlank(message = "El campo email no puede ser nulo o vacío", groups = {ValidationGroups.Post_Get.class,
-            ValidationGroups.Post.class, ValidationGroups.Put.class})
+    @NotBlank(message = "El campo email no puede ser nulo o vacío", groups = {ValidationGroups.Post.class,
+            ValidationGroups.Put.class})
     private String email;
 
+    @ToString.Exclude
     @Schema(example = "password")
     @Size(min = 8, message = "La contraseña debe tener mínimo 8 caracteres")
     @NotBlank(message = "El campo password no puede ser nulo o vacío", groups = {ValidationGroups.Post_Get.class,
@@ -85,18 +87,7 @@ public class User implements Serializable {
             ValidationGroups.Post_Get.class})
     private Boolean active;
 
-    @Override
-    public String toString() {
-        return "{" +
-                "\"name\": \"" + name + "\"," +
-                "\"lastName\": \"" + lastName + "\"," +
-                "\"documentType\": \"" + documentType + "\"," +
-                "\"documentNumber\": \"" + documentNumber + "\"," +
-                "\"cellPhone\": \"" + cellPhone + "\"," +
-                "\"address\": \"" + address + "\"," +
-                "\"email\": \"" + email + "\"," +
-                "\"active\": " + active + "," +
-                "\"role\": \"" + role + "\"" +
-                "}";
-    }
+    @Schema(example = "usuario@correo.com")
+    @NotBlank(message = "El campo emailOrDoc no puede ser nulo o vacío", groups = ValidationGroups.Post_Get.class)
+    private String emailOrDoc;
 }

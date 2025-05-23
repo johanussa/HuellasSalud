@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.ExampleObject;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -39,6 +40,7 @@ public class UserApi {
     UserService userService;
 
     @POST
+    @Path("/login")
     @Tag(name = "Gestión de usuarios")
     @Operation(
             summary = "Obtención de un usuario registrado",
@@ -48,26 +50,40 @@ public class UserApi {
             @RequestBody(
                     name = "userMsg",
                     description = "Información del usuario que se va a consultar",
-                    content = @Content(example = """
-                            {
-                                "data": {
-                                    "email": "emailusuario@correo.com",
-                                    "password": "password"
-                                }
-                            }"""
-                    )
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "Enviar correo electrónico",
+                                    value = """
+                                            {
+                                                "data": {
+                                                    "emailOrDoc": "emailusuario@correo.com",
+                                                    "password": "password"
+                                                }
+                                            }"""
+                            ),
+                            @ExampleObject(
+                                    name = "Enviar número de documento",
+                                    value = """
+                                            {
+                                                "data": {
+                                                    "emailOrDoc": "1015624875",
+                                                    "password": "password"
+                                                }
+                                            }"""
+                            )
+                    })
             )
             @NotNull(message = "Debe ingresar el objeto con la información del usuario a registrar")
             @Valid @ConvertGroup(to = ValidationGroups.Post_Get.class) UserMsg userMsg
     ) throws HSException {
 
-        LOG.infof("@getOneUserData API > Inicia ejecucion del servicio para obtener el registro del usuario " +
-                "con el correo: %s en la base de datos", userMsg.getData().getEmail());
+        LOG.infof("@getOneUserData API > Inicia ejecucion del servicio para obtener registro del usuario con " +
+                "el correo o numero de documento: %s en la base de datos", userMsg.getData().getEmailOrDoc());
 
         UserMsg userMongo = userService.getRegisteredUserInMongo(userMsg);
 
-        LOG.infof("@getOneUserData API > Finaliza ejecucion del servicio para obtener el registro del usuario " +
-                "con el correo: %s. La data del usuario se obtuvo correctamente", userMsg.getData().getEmail());
+        LOG.infof("@getOneUserData API > Finaliza servicio para obtener registro del usuario con el correo o " +
+                "numero de documento: %s. La data se obtuvo correctamente", userMsg.getData().getEmailOrDoc());
 
         return Response.ok().entity(userMongo).build();
     }
@@ -76,13 +92,13 @@ public class UserApi {
     @Path("/list-users")
     @Tag(name = "Gestión de usuarios")
     @APIResponses(
-        value = {
-                @APIResponse(
-                    responseCode = "200",
-                    description = "Se retorna el listado de usuarios registrados correctamente",
-                    content = @Content(schema = @Schema(implementation = UserMsg.class, type = SchemaType.ARRAY))
-                )
-        }
+            value = {
+                    @APIResponse(
+                            responseCode = "200",
+                            description = "Se retorna el listado de usuarios registrados correctamente",
+                            content = @Content(schema = @Schema(implementation = UserMsg.class, type = SchemaType.ARRAY))
+                    )
+            }
     )
     @Operation(
             summary = "Obtención de todos los usuarios registrados",

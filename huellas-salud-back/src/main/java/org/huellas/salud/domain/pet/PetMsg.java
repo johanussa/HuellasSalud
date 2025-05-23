@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.huellas.salud.domain.Meta;
+import org.huellas.salud.helper.utils.ConvertFormatJSON;
 
 @Data
 @NoArgsConstructor
@@ -27,4 +28,9 @@ public class PetMsg {
 
     @Null(message = "No debe ingresar valor para el campo meta")
     private Meta meta;
+
+    @Override
+    public String toString() {
+        return ConvertFormatJSON.toJson(this);
+    }
 }

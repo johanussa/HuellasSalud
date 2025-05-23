@@ -1,9 +1,9 @@
-import { CategoryOption, ListCategoriesObj, SubMenuProps } from "../../services/typesHS";
+import { CategoryGroup, CategoryCard, SubMenuProps } from "../../services/typesHS";
 import prdPopularCat from "../../assets/Comida_Gato.webp";
 import prdPopularDog from "../../assets/TratamientosEspecializados.webp";
 import prdPopularOther from "../../assets/PeluqueriaBienestar.webp";
 
-export const listDogCategories: ListCategoriesObj[] = [
+export const listDogCategories: CategoryCard[] = [
     { name: "Comida", img: "fa-solid fa-bowl-food" },
     { name: "Salud", img: "fa-solid fa-suitcase-medical" },
     { name: "Hogar Perros", img: "fa-solid fa-house-chimney" },
@@ -13,7 +13,7 @@ export const listDogCategories: ListCategoriesObj[] = [
     { name: "Juguetes", img: "fa-solid fa-baseball" },
 ];
 
-export const listCatCategories: ListCategoriesObj[] = [
+export const listCatCategories: CategoryCard[] = [
     { name: "Comida", img: "fa-solid fa-bowl-food" },
     { name: "Salud", img: "fa-solid fa-suitcase-medical" },
     { name: "Gimnasios", img: "fa-solid fa-dumbbell" },
@@ -23,7 +23,7 @@ export const listCatCategories: ListCategoriesObj[] = [
     { name: "Juguetes", img: "fa-solid fa-baseball" },
 ];
 
-export const listOtherCategories: ListCategoriesObj[] = [
+export const listOtherCategories: CategoryCard[] = [
     { name: "Peces", img: "fa-solid fa-fish-fins" },
     { name: "Aves", img: "fa-solid fa-crow" },
     { name: "Roedores", img: "fa-solid fa-otter" },
@@ -31,7 +31,7 @@ export const listOtherCategories: ListCategoriesObj[] = [
     { name: "Caballos", img: "fa-solid fa-horse" },
 ];
 
-export const dogCategoryOptions: CategoryOption[] = [
+export const dogCategoryOptions: CategoryGroup[] = [
     {
         name: "Comida",
         options: [
@@ -114,7 +114,7 @@ export const dogCategoryOptions: CategoryOption[] = [
     }
 ];
 
-export const catCategoryOptions: CategoryOption[] = [
+export const catCategoryOptions: CategoryGroup[] = [
     {
         name: "Comida",
         options: [
@@ -197,7 +197,7 @@ export const catCategoryOptions: CategoryOption[] = [
     }
 ];
 
-export const otherCategoryOptions: CategoryOption[] = [
+export const otherCategoryOptions: CategoryGroup[] = [
     {
         name: "Peces",
         options: [
@@ -240,7 +240,7 @@ export const otherCategoryOptions: CategoryOption[] = [
     }
 ];
 
-export const popularDogBreeds: ListCategoriesObj[] = [
+export const popularDogBreeds: CategoryCard[] = [
     { name: "Royal Canin", img: prdPopularDog },
     { name: "Purina", img: prdPopularDog },
     { name: "Pedigree", img: prdPopularDog },
@@ -251,7 +251,7 @@ export const popularDogBreeds: ListCategoriesObj[] = [
     { name: "Taste of the Wild", img: prdPopularDog }
 ];
 
-export const popularCatBreeds: ListCategoriesObj[] = [
+export const popularCatBreeds: CategoryCard[] = [
     { name: "Royal Canin", img: prdPopularCat },
     { name: "Purina", img: prdPopularCat },
     { name: "Whiskas", img: prdPopularCat },
@@ -261,7 +261,7 @@ export const popularCatBreeds: ListCategoriesObj[] = [
     { name: "Taste of the Wild", img: prdPopularCat }
 ];
 
-export const popularOtherBreeds: ListCategoriesObj[] = [
+export const popularOtherBreeds: CategoryCard[] = [
     { name: "Piamontina", img: prdPopularOther },
     { name: "Incros", img: prdPopularOther },
     { name: "Omega One", img: prdPopularOther },
@@ -270,9 +270,9 @@ export const popularOtherBreeds: ListCategoriesObj[] = [
 
 export const MENU_DATA: Record<
     SubMenuProps["option"], {
-        categories: ListCategoriesObj[];
-        options: CategoryOption[];
-        popular: ListCategoriesObj[];
+        categories: CategoryCard[];
+        options: CategoryGroup[];
+        popular: CategoryCard[];
     }
 > = {
     Perros: {

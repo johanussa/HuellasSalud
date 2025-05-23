@@ -9,7 +9,7 @@ interface PropsButton {
 const ButtonComponent = ({ loading, contain, type = "button" }: PropsButton) => {
     return (
         <button className={styles.button} type={type} disabled={loading} >
-            {contain}
+            {loading ? "CARGANDO..." : contain}
         </button>
     )
 }

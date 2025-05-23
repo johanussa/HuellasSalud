@@ -149,7 +149,7 @@ public class PetService {
         petMongo.setAge(petRequest.getAge());
         petMongo.setName(petRequest.getName());
         petMongo.setWeight(petRequest.getWeight());
-        petMongo.setNeutered(petRequest.isNeutered());
+        petMongo.setSterilized(petRequest.isSterilized());
         petMongo.setDisability(petRequest.getDisability());
         petMongo.setDescription(petRequest.getDescription());
         petMongo.setIsActive(petRequest.getIsActive());

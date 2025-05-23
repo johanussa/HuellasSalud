@@ -30,22 +30,24 @@ public class UserService {
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
 
-        LOG.infof("@getRegisteredUserInMongo SERV > Inicia ejecucion de servicio para obtener registro del " +
-                "usuario con correo: %s en mongo", userMsg.getData().getEmail());
+        String userEmailOrDocument = userMsg.getData().getEmailOrDoc();
 
-        UserMsg userMongo = userRepository.getOneUserData(userMsg.getData().getEmail()).orElseThrow(() -> {
+        LOG.infof("@getRegisteredUserInMongo SERV > Inicia ejecucion de servicio para obtener registro del " +
+                "usuario con correo o numero de documento: %s en mongo", userEmailOrDocument);
+
+        UserMsg userMongo = userRepository.getOneUserData(userEmailOrDocument).orElseThrow(() -> {
 
             LOG.errorf("@getRegisteredUserInMongo SERV > No se encontro informacion del registro del usuario " +
-                    "con el correo: %s en base de datos", userMsg.getData().getEmail());
+                    "con el correo o documento: %s en base de datos", userEmailOrDocument);
 
-            return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userMsg.getData().getEmail() +
+            return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userEmailOrDocument +
                     " No se encuentra registrado en la base de datos");
         });
 
         if (!BCrypt.checkpw(userMsg.getData().getPassword(), userMongo.getData().getPassword())) {
 
             LOG.errorf("@getRegisteredUserInMongo SERV > El password ingresado no es valido para el usuario " +
-                    "con correo: %s", userMsg.getData().getEmail());
+                    "con correo: %s", userEmailOrDocument);
 
             throw new HSException(Response.Status.BAD_REQUEST, "Error en los recursos suministrados");
         }
@@ -59,14 +61,12 @@ public class UserService {
 
     public List<UserMsg> getListRegisteredUser() {
 
-        LOG.info("@getListRegisteredUser SERV > Inicia ejecucion del servicio para obtener el listado de los " +
-                "usuarios registrados en mongo");
+        LOG.info("@getListRegisteredUser SERV > Inicia servicio para obtener listado de usuarios registrados en mongo");
 
         List<UserMsg> users = getUserData();
 
-        LOG.infof("@getListRegisteredUser SERV > Finaliza obtencion de registros de usuarios y se retorna " +
-                "un total de %s registros de mongo. Finaliza ejecucion del servicio para obtener el listado de los" +
-                "usuarios registrados", users.size());
+        LOG.infof("@getListRegisteredUser SERV > Finaliza consulta, se retorna un total de %s registros de mongo. " +
+                "Finaliza ejecucion del servicio para obtener listado de usuarios registrados", users.size());
 
         return users;
     }
