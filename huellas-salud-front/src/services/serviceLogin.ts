@@ -1,10 +1,12 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { FormState, InputErrors, LoginRequest } from "./typesHS";
+import { FormState, GetUserLogin, InputErrors, LoginRequest } from "./typesHS";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const MIN_CREDENTIAL_LENGTH: number = 8;
 const DEFAULT_ERROR_MSG: string = "ㅤ";
+const PATH_BASE = 'http://localhost:8089/internal';
 
 export const useLoginService = () => {
 
@@ -19,6 +21,8 @@ export const useLoginService = () => {
     const emailOrDocRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
+    const navigate = useNavigate();
+
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
         const { id, value } = event.target;
@@ -28,7 +32,7 @@ export const useLoginService = () => {
         if (id === "inputPassword") {
             setShowEyePass(value.trim().length > 0);
             setInputErrors((prev) => ({ ...prev, password: false }));
-        } else if (id === "inputEmailOrDoc") {
+        } else {
             setInputErrors((prev) => ({ ...prev, emailOrDoc: false }));
         }
     };
@@ -37,9 +41,9 @@ export const useLoginService = () => {
 
     const validateCredentials = (): boolean => {
 
-        const newErrors: InputErrors = { emailOrDoc: false, password: false };
-        const { inputPassword, inputEmailOrDoc } = formState;
         let isValid = true;
+        const { inputPassword, inputEmailOrDoc } = formState;
+        const newErrors: InputErrors = { emailOrDoc: false, password: false };
 
         if (inputEmailOrDoc.length < MIN_CREDENTIAL_LENGTH) {
             setErrorMsg("El correo o documento deben tener mínimo 8 caracteres");
@@ -47,61 +51,60 @@ export const useLoginService = () => {
             newErrors.emailOrDoc = true;
             isValid = false;
             setTimeout(() => emailOrDocRef.current?.focus(), 0);
-        } else if (inputPassword.length < MIN_CREDENTIAL_LENGTH) {
+        }
+        if (inputPassword.length < MIN_CREDENTIAL_LENGTH) {
             setErrorMsg("La contraseña debe tener mínimo 8 caracteres");
             toast.warn("La contraseña ingresada es incorrecta");
             newErrors.password = true;
             isValid = false;
             setTimeout(() => passwordRef.current?.focus(), 0);
         }
-
-        if (isValid) setErrorMsg(DEFAULT_ERROR_MSG);
-
         setValidData(isValid);
         setInputErrors(newErrors);
+        setErrorMsg(isValid ? DEFAULT_ERROR_MSG : errorMsg);
+
         return isValid;
     }
 
     const performLogin = async () => {
-        try {
-            toast.info("Enviando datos... ⏳");
 
-            const loginBody: LoginRequest = {
-                data: {
-                    emailOrDoc: formState.inputEmailOrDoc,
-                    password: formState.inputPassword
-                }
+        toast.info("Enviando datos... ⏳", { autoClose: 1000 });
+
+        const loginBody: LoginRequest = {
+            data: {
+                emailOrDoc: formState.inputEmailOrDoc,
+                password: formState.inputPassword
             }
-
-            const response = await axios.post('http://localhost:8089/internal/user/login', loginBody, {
-                headers: { "Content-type": "application/json" }
-            });
-
-            console.log("Response: " + response.data?.data);
-            toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenido Fulanito`); // Cambiar por nombre de usuario
-
-        } catch (error) {
-            setValidData(false);
-            setErrorMsg("Error en los datos suministrados");
-
-            if (axios.isAxiosError(error)) {
-                const errorMessage = error.response?.data?.title
-                    ? `${error.response.data.title}. ${error.response.data.detail || ''}`
-                    : error.message || 'Error en la comunicación con el servidor';
-
-                console.error("Error en la petición:", error.response?.data || error);
-                toast.error(`${errorMessage} ❌`);
-                return;
-            }
-
-            const errorMessage = error instanceof Error ? error.message : 'Error desconocido al iniciar sesión';
-
-            console.error("Error inesperado:", error);
-            toast.error(`${errorMessage} ❌`);
         }
+
+        const { data } = await axios.post<GetUserLogin>(`${PATH_BASE}/user/login`, loginBody, {
+            headers: { "Content-type": "application/json" }
+        });
+
+        toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenido ${data.data.name}`);
+        navigate("/inicio");
+    }
+
+    const handleLoginError = (error: unknown) => {
+
+        setValidData(false);
+        setErrorMsg("Error en los datos suministrados");
+
+        let errorMessage = "Error desconocido al iniciar sesión";
+
+        if (axios.isAxiosError(error)) {
+            errorMessage = error.response?.data?.title
+                ? `${error.response.data.title}. ${error.response.data.detail || ''}`
+                : error.message || 'Error en la comunicación con el servidor';
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.error("Error en la petición:", error);
+        toast.error(`${errorMessage} ❌`);
     }
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+
         event.preventDefault();
         setLoading(true);
 
@@ -110,11 +113,9 @@ export const useLoginService = () => {
             return;
         }
 
-        try {
-            await performLogin();
-        } catch (error) {
-            console.error("Error en la petición: ", error);
-        } finally { setLoading(false); }
+        try { await performLogin(); } 
+        catch (error) { handleLoginError(error); } 
+        finally { setLoading(false); }
     };
 
     return {

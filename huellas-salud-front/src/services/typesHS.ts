@@ -36,15 +36,15 @@ export interface Product {
 }
 
 export interface User {
-    id: string;
     name: string;
+    lastName: string;
     documentType: 'CC' | 'CE' | 'TI' | 'NIT' | 'PASAPORTE';
     documentNumber: string;
     address: string;
     email: string;
-    phone: string;
-    role: 'admin' | 'veterinario' | 'cliente';
-    status: 'activo' | 'inactivo' | 'pendiente';
+    cellPhone: string;
+    role: 'ADMIN' | 'VETERINARIO' | 'CLIENTE';
+    active: boolean;
 }
 
 export interface Pet {
@@ -61,6 +61,12 @@ export interface Pet {
     vaccines: string[];
     surgeries: string[];
     treatments: string[];
+}
+
+export interface Meta {
+    creationDate: Date;
+    ipAddress: string;
+    source: string;
 }
 
 export interface CategoryCard {
@@ -98,4 +104,9 @@ export interface FormState {
 export interface InputErrors {
     emailOrDoc: boolean;
     password: boolean;
+}
+
+export interface GetUserLogin {
+    data: User;
+    meta: Meta;
 }

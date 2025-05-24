@@ -1,5 +1,6 @@
 package org.huellas.salud.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ValidUserInterface
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
     @BsonProperty("tipoDocumento")
