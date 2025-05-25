@@ -2,11 +2,11 @@ import styles from "./login.module.css";
 import logoGoogle from "../../assets/logoGoogleG.png";
 import { Link } from "react-router-dom";
 import ButtonComponent from "../../components/Button/Button";
-import { InputFieldProps, PasswordFieldProps } from "../../services/typesHS";
+import { InputFieldProps, LoginFormProps, PasswordFieldProps } from "../../services/typesHS";
 import { useLoginService } from "../../services/serviceLogin";
 import { forwardRef } from "react";
 
-export const LoginForm = () => {
+export const LoginForm = ({ loading, setLoading }: LoginFormProps) => {
 
     const {
         handleSubmit,
@@ -19,8 +19,7 @@ export const LoginForm = () => {
         inputErrors,
         emailOrDocRef,
         passwordRef,
-        loading,
-    } = useLoginService();
+    } = useLoginService(setLoading);
 
     return (
         <form className={styles.formLogin} onSubmit={handleSubmit}>
@@ -111,7 +110,7 @@ const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
 export const Divider = () => (
     <section className={styles.sectionOr}>
         <span className={styles.rowLine}></span>
-        <span>o</span>
+        <span>O</span>
         <span className={styles.rowLine}></span>
     </section>
 );
@@ -125,23 +124,40 @@ export const GoogleLoginButton = ({ loading }: { loading: boolean }) => (
     </section>
 );
 
-export const ForgotPasswordSection = ({ loading }: { loading: boolean }) => (
+export const ForgotPasswordSection = () => (
     <section className={styles.forgetPass}>
         <a className={styles.linkForget}>¿Olvidaste tu contraseña?</a>
-        <aside>
-            <Link to={loading ? "" : "/registro"}>
-                <ButtonComponent contain="CREAR CUENTA" />
-            </Link>
-        </aside>
     </section>
 );
 
 export const SocialMediaIcons = () => (
     <section className={styles.socialMedia}>
-        {["instagram", "whatsapp", "facebook", "twitter"].map((platform) => (
+        {["instagram", "whatsapp", "facebook", "twitter", "telegram"].map((platform) => (
             <i key={platform} className={`fa-brands fa-${platform}`} title={platform}>
                 {" "}
             </i>
         ))}
     </section>
+);
+
+export const AccountSection = ({ loading }: { loading: boolean }) => (
+    <aside className={styles.asideCreateAccount}>
+        <h1>¿ No tienes una cuenta ?</h1>
+        <p>
+            Regístrate en nuestro sistema y accede a un mundo de cuidados especializados para tu mascota.
+            <br />Con tu cuenta, podrás:
+        </p>
+        <ul>
+            <li>Comprar productos veterinarios de alta calidad.</li>
+            <li>Gestionar el historial clínico de tus mascotas: vacunas, tratamientos, diagnósticos y próximas citas.</li>
+            <li>Agendar servicios veterinarios (consultas, peluquería, emergencias) desde la comodidad de tu hogar.</li>
+            <li>Recibir alertas personalizadas para desparasitación, controles anuales y promociones exclusivas.</li>
+        </ul>
+        <aside>
+            <Link to={loading ? "" : "/registro"}>
+                <ButtonComponent contain="CREAR CUENTA" />
+            </Link>
+        </aside>
+        <SocialMediaIcons />
+    </ aside>
 );

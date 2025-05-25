@@ -14,11 +14,18 @@ public class UserRepository implements PanacheMongoRepository<UserMsg> {
 
     private final Logger LOG = Logger.getLogger(UserRepository.class);
 
-    public Optional<UserMsg> getOneUserData(String emailUser) {
+    public Optional<UserMsg> getOneUserByEmail(String emailUser) {
 
-        LOG.infof("@getOneUserData REPO > Inicia consulta de registro de usuario con correo: %s en mongo", emailUser);
+        LOG.infof("@getOneUserByEmail REPO > Inicia consulta de registro de usuario con correo: %s", emailUser);
 
         return find("data.correo = ?1", emailUser).firstResultOptional();
+    }
+
+    public Optional<UserMsg> getOneUserByDocument(String documentNumber) {
+
+        LOG.infof("@getOneUserByDocument REPO > Inicia consulta de registro de usuario con documento: %s", documentNumber);
+
+        return find("data.numeroDocumento = ?1", documentNumber).firstResultOptional();
     }
 
     public List<UserMsg> getRegisteredUsersMongo() {

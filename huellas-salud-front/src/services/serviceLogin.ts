@@ -1,16 +1,15 @@
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { FormState, GetUserLogin, InputErrors, LoginRequest } from "./typesHS";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const MIN_CREDENTIAL_LENGTH: number = 8;
 const DEFAULT_ERROR_MSG: string = "ㅤ";
 const PATH_BASE = 'http://localhost:8089/internal';
 
-export const useLoginService = () => {
+export const useLoginService = (setLoading: (show: boolean) => void) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
     const [viewPass, setViewPass] = useState<boolean>(false);
     const [validData, setValidData] = useState<boolean>(true);
     const [showEyePass, setShowEyePass] = useState<boolean>(false);
@@ -51,8 +50,7 @@ export const useLoginService = () => {
             newErrors.emailOrDoc = true;
             isValid = false;
             setTimeout(() => emailOrDocRef.current?.focus(), 0);
-        }
-        if (inputPassword.length < MIN_CREDENTIAL_LENGTH) {
+        } else if (inputPassword.length < MIN_CREDENTIAL_LENGTH) {
             setErrorMsg("La contraseña debe tener mínimo 8 caracteres");
             toast.warn("La contraseña ingresada es incorrecta");
             newErrors.password = true;
@@ -61,7 +59,6 @@ export const useLoginService = () => {
         }
         setValidData(isValid);
         setInputErrors(newErrors);
-        setErrorMsg(isValid ? DEFAULT_ERROR_MSG : errorMsg);
 
         return isValid;
     }
@@ -127,7 +124,6 @@ export const useLoginService = () => {
         validData,
         errorMsg,
         viewPass,
-        loading,
         inputErrors,
         emailOrDocRef,
         passwordRef

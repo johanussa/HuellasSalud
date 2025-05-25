@@ -110,3 +110,8 @@ export interface GetUserLogin {
     data: User;
     meta: Meta;
 }
+
+export interface LoginFormProps {
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
+}

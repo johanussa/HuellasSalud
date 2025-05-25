@@ -1,14 +1,15 @@
 .button {
     color: var(--color-font);
-    font-size: .8rem;
+    font-size: 1rem;
     letter-spacing: 1px;
-    padding: .6rem;
+    padding: 8px 15px;
     border-radius: 2rem;
-    width: 60%;
+    width: 80%;
     background-color: rgba(0, 0, 0);
     border: none;
     cursor: pointer;
     transition: background-color .3s ease, box-shadow .3s ease;
+    border: 2px solid #00000020;
     margin: 0 auto;
 }
 

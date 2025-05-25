@@ -16,6 +16,8 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @ApplicationScoped
 public class UserService {
@@ -30,12 +32,32 @@ public class UserService {
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
 
-        String userEmailOrDocument = userMsg.getData().getEmailOrDoc();
+        final String userEmailOrDocument = userMsg.getData().getEmailOrDoc();
 
         LOG.infof("@getRegisteredUserInMongo SERV > Inicia ejecucion de servicio para obtener registro del " +
                 "usuario con correo o numero de documento: %s en mongo", userEmailOrDocument);
 
-        UserMsg userMongo = userRepository.getOneUserData(userEmailOrDocument).orElseThrow(() -> {
+        UserMsg userMongo = getUserRegister(userEmailOrDocument);
+
+        validatePassword(userMsg.getData().getPassword(), userMongo.getData().getPassword(), userEmailOrDocument);
+
+        userMongo.setData(getUserDto(userMongo));
+
+        LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio. La informacion del " +
+                "usuario que se obtuvo es: %s", userMongo);
+
+        return userMongo;
+    }
+
+    private UserMsg getUserRegister(String userEmailOrDocument) throws HSException {
+
+        LOG.infof("@getUserRegister SERV > Se consulta usuario con correo o numero documento: %s", userEmailOrDocument);
+
+        Optional<UserMsg> userMsg = isEmail(userEmailOrDocument)
+                ? userRepository.getOneUserByEmail(userEmailOrDocument)
+                : userRepository.getOneUserByDocument(userEmailOrDocument);
+
+        return userMsg.orElseThrow(() -> {
 
             LOG.errorf("@getRegisteredUserInMongo SERV > No se encontro informacion del registro del usuario " +
                     "con el correo o documento: %s en base de datos", userEmailOrDocument);
@@ -43,20 +65,27 @@ public class UserService {
             return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userEmailOrDocument +
                     " No se encuentra registrado en la base de datos");
         });
+    }
 
-        if (!BCrypt.checkpw(userMsg.getData().getPassword(), userMongo.getData().getPassword())) {
+    private boolean isEmail(String value) {
+
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        return Pattern.compile(regex).matcher(value).matches();
+    }
+
+    private void validatePassword(String inputPassword, String storedHash, String userEmailOrDocument) throws HSException {
+
+        LOG.infof("@validatePassword SERV > Inicia servicio de validacion del password ingresado del usuario " +
+                "con correo o numero documento: %s", userEmailOrDocument);
+
+        if (!BCrypt.checkpw(inputPassword, storedHash)) {
 
             LOG.errorf("@getRegisteredUserInMongo SERV > El password ingresado no es valido para el usuario " +
                     "con correo: %s", userEmailOrDocument);
 
             throw new HSException(Response.Status.BAD_REQUEST, "Error en los recursos suministrados");
         }
-        userMongo.setData(getUserDto(userMongo));
-
-        LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio. La informacion del " +
-                "usuario que se obtuvo es: %s", userMongo);
-
-        return userMongo;
     }
 
     public List<UserMsg> getListRegisteredUser() {

@@ -1,34 +1,95 @@
 /* Estilo contenedor Login */
 .containerLogin {
-    text-align: center;
-    width: 1000px;
-    height: 700px;
-    margin: 135px auto 0;
-    box-shadow: 0px 0px 10px 5px #00000050;
+    background-image: url("../../assets/Background-Login4.jpg");
+    width: 100vw;
     display: grid;
-    grid-template-columns: 40% 60%;
-    border-radius: 10px;
+    grid-template-columns: 55% 45%;
+    color: #FFF;
 }
 
-/* Estilo section img */
+/* Estilos sección crear cuenta */
 .sectionRegister {
-    background-image: url('../../assets/FondoLogin.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    border-radius: 10px 0 0 10px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
 }
 
-/* Estilo form Login */
+.asideCreateAccount {
+    width: 94%;
+    padding: 20px;
+    margin-bottom: 50px;
+    backdrop-filter: blur(12px);
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.asideCreateAccount h1 {
+    font-size: 2.8rem;
+}
+
+.asideCreateAccount p {
+    padding-top: 30px;
+}
+
+.asideCreateAccount ul {
+    margin-left: 30px;
+    padding: 25px 0px;
+}
+
+.asideCreateAccount aside button {
+    width: 270px;
+}
+
+/* Estilo Social media */
+.socialMedia {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    padding-right: 10px;
+}
+
+.socialMedia i {
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: transform .3s ease, color .3s ease;
+}
+
+.socialMedia i:hover {
+    color: #00000090;
+    transform: scale(1.2);
+}
+
+/* Estilos fomulario Login */
+.sectionForm {
+    width: 100%;
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    text-align: center;
+}
+
+.containerForm {
+    backdrop-filter: blur(10px);
+    width: 560px;
+    height: 650px;
+    margin-bottom: 50px;
+    border-radius: 5px;
+}
+
+.titleLogin {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
 .logoLogin {
     width: 220px;
     margin-right: 20px;
 }
 
 .formLogin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .inputContainer {
@@ -36,19 +97,18 @@
 }
 
 .inputContainer p {
-    padding: 8px;
-    font-size: .9rem;
-    height: 35px;
+    padding: 10px;
+    font-size: 1rem;
+    height: 40px;
     font-weight: 600;
-    color: rgb(255, 101, 101);
+    text-shadow: 1px 1px 3px red;
 }
 
 .loginLabel {
     display: block;
-    color: #000;
     text-transform: uppercase;
     font-size: .8rem;
-    margin: .4rem 0;
+    margin: .5rem 0;
 }
 
 .loginInput+.loginLabel {
@@ -56,15 +116,14 @@
 }
 
 .loginInput {
-    color: black;
-    font-size: .9rem;
-    width: 60%;
-    padding: 6px 10px;
+    font-size: 1rem;
+    width: 80%;
+    padding: 8px 15px;
     border: 2px solid #00000020;
     outline: none;
     border-radius: 1.5rem;
     background-color: var(--background-input);
-    letter-spacing: .8px;
+    letter-spacing: .5px;
     transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
 }
 
@@ -75,15 +134,16 @@
 
 .inputPass {
     padding-right: 38px;
-    margin-left: 22px;
+    margin-left: 24px;
     user-select: none;
 }
 
 .iconEye {
+    width: 24px;
     cursor: pointer;
     position: relative;
-    right: 32px;
-    top: 2px;
+    right: 35px;
+    top: 1px;
     color: #000;
     background: transparent;
     border: none;
@@ -108,14 +168,9 @@
 }
 
 .errorInput {
-    border: 2px solid #ff4444 !important;
+    border: 2px solid #ff0000 !important;
+    box-shadow: 0px 0px 8px red;
     animation: shake 0.5s;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
 }
 
 /* Estilos Divider Comp */
@@ -124,7 +179,6 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-top: 15px;
 }
 
 .rowLine {
@@ -135,12 +189,12 @@
 
 /* Inicio sesion Google */
 .loginGoogle button {
-    width: 40%;
+    width: 80%;
     font-size: 1rem;
-    padding: 5px 10px;
+    padding: .6rem;
     border-radius: 2rem;
     border: 1px solid #00000060;
-    background-color: #ffffff90;
+    background-color: #ffffff99;
     margin-top: 15px;
     cursor: pointer;
     transition: background-color .3s ease, transform .3s ease;
@@ -173,22 +227,20 @@
     color: #00000090;
 }
 
-/* Estilo Social media */
-.socialMedia {
-    display: flex;
-    justify-content: end;
-    align-items: end;
-    gap: 10px;
-    height: 70px;
-    padding-right: 10px;
-}
+@keyframes shake {
 
-.socialMedia i {
-    font-size: 1.6rem;
-    transition: color .3s ease;
-}
+    0%,
+    100% {
+        transform: translateX(0);
+    }
 
-.socialMedia i:hover {
-    color: #00000080;
-    cursor: pointer;
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
 }
