@@ -1,10 +1,10 @@
-import styles from "./login.module.css";
-import logoGoogle from "../../assets/logoGoogleG.png";
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
-import ButtonComponent from "../../components/Button/Button";
 import { InputFieldProps, LoginFormProps, PasswordFieldProps } from "../../services/typesHS";
 import { useLoginService } from "../../services/serviceLogin";
-import { forwardRef } from "react";
+import styles from "./login.module.css";
+import logoGoogle from "../../assets/logoGoogleG.png";
+import ButtonComponent from "../../components/Button/Button";
 
 export const LoginForm = ({ loading, setLoading }: LoginFormProps) => {
 
@@ -46,7 +46,7 @@ export const LoginForm = ({ loading, setLoading }: LoginFormProps) => {
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     ({ handleInputChange, hasError }, ref) => {
         return (
-            <aside className={`${styles.inputContainer} ${hasError ? styles.hasError : ""}`} >
+            <aside className={styles.inputContainer} >
                 <label htmlFor="inputEmailOrDoc" className={styles.loginLabel}>
                     Correo o número de documento
                 </label>
@@ -77,10 +77,7 @@ const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
         ref
     ) => {
         return (
-            <aside
-                className={`${styles.inputContainer} ${hasError ? styles.hasError : ""
-                    }`}
-            >
+            <aside className={styles.inputContainer} >
                 <label htmlFor="inputPassword" className={styles.loginLabel}>
                     Contraseña
                 </label>

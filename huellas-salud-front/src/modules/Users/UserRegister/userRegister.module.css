@@ -1,0 +1,111 @@
+/* Contenedor principal */
+.containerRegister {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../../../assets/Background-Login.jpg");
+    display: grid;
+    grid-template-columns: 60% 40%;
+    color: #FFF;
+}
+
+/* Contenedor descripción registro usuario */
+.userRegisterData {
+    text-align: center;
+    margin-top: 125px;
+}
+
+.userRegisterData img {
+    width: 90px;
+}
+
+.userRegisterData p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Contenedor formulario registro */
+.containerForm {
+    width: 100%;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.containerForm h1 {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.containerForm hr {
+    margin: 0 auto 20px;
+    width: 60%;
+}
+
+.formRegister {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.inputField label {
+    display: block;
+    width: 220px;
+    padding-left: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-shadow: 1px 1px 4px rgba(5, 5, 5, 0.5);
+}
+
+.inputField input,
+.inputField select {
+    width: 100%;
+    background-color: #FFFFFF90;
+    padding: 8px 12px;
+    border-radius: 1.5rem;
+    border: 2px solid #FFFFFF50;
+    outline: none;
+    font-size: 1rem;
+    transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.inputField input:hover,
+.inputField select:hover,
+.inputField input:focus,
+.inputField select:focus {
+    border: 2px solid #FFFFFF;
+    box-shadow: 0px 0px 10px #FFF;
+}
+
+.containerButtons {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 25px;
+}
+
+.containerButtons button {
+    font-size: .9rem;
+    width: 180px;
+    margin: 0;
+    border: 1px solid #FFFFFF80;
+    border-radius: 1.5rem;
+}
+
+.inputField input {
+    width: 100%;
+}
+
+.inputFull {
+    grid-column: span 2;
+}
+
+.errorMsg {
+    text-align: center;
+    text-shadow: 0px 0px 5px red;
+    font-size: 1.1rem;
+}

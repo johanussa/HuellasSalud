@@ -115,3 +115,11 @@ export interface LoginFormProps {
     loading: boolean;
     setLoading: (loading: boolean) => void;
 }
+
+export interface InputFieldUserRegister {
+    nombre: string;
+    type?: string;
+    idInput: string;
+    required?: boolean;
+    inputFull?: boolean;
+}

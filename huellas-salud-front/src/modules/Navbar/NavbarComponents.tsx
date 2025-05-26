@@ -85,7 +85,7 @@ export const BtnsLogRegister = () => (
         <Link to={"/login"}>
             <button type="button">Iniciar sesión</button>
         </Link>
-        <Link to={"/registro"}>
+        <Link to={"/registro-usuario"}>
             <button type="button">Crear cuenta</button>
         </Link>
     </aside>

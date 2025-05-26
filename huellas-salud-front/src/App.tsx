@@ -1,6 +1,5 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Register from "./pages/RegisterPage/Register";
 import Navbar from "./modules/Navbar/Navbar";
 import Login from "./modules/Login/Login";
 import Products from "./modules/Products/Products";
@@ -11,13 +10,14 @@ import History from "./modules/History/History";
 import Home from "./modules/Home/Home";
 import Contact from "./modules/Contact/Contact";
 import Services from "./modules/Services/Services";
+import UserRegister from "./modules/Users/UserRegister/UserRegister";
 
 const AppRoutes = () => {
 
   const routes = useRoutes([
     { path: "/", element: <Home/> },
     { path: "/login", element: <Login /> },
-    { path: "/registro", element: <Register /> },
+    { path: "/registro-usuario", element: <UserRegister /> },
     { path: "/productos", element: <Products /> },
     { path: "/productos-admin", element: <ProductsAdmin /> },
     { path: "/usuarios", element: <Users /> },
@@ -36,7 +36,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <AppRoutes />
-      <ToastContainer theme="dark" />
+      <ToastContainer theme="light" />
     </BrowserRouter>
   );
 }
