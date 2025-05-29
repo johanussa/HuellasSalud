@@ -1,3 +1,6 @@
+import { HTMLInputTypeAttribute } from "react";
+import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form";
+
 export interface ListItemNavProps extends NavLinkProps {
     path: string;
     name: string;
@@ -42,9 +45,11 @@ export interface User {
     documentNumber: string;
     address: string;
     email: string;
+    password: string;
+    confirmPassword?: string;
     cellPhone: string;
     role: 'ADMIN' | 'VETERINARIO' | 'CLIENTE';
-    active: boolean;
+    active?: boolean;
 }
 
 export interface Pet {
@@ -117,9 +122,11 @@ export interface LoginFormProps {
 }
 
 export interface InputFieldUserRegister {
-    nombre: string;
-    type?: string;
-    idInput: string;
+    label: string;
+    type?: HTMLInputTypeAttribute;
+    idInput: keyof User;
     required?: boolean;
     inputFull?: boolean;
+    register: UseFormRegister<User>;
+    errors: FieldErrors<User>;
 }

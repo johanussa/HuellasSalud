@@ -5,38 +5,41 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDocumentTypeEnum;
+import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.domain.user.UserRoleEnum;
 
 import java.util.Arrays;
 
-public class UserValidator implements ConstraintValidator<ValidUserInterface, User> {
+public class UserValidator implements ConstraintValidator<ValidUserInterface, UserMsg> {
 
     @Override
-    public boolean isValid(User value, ConstraintValidatorContext context) {
+    public boolean isValid(UserMsg value, ConstraintValidatorContext context) {
 
         Log.debugf("@isValid > Inicia validacion del usuario con la data: %s", value);
 
+        User user = value.getData();
+
         if (Arrays.stream(UserDocumentTypeEnum.values())
-                .noneMatch(documentType -> documentType.getAcron().equals(value.getDocumentType()))) {
+                .noneMatch(documentType -> documentType.getAcron().equals(user.getDocumentType()))) {
 
-            String message = "El tipo de documento ingresado: " + value.getDocumentType() + ", no es valido";
-
-            Log.errorf("@isValid > %s", message);
-
-            return createConstraintViolation(context, message);
-        }
-
-        if (value.getRole() != null && Arrays.stream(UserRoleEnum.values())
-                .noneMatch(enumRole -> enumRole.getValue().equals(value.getRole()))) {
-
-            String message = "El rol de usuario ingresado: " + value.getRole() + ", no es valido";
+            String message = "El tipo de documento ingresado: " + user.getDocumentType() + ", no es valido";
 
             Log.errorf("@isValid > %s", message);
 
             return createConstraintViolation(context, message);
         }
 
-        Log.debugf("@isValid > Finaliza validacion del usuario con la data: %s. Los datos son correctos", value);
+        if (user.getRole() != null && Arrays.stream(UserRoleEnum.values())
+                .noneMatch(enumRole -> enumRole.getValue().equals(user.getRole()))) {
+
+            String message = "El rol de usuario ingresado: " + user.getRole() + ", no es valido";
+
+            Log.errorf("@isValid > %s", message);
+
+            return createConstraintViolation(context, message);
+        }
+
+        Log.debug("@isValid > Finaliza validacion del usuario. Los datos ingresados son correctos");
 
         return true;
     }

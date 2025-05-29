@@ -6,7 +6,7 @@ import axios from "axios";
 
 const MIN_CREDENTIAL_LENGTH: number = 8;
 const DEFAULT_ERROR_MSG: string = "ㅤ";
-const PATH_BASE = 'http://localhost:8089/internal';
+const PATH_BASE = 'http://localhost:8089/internal/user';
 
 export const useLoginService = (setLoading: (show: boolean) => void) => {
 
@@ -74,7 +74,7 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
             }
         }
 
-        const { data } = await axios.post<GetUserLogin>(`${PATH_BASE}/user/login`, loginBody, {
+        const { data } = await axios.post<GetUserLogin>(`${PATH_BASE}/login`, loginBody, {
             headers: { "Content-type": "application/json" }
         });
 

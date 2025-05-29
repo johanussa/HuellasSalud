@@ -118,7 +118,7 @@ public class UserApi {
     }
 
     @POST
-    @Path("/create")
+    @Path("/register")
     @Tag(name = "Gestión de usuarios")
     @Operation(
             summary = "Creación de un usuario nuevo",
@@ -149,12 +149,11 @@ public class UserApi {
             @Valid @ConvertGroup(to = ValidationGroups.Post.class) UserMsg userMsg
     ) throws UnknownHostException, HSException {
 
-        LOG.infof("@createUserData API > Inicia ejecucion del servicio de creacion de usuario con la data: " +
-                "%s en la base de datos", userMsg.getData());
+        LOG.infof("@createUserData API > Inicia servicio de creacion de usuario con la data: %s", userMsg);
 
         userService.saveUserDataInMongo(userMsg);
 
-        LOG.infof("@createUserData API > Finaliza ejecucion api de creacion de usuario con la data: %s", userMsg);
+        LOG.info("@createUserData API > Finaliza servicio. El usuario se registro correctamente");
 
         return Response.ok()
                 .status(Response.Status.CREATED)

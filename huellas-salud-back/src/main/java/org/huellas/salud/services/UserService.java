@@ -102,29 +102,26 @@ public class UserService {
 
     public void saveUserDataInMongo(UserMsg userMsg) throws UnknownHostException, HSException {
 
-        LOG.infof("@saveUserDataInMongo SERV > Inicia servicio de guardado de usuario en mongo con la data: " +
-                "%s. Inicia verificacion de si el usuario ya esta registrado en mongo", userMsg.getData());
+        LOG.info("@saveUserDataInMongo SERV > Inicia verificacion si el usuario ya esta registrado en la base de datos");
 
         validateIfUserIsRegistered(userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza validacion de data del usuario si ya ha sido registrado " +
-                "previamente. Inicia servicio de encriptacion de password de usuario con data: %s", userMsg.getData());
+        LOG.info("@saveUserDataInMongo SERV > El usuario no existe. Inicia servicio de encriptacion de password");
 
         validatePasswordEncrypted(userMsg.getData());
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza encriptacion de password del usuario con data: %s. " +
-                "Inicia formato al nombre de usuario, el estado y se agrega la metadata", userMsg.getData());
+        LOG.info("@saveUserDataInMongo SERV > Encriptación de contraseña validada. Inicia formato al nombre de " +
+                "usuario, el estado y se agrega la metadata");
 
         formatUserDataToCreateUser(userMsg);
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza estructura del objeto meta correctamente. Inicia " +
-                "almacenamiento del registro en mongo con la data: %s", userMsg);
+        LOG.infof("@saveUserDataInMongo SERV > Datos de usuario formateados correctamente. Inicia almacenamiento " +
+                "del registro en mongo con la data: %s", userMsg);
 
         userRepository.persist(userMsg);
 
-        LOG.infof("@saveUserDataInMongo SERV > Finaliza servicio de creacion de usuario. El usuario con " +
-                "numero de documento: %s y correo: %s se creo correctamente en la base de datos", userMsg.getData()
-                .getDocumentNumber(), userMsg.getData().getEmail());
+        LOG.infof("@saveUserDataInMongo SERV > El usuario con documento: %s y correo: %s se creo correctamente " +
+                "en la base de datos", userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
     }
 
     public void updateUserDataInMongo(UserMsg userMsg) throws HSException {
@@ -243,21 +240,18 @@ public class UserService {
 
     private void validateIfUserIsRegistered(String documentNumber, String email) throws HSException {
 
-        LOG.infof("@validateIfUserIsRegistered SERV > Inicia busqueda del registro del usuario identificado " +
-                "con numero de documento: %s y correo: %s", documentNumber, email);
+        LOG.info("@validateIfUserIsRegistered SERV > Iniciando validacion de usuario no registrado");
 
         if (userRepository.findUserByEmailOrDocument(documentNumber, email).isPresent()) {
 
-            LOG.errorf("@validateIfUserIsRegistered SERV > El usuario identificado con numero de documento: " +
-                    "%s y correo: %s ya se encuentra registrado en mongo. La solicitud es invalida, no se puede " +
-                    "registrar el usuario", documentNumber, email);
+            LOG.errorf("@validateIfUserIsRegistered SERV > El usuario con numero de documento: %s o correo: %s " +
+                    "ya se encuentra registrado. La solicitud es invalidada", documentNumber, email);
 
-            throw new HSException(Response.Status.BAD_REQUEST, "El usuario con correo: " + email + " y número de " +
+            throw new HSException(Response.Status.BAD_REQUEST, "El usuario con correo: " + email + " o número de " +
                     "documento: " + documentNumber + " ya se encuentra registrado en la base de datos");
         }
-        LOG.infof("@validateIfUserIsRegistered SERV > Finaliza busqueda del registro del usuario. El usuario " +
-                "con numero de documento: %s y correo: %s No ha sido registrado previamente. Se continua proceso de " +
-                "registro en mongo", documentNumber, email);
+        LOG.infof("@validateIfUserIsRegistered SERV > Finaliza consulta de registro. Validacion exitosa, el " +
+                "usuario con documento: %s y correo: %s No ha sido registrado previamente.", documentNumber, email);
     }
 
     private void validatePasswordEncrypted(User user) {
@@ -284,7 +278,7 @@ public class UserService {
 
         User user = userMsg.getData();
 
-        user.setActive(true);
+        user.setActive(false);
         user.setName(utils.capitalizeWords(user.getName()));
         user.setLastName(utils.capitalizeWords(user.getLastName()));
 

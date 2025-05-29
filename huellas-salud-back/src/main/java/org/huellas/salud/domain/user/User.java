@@ -2,21 +2,17 @@ package org.huellas.salud.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.huellas.salud.helper.validators.ValidUserInterface;
 import org.huellas.salud.helper.validators.ValidationGroups;
 
 import java.io.Serializable;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ValidUserInterface
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
