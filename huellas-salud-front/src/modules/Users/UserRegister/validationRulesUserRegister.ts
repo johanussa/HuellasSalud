@@ -62,7 +62,7 @@ export const validationRules: ValidationRules = {
     },
     address: {
         pattern: {
-            value: /^[a-zA-Z0-9\s#-_.,'"]{8,}$/,
+            value: /^(|[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s#-_.,'"]{8,})$/,
             message: "La dirección debe tener al menos 8 caracteres y no puede contener caracteres especiales"
         }
     },

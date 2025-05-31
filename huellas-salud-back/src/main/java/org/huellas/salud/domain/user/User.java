@@ -68,8 +68,8 @@ public class User implements Serializable {
     private String cellPhone;
 
     @BsonProperty("domicilio")
-    @Pattern(regexp = "^[a-zA-Z0-9 .\\-_#]+(\\s*[a-zA-Z0-9.\\-_#]*)+$", message = "El campo dirección no puede " +
-            "contener caracteres especiales (No puede contener tildes (´), coma (,), #, @, €, %, ñ y llaves)")
+    @Pattern(regexp = "(|[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\\s#-_.,'\"]{8,})", message = "El campo dirección no puede " +
+            "contener caracteres especiales (No puede contener @, €, %, {})")
     private String address;
 
     @BsonProperty("rol")

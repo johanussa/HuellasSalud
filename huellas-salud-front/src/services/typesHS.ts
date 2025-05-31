@@ -39,6 +39,7 @@ export interface Product {
 }
 
 export interface User {
+    image?: string;
     name: string;
     lastName: string;
     documentType: 'CC' | 'CE' | 'TI' | 'NIT' | 'PASAPORTE';
@@ -69,7 +70,7 @@ export interface Pet {
 }
 
 export interface Meta {
-    creationDate: Date;
+    creationDate: string;
     ipAddress: string;
     source: string;
 }
@@ -111,7 +112,7 @@ export interface InputErrors {
     password: boolean;
 }
 
-export interface GetUserLogin {
+export interface GetUserData {
     data: User;
     meta: Meta;
 }
@@ -129,4 +130,13 @@ export interface InputFieldUserRegister {
     inputFull?: boolean;
     register: UseFormRegister<User>;
     errors: FieldErrors<User>;
+}
+
+export interface UserFiltersProps {
+    searchTerm: string;
+    roleFilter: string;
+    statusFilter: string;
+    onSearchChange: (value: string) => void;
+    onRoleFilterChange: (value: string) => void;
+    onStatusFilterChange: (value: string) => void;
 }

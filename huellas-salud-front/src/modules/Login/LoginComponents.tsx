@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { InputFieldProps, LoginFormProps, PasswordFieldProps } from "../../services/typesHS";
-import { useLoginService } from "../../services/serviceLogin";
+import { useLoginService } from "./loginService";
 import styles from "./login.module.css";
 import logoGoogle from "../../assets/logoGoogleG.png";
 import ButtonComponent from "../../components/Button/Button";

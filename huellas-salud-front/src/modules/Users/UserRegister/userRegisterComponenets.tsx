@@ -1,10 +1,10 @@
 import { InputFieldUserRegister, User } from "../../../services/typesHS";
-import { SocialMediaIcons } from "../../Login/LoginComponents";
+import { SocialMediaIcons } from "../../Login/loginComponents";
 import { RegisterOptions } from "react-hook-form";
 import { validationRules } from "./validationRulesUserRegister";
+import { useUserRegister } from "./userRegisterService";
 import ButtonComponent from "../../../components/Button/Button";
 import styles from "./userRegister.module.css";
-import { useUserRegister } from "../../../services/serviceUserRegister";
 
 export const FormUserRegister = () => {
 

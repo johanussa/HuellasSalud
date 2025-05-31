@@ -1,41 +1,12 @@
-import { User } from "../../services/typesHS";
-
-export const userFieldsTable = [
-    "#",
+export const tableColumns: string[] = [
     "Nombre",
     "Tipo Doc.",
     "N° Doc.",
     "Rol",
     "Teléfono",
-    "Dirección",
     "Correo",
     "Estado",
     "Acciones"
-];
-
-export const users: User[] = [
-    {
-        id: 1,
-        name: "Dr. Juan Pérez",
-        documentType: "CC.",
-        documentNumber: 12345678,
-        role: "Veterinario",
-        phone: 912345678,
-        address: "Calle 123 #45-67",
-        email: "juanp@vet.com",
-        status: "Activo"
-    },
-    {
-        id: 2,
-        name: "Dra. Ana Maria",
-        documentType: "CC.",
-        documentNumber: 23456879,
-        role: "Veterinario",
-        phone: 3214567890,
-        address: "Calle 321 #76-18",
-        email: "anaMaria@vet.com",
-        status: "Inactivo"
-    }
 ];
 
 export const fieldsFormUser = [

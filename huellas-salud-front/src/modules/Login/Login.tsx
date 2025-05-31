@@ -1,6 +1,6 @@
 import styles from './login.module.css';
 import logoLogin from "../../assets/Huellas&Salud_3.png";
-import { AccountSection, Divider, ForgotPasswordSection, GoogleLoginButton, LoginForm } from './LoginComponents';
+import { AccountSection, Divider, ForgotPasswordSection, GoogleLoginButton, LoginForm } from './loginComponents';
 import { useState } from 'react';
 
 const Login = () => {

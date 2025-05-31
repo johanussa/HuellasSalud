@@ -1,8 +1,8 @@
 import axios from "axios";
-import { User } from "./typesHS";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
+import { User } from "../../../services/typesHS";
 
 const PATH_BASE = 'http://localhost:8089/internal/user';
 
@@ -60,7 +60,7 @@ export const useUserRegister = () => {
         } else if (error instanceof Error) {
             errorMessage = error.message;
         }
-        console.error("Error en registro:", error);
+        console.error("Error en registro: ", error);
         toast.error(`${errorMessage} ❌`);
     }
 
