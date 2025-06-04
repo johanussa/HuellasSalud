@@ -20,18 +20,18 @@
 }
 
 .userRegisterData p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     text-align: end;
 }
 
 .userRegisterData .slogan {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     padding-bottom: 8px;
 }
 
 .userRegisterData i {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .userRegisterData i:hover {

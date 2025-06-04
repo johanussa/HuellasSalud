@@ -95,7 +95,7 @@
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    border-bottom: 8px solid;
+    border-bottom: 8px solid #000;
 }
 
 .userTable thead {

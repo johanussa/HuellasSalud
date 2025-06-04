@@ -1,5 +1,5 @@
 import { HTMLInputTypeAttribute } from "react";
-import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 export interface ListItemNavProps extends NavLinkProps {
     path: string;
@@ -139,4 +139,9 @@ export interface UserFiltersProps {
     onSearchChange: (value: string) => void;
     onRoleFilterChange: (value: string) => void;
     onStatusFilterChange: (value: string) => void;
+}
+
+export interface UserTableProps {
+    users: GetUserData[] | undefined;
+    setUsersData: React.Dispatch<React.SetStateAction<GetUserData[] | undefined>>;
 }

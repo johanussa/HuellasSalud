@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { GetUserData } from "../../../services/typesHS";
-import { useGetUsers } from "./usersService";
 import { UserFilters, UserTable } from "./userComponents";
+import { useUserService } from "./usersService";
 import styles from "./users.module.css";
 
 const Users = () => {
@@ -11,16 +11,15 @@ const Users = () => {
   const [roleFilter, setRoleFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  const { handleGetUsers, loading } = useGetUsers();
+  const { handleGetUsers, loading } = useUserService();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       const data = await handleGetUsers();
       setUsersData(data);
-      console.log(data);
     };
 
-    fetchData();
+    fetchUserData();
   }, []);
 
   const filteredUsers = useMemo(() => {
@@ -52,7 +51,7 @@ const Users = () => {
           onRoleFilterChange={setRoleFilter}
           onStatusFilterChange={setStatusFilter}
         />
-        <UserTable users={filteredUsers} />
+        <UserTable users={filteredUsers} setUsersData={setUsersData} />
       </section>
     </main>
   )

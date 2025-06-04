@@ -1,8 +1,10 @@
-import { GetUserData, User, UserFiltersProps } from "../../../services/typesHS";
-import styles from "./users.module.css";
+import { User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
 import { tableColumns } from "./usersUtils";
+import { useUserService } from "./usersService";
+import styles from "./users.module.css";
 
 const roles = ['ADMINISTRADOR', 'CLIENTE', 'VETERINARIO', 'RECEPCIONISTA'];
+
 const statusOptions = [
     { value: 'all', label: 'Todos los estados' },
     { value: 'active', label: 'Activo' },
@@ -57,10 +59,16 @@ export const UserFilters = ({
     </section>
 );
 
-export const UserTable = ({ users }: { users: GetUserData[] | undefined }) => {
+export const UserTable = ({ users, setUsersData }: UserTableProps) => {
 
-    const toggleUserStatus = (userId: string) => {
-        console.log(`Cambiando estado del usuario con documento: ${userId}`);
+    const { confirmDelete, confirmUpdate } = useUserService();
+    const changeUserStatus = (user: User) => confirmUpdate(user);
+
+    const deleteUser = async (user: User) => {
+        const idUser = await confirmDelete(user);
+        if (idUser) {
+            setUsersData(prevUsers => prevUsers?.filter(u => u.data.documentNumber !== idUser));
+        }
     };
 
     return (
@@ -106,16 +114,19 @@ export const UserTable = ({ users }: { users: GetUserData[] | undefined }) => {
                             <td>
                                 <aside className={styles.actions}>
                                     <button className={`${styles.btn} ${styles.edit}`}>
-                                        <i className="fa-regular fa-pen-to-square"></i>
+                                        <i className="fa-regular fa-pen-to-square" />
                                     </button>
-                                    <button className={`${styles.btn} ${styles.delete}`}>
-                                        <i className="fa-regular fa-trash-can"></i>
+                                    <button
+                                        className={`${styles.btn} ${styles.delete}`}
+                                        onClick={() => deleteUser(user)}
+                                    >
+                                        <i className="fa-regular fa-trash-can" />
                                     </button>
                                     <button
                                         className={`${styles.btn} ${styles.toggleStatus}`}
-                                        onClick={() => toggleUserStatus(user.documentNumber)}
+                                        onClick={() => changeUserStatus(user)}
                                     >
-                                        <i className="fa-solid fa-power-off"></i>
+                                        <i className="fa-solid fa-power-off" />
                                     </button>
                                 </aside>
                             </td>
