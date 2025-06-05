@@ -42,6 +42,9 @@ public class UserMsg implements Serializable {
             ValidationGroups.Post_Get.class})
     private Meta meta;
 
+    @Schema(example = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSU")
+    private String token;
+
     @Override
     public String toString() {
         return ConvertFormatJSON.toJson(this);

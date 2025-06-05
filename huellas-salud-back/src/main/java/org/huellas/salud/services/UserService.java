@@ -7,6 +7,7 @@ import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
+import org.huellas.salud.helper.jwt.JwtService;
 import org.huellas.salud.helper.utils.Utils;
 import org.huellas.salud.repositories.UserRepository;
 import org.jboss.logging.Logger;
@@ -28,6 +29,9 @@ public class UserService {
     Utils utils;
 
     @Inject
+    JwtService jwtService;
+
+    @Inject
     UserRepository userRepository;
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
@@ -44,7 +48,9 @@ public class UserService {
         userMongo.setData(getUserDto(userMongo));
 
         LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio. La informacion del " +
-                "usuario que se obtuvo es: %s", userMongo);
+                "usuario que se obtuvo es: %s. Inicia generacion del token del usuario", userMongo);
+
+        userMongo.setToken(jwtService.generateToken(userMongo.getData()));
 
         return userMongo;
     }
