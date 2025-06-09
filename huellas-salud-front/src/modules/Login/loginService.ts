@@ -1,5 +1,5 @@
-import { FormState, GetUserData, InputErrors, LoginRequest } from "../../services/typesHS";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { AuthContext, FormState, GetUserData, InputErrors, LoginRequest } from "../../services/typesHS";
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -19,6 +19,8 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
 
     const emailOrDocRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const { login } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -78,8 +80,10 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
             headers: { "Content-type": "application/json" }
         });
 
+        login(data.token || "", data.data);
+
         toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenido ${data.data.name}`);
-        navigate("/inicio");
+        navigate("/", { replace: true});
     }
 
     const handleLoginError = (error: unknown) => {
@@ -110,8 +114,8 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
             return;
         }
 
-        try { await performLogin(); } 
-        catch (error) { handleLoginError(error); } 
+        try { await performLogin(); }
+        catch (error) { handleLoginError(error); }
         finally { setLoading(false); }
     };
 

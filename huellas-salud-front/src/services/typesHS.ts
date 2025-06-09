@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "react";
+import { createContext, HTMLInputTypeAttribute } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 export interface ListItemNavProps extends NavLinkProps {
@@ -115,6 +115,7 @@ export interface InputErrors {
 export interface GetUserData {
     data: User;
     meta: Meta;
+    token?: string;
 }
 
 export interface LoginFormProps {
@@ -144,4 +145,24 @@ export interface UserFiltersProps {
 export interface UserTableProps {
     users: GetUserData[] | undefined;
     setUsersData: React.Dispatch<React.SetStateAction<GetUserData[] | undefined>>;
+}
+
+interface AuthContextType {
+    user: User | null;
+    token: string | null;
+    loading: boolean;
+    login: (token: string, user: User) => void;
+    logout: () => void;
+}
+
+export const AuthContext = createContext<AuthContextType>({
+    user: null,
+    token: null,
+    loading: true,
+    login: () => { },
+    logout: () => { },
+});
+
+export type JwtPayload = {
+    exp: number;
 }

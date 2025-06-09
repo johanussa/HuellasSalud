@@ -3,13 +3,7 @@ import { GetUserData, User } from "../../../services/typesHS";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
-
-const PATH_BASE = 'http://localhost:8089/internal/user';
-
-const defaultHeaders = {
-    "Content-type": "application/json",
-    "Accept": "application/json"
-}
+import axiosInstance from "../../../context/axiosInstance";
 
 export const useUserService = () => {
 
@@ -17,25 +11,20 @@ export const useUserService = () => {
 
     const api = {
         getUsers: async () => {
-            const { data } = await axios.get<GetUserData[]>(`${PATH_BASE}/list-users`, {
-                headers: defaultHeaders
-            });
+            const { data } = await axiosInstance.get<GetUserData[]>("/user/list-users");
             return data;
         },
         updateUserStatus: async (user: User) => {
             user.active = !user.active;
             const dataUpdate = { data: { ...user, role: null } }
-            await axios.put(`${PATH_BASE}/update`, dataUpdate, {
-                headers: defaultHeaders
-            });
+            await axiosInstance.put(`/user/update`, dataUpdate);
         },
         deleteUser: async (user: User) => {
-            await axios.delete(`${PATH_BASE}/delete`, {
+            await axiosInstance.delete(`/user/delete`, {
                 params: {
                     documentNumber: user.documentNumber,
                     emailUser: user.email
-                },
-                headers: defaultHeaders
+                }
             });
         }
     }
@@ -111,9 +100,17 @@ const handleError = (error: unknown, message: string) => {
     let errorMessage = message;
 
     if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.title
-            ? `${error.response.data.title}. ${error.response.data.detail || ''}`
-            : error.message || 'Error en la comunicación con el servidor';
+
+        const { response, message } = error;
+
+        if (response?.data?.title) {
+            const detail = response.data.detail ? `. ${response.data.detail}` : "";
+            errorMessage = `${response.data.title}${detail}`;
+        } else if (response?.status === 401) {
+            errorMessage = "No tienes permisos para realizar esta acción";
+        } else {
+            errorMessage = message || "Error en la comunicación con el servidor";
+        }
     } else if (error instanceof Error) errorMessage = error.message;
 
     toast.error(`${errorMessage} ❌`);

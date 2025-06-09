@@ -1,4 +1,4 @@
-import { BrowserRouter, useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./modules/Navbar/Navbar";
 import Login from "./modules/Login/Login";
@@ -11,21 +11,28 @@ import Contact from "./modules/Contact/Contact";
 import Services from "./modules/Services/Services";
 import UserRegister from "./modules/Users/UserRegister/UserRegister";
 import Users from "./modules/Users/UserManagement/Users";
+import ProtectedRoute from "./context/ProtectedRoute";
 
 const AppRoutes = () => {
 
   const routes = useRoutes([
-    { path: "/", element: <Home/> },
+    { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/registro-usuario", element: <UserRegister /> },
     { path: "/productos", element: <Products /> },
     { path: "/productos-admin", element: <ProductsAdmin /> },
-    { path: "/usuarios", element: <Users /> },
+    {
+      path: "/usuarios",
+      element: (
+        <ProtectedRoute requiredRole={["ADMINISTRADOR"]}>
+          <Users />
+        </ProtectedRoute>
+      ),
+    },
     { path: "/mascotas", element: <Pets /> },
     { path: "/historial", element: <History /> },
-    { path: "/inicio", element: <Home/>},
-    { path: "/contacto", element: <Contact/>},
-    { path: "/servicios", element: <Services/>}
+    { path: "/contacto", element: <Contact /> },
+    { path: "/servicios", element: <Services /> }
   ]);
 
   return routes;
@@ -33,11 +40,11 @@ const AppRoutes = () => {
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <AppRoutes />
       <ToastContainer theme="light" />
-    </BrowserRouter>
+    </>
   );
 }
 

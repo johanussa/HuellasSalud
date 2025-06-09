@@ -1,5 +1,7 @@
 package org.huellas.salud.services;
 
+import io.quarkus.cache.CacheInvalidateAll;
+import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
@@ -17,7 +19,6 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @ApplicationScoped
@@ -94,6 +95,7 @@ public class UserService {
         }
     }
 
+    @CacheResult(cacheName = "users-list-cache")
     public List<UserMsg> getListRegisteredUser() {
 
         LOG.info("@getListRegisteredUser SERV > Inicia servicio para obtener listado de usuarios registrados en mongo");
@@ -106,6 +108,7 @@ public class UserService {
         return users;
     }
 
+    @CacheInvalidateAll(cacheName = "users-list-cache")
     public void saveUserDataInMongo(UserMsg userMsg) throws UnknownHostException, HSException {
 
         LOG.info("@saveUserDataInMongo SERV > Inicia verificacion si el usuario ya esta registrado en la base de datos");
@@ -130,6 +133,7 @@ public class UserService {
                 "en la base de datos", userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
     }
 
+    @CacheInvalidateAll(cacheName = "users-list-cache")
     public void updateUserDataInMongo(UserMsg userMsg) throws HSException {
 
         LOG.infof("@updateUserDataInMongo SERV > Inicia ejecucion de servicio de actualizacion de registro " +
@@ -172,6 +176,7 @@ public class UserService {
                 "de servicio de actualizacion de usuario", documentNumber, email, userMsgMongo);
     }
 
+    @CacheInvalidateAll(cacheName = "users-list-cache")
     public void deleteUserDataInMongo(String documentNumber, String emailUser) throws HSException {
 
         LOG.infof("@deleteUserDataInMongo SERV > Inicia ejecucion del servicio para eliminar registro del " +

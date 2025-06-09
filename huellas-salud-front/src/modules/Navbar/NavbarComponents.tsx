@@ -1,14 +1,14 @@
-import styles from "./navbar.module.css";
+import { useContext, useMemo } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext, ListItemNavProps, NavLinkProps, SubMenuProps, User } from "../../services/typesHS";
+import { MENU_DATA } from "./navbarData";
 import imgHS1 from "../../assets/HS_LOGO_WHITE.jpg";
 import imgHS2 from "../../assets/simba.webp";
-import { Link, NavLink } from "react-router-dom";
-import { ListItemNavProps, NavLinkProps, SubMenuProps } from "../../services/typesHS";
-import { MENU_DATA } from "./navbarData";
-import { useMemo } from "react";
+import styles from "./navbar.module.css";
 
 export const Logo = () => (
     <picture className={styles.logoContain}>
-        <Link to={"/inicio"}>
+        <Link to={"/"}>
             <img src={imgHS1} alt="Huellas&Salud" />
         </Link>
     </picture>
@@ -21,37 +21,48 @@ export const SearchBar = () => (
     </aside>
 );
 
-export const NavLinks = ({ setOptionHover, setShowSubMenu }: NavLinkProps) => (
-    <ul className={styles.containerUl}>
-        <ListItemNav
-            path="/mascotas/perros"
-            name="Perros"
-            icon="fa-solid fa-dog"
-            setOptionHover={setOptionHover}
-            setShowSubMenu={setShowSubMenu}
-        />
-        <ListItemNav
-            path="/mascotas/gatos"
-            name="Gatos"
-            icon="fa-solid fa-cat"
-            setOptionHover={setOptionHover}
-            setShowSubMenu={setShowSubMenu}
-        />
-        <ListItemNav
-            path="/mascotas/otras-mascotas"
-            name="Otras Mascotas"
-            icon="fa-solid fa-horse-head"
-            setOptionHover={setOptionHover}
-            setShowSubMenu={setShowSubMenu}
-        />
-        <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
-        <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
-        <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
-        <ListItemNav path="/mascotas" name="Mascotas" icon="fa-solid fa-paw" />
-        <ListItemNav path="/historial" name="Historial" icon="fa-solid fa-notes-medical" />
-        <ListItemNav path="/contacto" name="Contacto" icon="fa-solid fa-mobile-screen-button" />
-    </ul>
-);
+export const NavLinks = ({ setOptionHover, setShowSubMenu }: NavLinkProps) => {
+
+    const { user } = useContext(AuthContext);
+
+    return (
+        <ul className={styles.containerUl}>
+            <ListItemNav
+                path="/mascotas/perros"
+                name="Perros"
+                icon="fa-solid fa-dog"
+                setOptionHover={setOptionHover}
+                setShowSubMenu={setShowSubMenu}
+            />
+            <ListItemNav
+                path="/mascotas/gatos"
+                name="Gatos"
+                icon="fa-solid fa-cat"
+                setOptionHover={setOptionHover}
+                setShowSubMenu={setShowSubMenu}
+            />
+            <ListItemNav
+                path="/mascotas/otras-mascotas"
+                name="Otras Mascotas"
+                icon="fa-solid fa-horse-head"
+                setOptionHover={setOptionHover}
+                setShowSubMenu={setShowSubMenu}
+            />
+            <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
+            <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
+
+            {
+                hasRole(user, ["ADMINISTRADOR"]) && (
+                    <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
+                )
+            }
+
+            <ListItemNav path="/mascotas" name="Mascotas" icon="fa-solid fa-paw" />
+            <ListItemNav path="/historial" name="Historial" icon="fa-solid fa-notes-medical" />
+            <ListItemNav path="/contacto" name="Contacto" icon="fa-solid fa-mobile-screen-button" />
+        </ul>
+    );
+};
 
 const ListItemNav = ({ path, style, icon, name, setOptionHover, setShowSubMenu }: ListItemNavProps) => {
 
@@ -80,23 +91,41 @@ const ListItemNav = ({ path, style, icon, name, setOptionHover, setShowSubMenu }
     )
 };
 
-export const BtnsLogRegister = () => (
-    <aside className={styles.asideButtons}>
-        <Link to={"/login"}>
-            <button type="button">Iniciar sesión</button>
-        </Link>
-        <Link to={"/registro-usuario"}>
-            <button type="button">Crear cuenta</button>
-        </Link>
-    </aside>
-);
+export const BtnsLogRegister = () => {
+
+    const { user, logout } = useContext(AuthContext);
+
+    return (
+        <>
+            {
+                user ? (
+                    <aside className={styles.asideButtons}>
+                        <Link to={"/perfil"}>
+                            <button type="button">Perfil</button>
+                        </Link>
+                        <button type="button" onClick={logout}>Cerrar sesión</button>
+                    </aside>
+                ) : (
+                    <aside className={styles.asideButtons}>
+                        <Link to={"/login"}>
+                            <button type="button">Iniciar sesión</button>
+                        </Link>
+                        <Link to={"/registro-usuario"}>
+                            <button type="button">Crear cuenta</button>
+                        </Link>
+                    </aside>
+                )
+            }
+        </>
+    );
+}
 
 export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
 
     const data = useMemo(() => MENU_DATA[option as keyof typeof MENU_DATA], [option]);
 
     if (!data) return null;
-    
+
     const handleMouse = (show: boolean) => setShowSubMenu?.(show);
 
     return (
@@ -141,3 +170,7 @@ export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
         </section>
     )
 };
+
+const hasRole = (user: User | null, roles: string[]): boolean => {
+    return !!user && roles.includes(user.role);
+}

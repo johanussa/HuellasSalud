@@ -1,5 +1,7 @@
 package org.huellas.salud.rest;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -90,6 +92,7 @@ public class UserApi {
 
     @GET
     @Path("/list-users")
+    @RolesAllowed("ADMINISTRADOR")
     @Tag(name = "Gestión de usuarios")
     @APIResponses(
             value = {
@@ -161,6 +164,7 @@ public class UserApi {
     }
 
     @PUT
+    @PermitAll
     @Path("/update")
     @Tag(name = "Gestión de usuarios")
     @Operation(
@@ -205,6 +209,7 @@ public class UserApi {
 
     @DELETE
     @Path("/delete")
+    @RolesAllowed("ADMINISTRADOR")
     @Tag(name = "Gestión de usuarios")
     @Operation(
             summary = "Eliminación de un usuario registrado",
@@ -227,7 +232,7 @@ public class UserApi {
                     required = true
             )
             @NotBlank(message = "El valor para el campo email no puede ser nulo o vacío")
-            @Email(message = "El valor de campo email contiene un formato no válido. Corríjalo por favor")
+            @Email(message = "El valor de campo email contiene un formato no válido, corríjalo por favor")
             @QueryParam("emailUser") String emailUser
     ) throws HSException {
 
