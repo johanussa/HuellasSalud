@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,7 +22,7 @@ public class Meta implements Serializable {
     @BsonProperty("fechaCreacion")
     private LocalDateTime creationDate;
 
-    @BsonProperty("fechaUltimaActualizacion")
+    @BsonProperty("ultimaActualizacion")
     private LocalDateTime lastUpdate;
 
     @Schema(example = "192.168.1.1")
@@ -30,12 +31,15 @@ public class Meta implements Serializable {
     @Schema(example = "http://localhost:8089/internal/API_PATH")
     private String source;
 
-    @Schema(example = "1023456789")
-    private String idUser;
-
+    @BsonProperty("nombreUsuarioActualizo")
     @Schema(example = "John Alexander Suarez Mendez")
-    private String nameUser;
+    private String nameUserUpdated;
 
+    @BsonProperty("correoUsuarioActualizo")
     @Schema(example = "usuario@correo.com")
-    private String emailUser;
+    private String emailUserUpdated;
+
+    @BsonProperty("rolUsuarioActualizo")
+    @Schema(example = "ADMINISTRADOR")
+    private String roleUserUpdated;
 }

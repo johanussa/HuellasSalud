@@ -2,8 +2,10 @@ package org.huellas.salud.helper.jwt;
 
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import lombok.Data;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.jboss.logging.Logger;
@@ -29,6 +31,9 @@ public class JwtService {
     private static final String ISSUER = "http://localhost";
 
     private PrivateKey privateKey;
+
+    @Inject
+    JsonWebToken jsonWebToken;
 
     public JwtService() {
         try {
@@ -74,5 +79,17 @@ public class JwtService {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
 
         return KeyFactory.getInstance("RSA").generatePrivate(spec);
+    }
+
+    public String getCurrentUserEmail() {
+        return jsonWebToken.getSubject();
+    }
+
+    public String getCurrentUserName() {
+        return jsonWebToken.getClaim("name") + " " + jsonWebToken.getClaim("lastName");
+    }
+
+    public String getCurrentUserRole() {
+        return jsonWebToken.getGroups().stream().findFirst().orElse("");
     }
 }

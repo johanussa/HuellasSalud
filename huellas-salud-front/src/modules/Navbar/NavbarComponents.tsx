@@ -1,7 +1,8 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext, ListItemNavProps, NavLinkProps, SubMenuProps, User } from "../../services/typesHS";
 import { MENU_DATA } from "./navbarData";
+import { UserAvatar } from "../Users/UserManagement/userComponents";
 import imgHS1 from "../../assets/HS_LOGO_WHITE.jpg";
 import imgHS2 from "../../assets/simba.webp";
 import styles from "./navbar.module.css";
@@ -93,30 +94,65 @@ const ListItemNav = ({ path, style, icon, name, setOptionHover, setShowSubMenu }
 
 export const BtnsLogRegister = () => {
 
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const { user, logout } = useContext(AuthContext);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const handleLogout = () => {
+        logout();
+        setOpenModal(false);
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+            setOpenModal(false);
+        }
+    };
+
+    useEffect(() => {
+        if (openModal) document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [openModal]);
+
+    if (!user) {
+        return (
+            <aside className={styles.asideButtons}>
+                <Link to="/login">
+                    <button type="button">Iniciar sesión</button>
+                </Link>
+                <Link to="/registro-usuario">
+                    <button type="button">Crear cuenta</button>
+                </Link>
+            </aside>
+        );
+    }
 
     return (
-        <>
-            {
-                user ? (
-                    <aside className={styles.asideButtons}>
-                        <Link to={"/perfil"}>
-                            <button type="button">Perfil</button>
-                        </Link>
-                        <button type="button" onClick={logout}>Cerrar sesión</button>
-                    </aside>
-                ) : (
-                    <aside className={styles.asideButtons}>
-                        <Link to={"/login"}>
-                            <button type="button">Iniciar sesión</button>
-                        </Link>
-                        <Link to={"/registro-usuario"}>
-                            <button type="button">Crear cuenta</button>
-                        </Link>
-                    </aside>
-                )
-            }
-        </>
+        <aside className={styles.asideButtons}>
+            <button
+                className={styles.avatarButton}
+                onClick={() => setOpenModal(prev => !prev)}
+                title={`${user.name} ${user.lastName}`}
+            >
+                <UserAvatar user={user} />
+            </button>
+
+            {openModal && (
+                <section className={styles.dropdown} ref={dropdownRef}>
+                    <button className={styles.closeButton} onClick={() => setOpenModal(false)}>×</button>
+                    <div className={styles.profileSection}>
+                        <UserAvatar user={user} />
+                        <p className={styles.userName}>{`${user.name} ${user.lastName}`}</p>
+                    </div>
+                    <button className={styles.editButton}>Editar perfil</button>
+                    <button className={styles.logoutButton} onClick={handleLogout}>
+                        Cerrar sesión
+                    </button>
+                </section>
+            )}
+        </aside>
     );
 }
 

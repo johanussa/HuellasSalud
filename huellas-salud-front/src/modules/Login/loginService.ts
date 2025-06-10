@@ -82,7 +82,7 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
 
         login(data.token || "", data.data);
 
-        toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenido ${data.data.name}`);
+        toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenid@ ${data.data.name}`);
         navigate("/", { replace: true});
     }
 

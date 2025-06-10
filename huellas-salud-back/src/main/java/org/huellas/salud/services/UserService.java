@@ -18,6 +18,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -137,19 +138,12 @@ public class UserService {
     public void updateUserDataInMongo(UserMsg userMsg) throws HSException {
 
         LOG.infof("@updateUserDataInMongo SERV > Inicia ejecucion de servicio de actualizacion de registro " +
-                "de usuario con la data: %s", userMsg.getData());
+                "de usuario con la data: %s. Inicia consulta de usuario", userMsg.getData());
 
         String email = userMsg.getData().getEmail();
         String documentNumber = userMsg.getData().getDocumentNumber();
 
-        UserMsg userMsgMongo = userRepository.findUserByDocumentNumber(documentNumber).orElseThrow(() -> {
-
-            LOG.errorf("@updateUserDataInMongo SERV > El usuario con documento: %s y correo: %s NO esta " +
-                    "registrado en mongo. Solicitud invalida no se puede editar registro", documentNumber, email);
-
-            return new HSException(Response.Status.NOT_FOUND, "No se encontró el registro del usuario con numero de " +
-                    "documento: " + documentNumber + " y correo: " + email + " en base de datos");
-        });
+        UserMsg userMsgMongo = getUserByDocumentNumber(documentNumber, email);
 
         LOG.infof("@updateUserDataInMongo SERV > El usuario con documento: %s y correo: %s si esta registrado. " +
                 "Se procede a realizar validacion del correo si va a ser modificado", documentNumber, email);
@@ -171,9 +165,8 @@ public class UserService {
 
         userRepository.update(userMsgMongo);
 
-        LOG.infof("@updateUserDataInMongo SERV > Finaliza actualizacion de registro de usuario con numero de " +
-                "documento: %s y correo: %s en mongo. Se actualizo el registro con la data: %s. Finaliza ejecucion " +
-                "de servicio de actualizacion de usuario", documentNumber, email, userMsgMongo);
+        LOG.infof("@updateUserDataInMongo SERV > Finaliza actualizacion registro usuario de numero documento: %s " +
+                "y correo: %s. Se actualizo el registro con la data: %s.", documentNumber, email, userMsgMongo);
     }
 
     @CacheInvalidateAll(cacheName = "users-list-cache")
@@ -196,6 +189,18 @@ public class UserService {
         LOG.infof("@deleteUserDataInMongo SERV > El registro del usuario con numero de documento: %s y correo: " +
                 "%s se elimino correctamente de mongo. Finaliza ejecucion del servicio para eliminar usuario y se " +
                 "elimino %s registro de la base de datos", documentNumber, emailUser, deleted);
+    }
+
+    private UserMsg getUserByDocumentNumber(String documentNumber, String email) throws HSException {
+
+        return userRepository.findUserByDocumentNumber(documentNumber).orElseThrow(() -> {
+
+            LOG.errorf("@getUserByDocumentNumber SERV > El usuario con documento: %s y correo: %s NO esta " +
+                    "registrado. Solicitud invalida no se puede editar registro", documentNumber, email);
+
+            return new HSException(Response.Status.NOT_FOUND, "No se encontró el registro del usuario con numero de " +
+                    "documento: " + documentNumber + " y correo: " + email + " en base de datos");
+        });
     }
 
     private void validateUserEmail(String emailUpdate, String emailMongo) throws HSException {
@@ -311,13 +316,16 @@ public class UserService {
         userMongo.setActive(editedUser.getActive());
         userMongo.setEmail(editedUser.getEmail());
         userMongo.setCellPhone(editedUser.getCellPhone());
-        userMongo.setAddress(Optional.ofNullable(editedUser.getAddress()).orElse(userMongo.getAddress()));
-        userMongo.setPassword(editedUser.getPassword());
+        userMongo.setAddress(Objects.requireNonNullElse(editedUser.getAddress(), userMongo.getAddress()));
+        userMongo.setPassword(Objects.requireNonNullElse(editedUser.getPassword(), userMongo.getPassword()));
         userMongo.setDocumentType(editedUser.getDocumentType());
         userMongo.setName(utils.capitalizeWords(editedUser.getName()));
         userMongo.setLastName(utils.capitalizeWords(editedUser.getLastName()));
 
         userMsgMongo.getMeta().setLastUpdate(LocalDateTime.now());
+        userMsgMongo.getMeta().setNameUserUpdated(jwtService.getCurrentUserName());
+        userMsgMongo.getMeta().setEmailUserUpdated(jwtService.getCurrentUserEmail());
+        userMsgMongo.getMeta().setRoleUserUpdated(jwtService.getCurrentUserRole());
 
         LOG.infof("@updateUserDataInformation SERV > Finaliza actualizacion de datos de usuario con id: %s", idUser);
     }

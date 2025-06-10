@@ -84,9 +84,9 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
                         <tr key={`${user.documentType}-${user.documentNumber}`}>
                             <td>
                                 <aside className={styles.userInfo}>
-                                    <div className={styles.avatar}>
+                                    <button className={styles.avatar}>
                                         <UserAvatar user={user} />
-                                    </div>
+                                    </button>
                                     <div className={styles.userDetails}>
                                         <span className={styles.userName}>
                                             {user.name.split(' ')[0]} {user.lastName.split(' ')[0]}
@@ -138,7 +138,7 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
     );
 }
 
-const UserAvatar = ({ user }: { user: User }) => {
+export const UserAvatar = ({ user }: { user: User }) => {
 
     if (user.image) return (<img src={user.image} alt={user.name} />);
 
