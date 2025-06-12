@@ -34,7 +34,7 @@ export const useUserService = () => {
         toast.info("Cargando usuarios... ⌛", { autoClose: 1000 });
         try {
             const users: GetUserData[] = await api.getUsers();
-            toast.success("¡Usuarios cargados con éxito! 🎉");
+            toast.success("¡Usuarios cargados con éxito! 🎉", { autoClose: 1500 });
             return users;
         } catch (error) {
             handleError(error, "Error al consultar los usuarios");
@@ -46,7 +46,7 @@ export const useUserService = () => {
         toast.info("Actualizando usuario... ⌛", { autoClose: 1000 });
         try {
             const updatedUser = await api.updateUserStatus(user);
-            toast.success("¡Usuario actualizado con éxito! 🎉");
+            toast.success("¡Usuario actualizado con éxito! 🎉", { autoClose: 1500 });
             return updatedUser;
         } catch (error) {
             handleError(error, "Error al actualizar el usuario");
@@ -58,7 +58,7 @@ export const useUserService = () => {
         toast.info("Eliminando usuario... ⌛", { autoClose: 1000 });
         try {
             await api.deleteUser(user);
-            toast.success("¡Usuario eliminado con éxito! 🎉");
+            toast.success("¡Usuario eliminado con éxito! 🎉", { autoClose: 1500 });
             return user.documentNumber;
         } catch (error) {
             handleError(error, "Error al eliminar el usuario");

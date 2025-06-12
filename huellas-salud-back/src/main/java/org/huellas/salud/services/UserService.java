@@ -5,6 +5,7 @@ import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+import org.huellas.salud.domain.Meta;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
@@ -312,20 +313,22 @@ public class UserService {
         LOG.infof("@updateUserInformation SERV > Inicia actualizacion de datos de usuario con id: %s", idUser);
 
         User userMongo = userMsgMongo.getData();
+        Meta metaMongo = userMsgMongo.getMeta();
 
         userMongo.setActive(editedUser.getActive());
         userMongo.setEmail(editedUser.getEmail());
         userMongo.setCellPhone(editedUser.getCellPhone());
         userMongo.setAddress(Objects.requireNonNullElse(editedUser.getAddress(), userMongo.getAddress()));
         userMongo.setPassword(Objects.requireNonNullElse(editedUser.getPassword(), userMongo.getPassword()));
+        userMongo.setRole(Objects.requireNonNullElse(editedUser.getRole(), userMongo.getRole()));
         userMongo.setDocumentType(editedUser.getDocumentType());
         userMongo.setName(utils.capitalizeWords(editedUser.getName()));
         userMongo.setLastName(utils.capitalizeWords(editedUser.getLastName()));
 
-        userMsgMongo.getMeta().setLastUpdate(LocalDateTime.now());
-        userMsgMongo.getMeta().setNameUserUpdated(jwtService.getCurrentUserName());
-        userMsgMongo.getMeta().setEmailUserUpdated(jwtService.getCurrentUserEmail());
-        userMsgMongo.getMeta().setRoleUserUpdated(jwtService.getCurrentUserRole());
+        metaMongo.setLastUpdate(LocalDateTime.now());
+        metaMongo.setNameUserUpdated(jwtService.getCurrentUserName());
+        metaMongo.setEmailUserUpdated(jwtService.getCurrentUserEmail());
+        metaMongo.setRoleUserUpdated(jwtService.getCurrentUserRole());
 
         LOG.infof("@updateUserDataInformation SERV > Finaliza actualizacion de datos de usuario con id: %s", idUser);
     }

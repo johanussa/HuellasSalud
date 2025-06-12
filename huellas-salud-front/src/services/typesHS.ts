@@ -1,14 +1,17 @@
 import { createContext, HTMLInputTypeAttribute } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
+export type Role = "ADMINISTRADOR" | "VETERINARIO" | "CLIENTE" | "RECEPCIONISTA";
+
 export interface ListItemNavProps extends NavLinkProps {
     path: string;
     name: string;
     icon: string;
     style?: boolean;
-};
+}
 
-export interface PasswordFieldProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PasswordFieldProps
+    extends React.HTMLAttributes<HTMLDivElement> {
     errorMsg: string;
     viewPass: boolean;
     validData: boolean;
@@ -32,9 +35,9 @@ export interface Product {
     supplier: string;
     description: string;
     expiration: Date | null;
-    status: 'activo' | 'inactivo' | 'agotado';
+    status: "activo" | "inactivo" | "agotado";
     image: string;
-    unitMeasure: 'kg' | 'g' | 'l' | 'ml' | 'unidad';
+    unitMeasure: "kg" | "g" | "l" | "ml" | "unidad";
     barcode: number;
 }
 
@@ -42,28 +45,28 @@ export interface User {
     image?: string;
     name: string;
     lastName: string;
-    documentType: 'CC' | 'CE' | 'TI' | 'NIT' | 'PASAPORTE';
+    documentType: "CC" | "CE" | "TI" | "NIT" | "PASAPORTE";
     documentNumber: string;
     address: string;
     email: string;
     password: string;
     confirmPassword?: string;
     cellPhone: string;
-    role: 'ADMIN' | 'VETERINARIO' | 'CLIENTE';
+    role: Role;
     active?: boolean;
 }
 
 export interface Pet {
     id: string;
     name: string;
-    type: 'perro' | 'gato' | 'ave' | 'roedor' | 'reptil' | 'otro';
+    type: "perro" | "gato" | "ave" | "roedor" | "reptil" | "otro";
     breed: string;
     owner: User;
     age: number;
     weight: number;
     styrofoam: boolean;
     description: string;
-    status: 'activo' | 'inactivo' | 'pendiente';
+    status: "activo" | "inactivo" | "pendiente";
     vaccines: string[];
     surgeries: string[];
     treatments: string[];
@@ -71,6 +74,7 @@ export interface Pet {
 
 export interface Meta {
     creationDate: string;
+    lastUpdate: string;
     ipAddress: string;
     source: string;
 }
@@ -165,4 +169,4 @@ export const AuthContext = createContext<AuthContextType>({
 
 export type JwtPayload = {
     exp: number;
-}
+};
