@@ -1,16 +1,8 @@
-import { Meta, Role, User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
-import { tableColumns } from "./usersUtils";
+import { EditUserModalProps, InputEditProps, Meta, Role, User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
+import { formatDate, metaEmpty, roles, statusOptions, tableColumns, userEmpty } from "./usersUtils";
 import { useUserService } from "./usersService";
 import styles from "./users.module.css";
-import React, { useState } from "react";
-
-const roles = ['ADMINISTRADOR', 'CLIENTE', 'VETERINARIO', 'RECEPCIONISTA'];
-
-const statusOptions = [
-    { value: 'all', label: 'Todos los estados' },
-    { value: 'active', label: 'Activo' },
-    { value: 'inactive', label: 'Inactivo' }
-];
+import React, { memo, useCallback, useState } from "react";
 
 export const UserFilters = ({
     searchTerm,
@@ -63,22 +55,20 @@ export const UserFilters = ({
 export const UserTable = ({ users, setUsersData }: UserTableProps) => {
 
     const { confirmDelete, confirmUpdate } = useUserService();
-    const changeUserStatus = (user: User) => confirmUpdate(user);
 
-    const [userSelected, setUserSelected] = useState<User>({
-        name: "Johan sebastian", lastName: "Ussa rubio", documentType: "CC", documentNumber: "", address: "",
-        email: "johanuss0405@correo.com", cellPhone: "", password: "", role: "ADMINISTRADOR"
-    });
-    const [metaSelected, setMetaSelected] = useState<Meta>({
-        creationDate: "2025-06-05T20:35:25.075", ipAddress: "", source: "", lastUpdate: ""
-    });
-    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(true);
+    const [userSelected, setUserSelected] = useState<User>(userEmpty);
+    const [metaSelected, setMetaSelected] = useState<Meta>(metaEmpty);
+    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false);
+
+    const changeUserStatus = (user: User, meta: Meta) => {
+        user.active = !user.active;
+        meta.lastUpdate = new Date().toString();
+        confirmUpdate(user, "estado");
+    }
 
     const deleteUser = async (user: User) => {
         const idUser = await confirmDelete(user);
-        if (idUser) {
-            setUsersData(prevUsers => prevUsers?.filter(u => u.data.documentNumber !== idUser));
-        }
+        if (idUser) setUsersData(prev => prev?.filter(u => u.data.documentNumber !== idUser));
     };
 
     const handleEditUser = (user: User, meta: Meta) => {
@@ -143,7 +133,7 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
                                     </button>
                                     <button
                                         className={`${styles.btn} ${styles.toggleStatus}`}
-                                        onClick={() => changeUserStatus(user)}
+                                        onClick={() => changeUserStatus(user, meta)}
                                     >
                                         <i className="fa-solid fa-power-off" />
                                     </button>
@@ -153,7 +143,14 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
                     ))}
                 </tbody>
             </table>
-            {isModalEditOpen && <EditUserModal user={userSelected} meta={metaSelected} setCloseModal={setIsModalEditOpen} />}
+            {isModalEditOpen && (
+                <EditUserModal
+                    user={userSelected}
+                    meta={metaSelected}
+                    setCloseModal={setIsModalEditOpen}
+                    confirmUpdate={confirmUpdate}
+                />
+            )}
         </section>
     );
 }
@@ -173,23 +170,22 @@ export const UserAvatar = ({ user }: { user: User }) => {
     );
 }
 
-interface EditUserModalProps {
-    user: User;
-    meta: Meta;
-    setCloseModal: (close: boolean) => void;
-}
+const EditUserModal = ({ user, meta, setCloseModal, confirmUpdate }: EditUserModalProps) => {
 
-const EditUserModal = ({ user, meta, setCloseModal }: EditUserModalProps) => {
+    const [roleSelected, setRolSelected] = useState<string>(user.role);
 
-    const setSelectedRole = (newRole: Role) => {
-        if (user) user = { ...user, role: newRole }
-    }
+    const handleUpdate = useCallback(
+        async (event: React.FormEvent) => {
+            event.preventDefault();
 
-    const handleUpdate = (event: React.FormEvent) => {
-        event.preventDefault();
-        setCloseModal(false)
-        console.log(user);
-    }
+            if (roleSelected !== user.role) {
+                user.role = roleSelected as Role;
+                meta.lastUpdate = new Date().toString();
+                await confirmUpdate(user, "rol") && setCloseModal(false);
+            }
+        },
+        [roleSelected, user, meta, confirmUpdate, setCloseModal]
+    );
 
     return (
         <main className={styles.overlay}>
@@ -201,15 +197,18 @@ const EditUserModal = ({ user, meta, setCloseModal }: EditUserModalProps) => {
                         <h2>{user.name} {user.lastName}</h2>
                         <span>{user.email}</span>
                         <aside className={styles.asideMeta}>
-                            <p><span className={styles.metaUser}>Fecha registro</span>: {meta.creationDate}</p>
                             <p>
-                                <span className={styles.metaUser}>Ult. actualización</span>:
-                                {meta.lastUpdate ? meta.lastUpdate : " ---"}
+                                <span className={styles.metaUser}>Fecha registro</span>:{' '}
+                                {formatDate(meta.creationDate)}
+                            </p>
+                            <p>
+                                <span className={styles.metaUser}>Ult. actualización</span>:{' '}
+                                {meta.lastUpdate ? formatDate(meta.lastUpdate) : "---"}
                             </p>
                         </aside>
                     </section>
                 </section>
-                <form>
+                <form onSubmit={handleUpdate}>
                     <button className={styles.closeButton} onClick={() => setCloseModal(false)}>X</button>
                     <InputEdit label="Tipo de Documento" value={user?.documentType} />
                     <InputEdit label="Número de Documento" value={user?.documentNumber} />
@@ -221,17 +220,16 @@ const EditUserModal = ({ user, meta, setCloseModal }: EditUserModalProps) => {
                         <select
                             required
                             defaultValue={user?.role}
-                            onChange={(e) => setSelectedRole(e.target.value as Role)}
+                            onChange={(e) => setRolSelected(e.target.value as Role)}
                         >
-                            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                            <option value="VETERINARIO">VETERINARIO</option>
-                            <option value="RECEPCIONISTA">RECEPCIONISTA</option>
-                            <option value="CLIENTE">CLIENTE</option>
+                            {roles.map(role =>
+                                (<option disabled={role === user.role} key={role} value={role}>{role}</option>))
+                            }
                         </select>
                     </aside>
                     <aside className={styles.buttonGroup}>
                         <button className={styles.cancelButton} onClick={() => setCloseModal(false)}>Cancelar</button>
-                        <button className={styles.updateButton} onClick={handleUpdate}>Actualizar</button>
+                        <button className={styles.updateButton} type="submit">Actualizar</button>
                     </aside>
                 </form>
             </section>
@@ -239,15 +237,11 @@ const EditUserModal = ({ user, meta, setCloseModal }: EditUserModalProps) => {
     );
 }
 
-interface InputEditProps {
-    label: string;
-    value: string | undefined;
-    isEditable?: boolean;
-}
-
-const InputEdit = ({ label, value, isEditable = true }: InputEditProps) => (
-    <aside className={styles.fieldGroup}>
-        <label>{label}</label>
-        <input value={value} disabled={isEditable} />
-    </aside>
+const InputEdit = memo(
+    ({ label, value, isEditable = true }: InputEditProps) => (
+        <aside className={styles.fieldGroup}>
+            <label>{label}</label>
+            <input value={value} disabled={isEditable} />
+        </aside>
+    )
 );

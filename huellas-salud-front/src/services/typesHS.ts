@@ -170,3 +170,16 @@ export const AuthContext = createContext<AuthContextType>({
 export type JwtPayload = {
     exp: number;
 };
+
+export interface EditUserModalProps {
+    user: User;
+    meta: Meta;
+    setCloseModal: (close: boolean) => void;
+    confirmUpdate: (user: User, action: string) => Promise<boolean>;
+}
+
+export interface InputEditProps {
+    label: string;
+    value: string | undefined;
+    isEditable?: boolean;
+}

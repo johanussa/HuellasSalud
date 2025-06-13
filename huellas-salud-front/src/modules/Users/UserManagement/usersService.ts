@@ -14,9 +14,8 @@ export const useUserService = () => {
             const { data } = await axiosInstance.get<GetUserData[]>("/user/list-users");
             return data;
         },
-        updateUserStatus: async (user: User) => {
-            user.active = !user.active;
-            const dataUpdate = { data: { ...user, role: null } }
+        updateUser: async (user: User) => {
+            const dataUpdate = { data: user }
             await axiosInstance.put(`/user/update`, dataUpdate);
         },
         deleteUser: async (user: User) => {
@@ -45,9 +44,8 @@ export const useUserService = () => {
         setLoading(true);
         toast.info("Actualizando usuario... ⌛", { autoClose: 1000 });
         try {
-            const updatedUser = await api.updateUserStatus(user);
+            await api.updateUser(user);
             toast.success("¡Usuario actualizado con éxito! 🎉", { autoClose: 1500 });
-            return updatedUser;
         } catch (error) {
             handleError(error, "Error al actualizar el usuario");
         } finally { setLoading(false); }
@@ -65,18 +63,22 @@ export const useUserService = () => {
         } finally { setLoading(false); }
     }
 
-    const confirmUpdate = async (user: User) => {
+    const confirmUpdate = async (user: User, action: string): Promise<boolean> => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
-            text: `¿Deseas ${user.active ? 'desactivar' : 'activar'} al usuario ${user.name} ${user.lastName}?`,
+            text: `¿Deseas actualizar el ${action} del usuario ${user.name} ${user.lastName}?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: `${user.active ? 'Desactivar' : 'Activar'} usuario`,
+            confirmButtonText: `Actualizar ${action} usuario`,
             cancelButtonText: "Cancelar",
         });
-        if (result.isConfirmed) handleUpdateUser(user);
+        if (result.isConfirmed) {
+            handleUpdateUser(user);
+            return true;
+        }
+        return false;
     }
 
     const confirmDelete = async (user: User): Promise<string | undefined> => {

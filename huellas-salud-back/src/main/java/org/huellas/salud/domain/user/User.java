@@ -74,8 +74,6 @@ public class User implements Serializable {
 
     @BsonProperty("rol")
     @Schema(example = "ADMINISTRADOR")
-    @Null(message = "No debe enviar datos para el rol del usuario", groups = {ValidationGroups.Put.class,
-            ValidationGroups.Post_Get.class})
     @NotBlank(message = "El campo role no debe ser nulo o vació", groups = ValidationGroups.Post.class)
     private String role;
 
