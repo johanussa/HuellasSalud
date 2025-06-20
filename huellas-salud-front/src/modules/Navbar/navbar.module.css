@@ -127,13 +127,13 @@
 
 /* Avatar */
 .avatarButton {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
+    font-size: 1.3rem;
     border: 1px solid #FFFFFF60;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
-    margin-right: 12px;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -150,7 +150,7 @@
 .dropdown {
     position: absolute;
     top: 135px;
-    right: 100px;
+    right: 80px;
     background-color: #000;
     border-radius: 12px;
     box-shadow: 0 0px 12px 5px rgba(0, 0, 0, 0.2);
@@ -165,6 +165,7 @@
 }
 
 .profileSection div {
+    font-size: 1.5rem;
     width: 80px;
     height: 80px;
     border-radius: 50%;

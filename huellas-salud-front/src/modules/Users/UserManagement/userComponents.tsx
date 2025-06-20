@@ -1,13 +1,15 @@
-import { EditUserModalProps, InputEditProps, Meta, Role, User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
+import { CreateUserModalProps, EditUserModalProps, InputEditProps, Meta, Role, User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
 import { formatDate, metaEmpty, roles, statusOptions, tableColumns, userEmpty } from "./usersUtils";
 import { useUserService } from "./usersService";
 import styles from "./users.module.css";
 import React, { memo, useCallback, useState } from "react";
+import { FormUser } from "../UserRegister/userRegisterComponenets";
 
 export const UserFilters = ({
     searchTerm,
     roleFilter,
     statusFilter,
+    setModalCreateClose,
     onSearchChange,
     onRoleFilterChange,
     onStatusFilterChange
@@ -24,6 +26,7 @@ export const UserFilters = ({
         </aside>
 
         <aside className={styles.selectFilters}>
+            <button className={styles.btnCreateUser} onClick={() => setModalCreateClose(true)}>Crear usuario</button>
             <select
                 value={roleFilter}
                 onChange={(e) => onRoleFilterChange(e.target.value)}
@@ -208,18 +211,19 @@ const EditUserModal = ({ user, meta, setCloseModal, confirmUpdate }: EditUserMod
                         </aside>
                     </section>
                 </section>
-                <form onSubmit={handleUpdate}>
+                <form className={styles.formEditUser} onSubmit={handleUpdate}>
                     <button className={styles.closeButton} onClick={() => setCloseModal(false)}>X</button>
                     <InputEdit label="Tipo de Documento" value={user?.documentType} />
                     <InputEdit label="Número de Documento" value={user?.documentNumber} />
                     <InputEdit label="Teléfono" value={user?.cellPhone} />
                     <InputEdit label="Dirección" value={user?.address} />
                     <InputEdit label="Estado" value={user?.active ? "Activo" : "Inactivo"} />
-                    <aside className={styles.fieldGroup}>
+                    <aside className={`${styles.fieldGroup}`}>
                         <label>Rol</label>
                         <select
                             required
                             defaultValue={user?.role}
+                            className={styles.selectRolEdit}
                             onChange={(e) => setRolSelected(e.target.value as Role)}
                         >
                             {roles.map(role =>
@@ -232,6 +236,19 @@ const EditUserModal = ({ user, meta, setCloseModal, confirmUpdate }: EditUserMod
                         <button className={styles.updateButton} type="submit">Actualizar</button>
                     </aside>
                 </form>
+            </section>
+        </main>
+    );
+}
+
+export const CreateUserModal = ({ setModalCreate, setUsersData }: CreateUserModalProps) => {
+
+    return (
+        <main className={styles.overlay}>
+            <section className={styles.modal}>
+                <button className={styles.closeButton} onClick={() => setModalCreate && setModalCreate(false)}>X</button>
+                <section className={styles.backgroundModalEdit} />
+                <FormUser isAdmin setModalCreate={setModalCreate} setUsersData={setUsersData} />
             </section>
         </main>
     );

@@ -111,7 +111,7 @@ public class UserService {
     }
 
     @CacheInvalidateAll(cacheName = "users-list-cache")
-    public void saveUserDataInMongo(UserMsg userMsg) throws UnknownHostException, HSException {
+    public UserMsg saveUserDataInMongo(UserMsg userMsg) throws UnknownHostException, HSException {
 
         LOG.info("@saveUserDataInMongo SERV > Inicia verificacion si el usuario ya esta registrado en la base de datos");
 
@@ -133,6 +133,10 @@ public class UserService {
 
         LOG.infof("@saveUserDataInMongo SERV > El usuario con documento: %s y correo: %s se creo correctamente " +
                 "en la base de datos", userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
+
+        userMsg.setData(getUserDto(userMsg));
+
+        return userMsg;
     }
 
     @CacheInvalidateAll(cacheName = "users-list-cache")

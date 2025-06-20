@@ -22,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.validators.ValidationGroups;
@@ -154,12 +155,13 @@ public class UserApi {
 
         LOG.infof("@createUserData API > Inicia servicio de creacion de usuario con la data: %s", userMsg);
 
-        userService.saveUserDataInMongo(userMsg);
+        UserMsg userCreated = userService.saveUserDataInMongo(userMsg);
 
         LOG.info("@createUserData API > Finaliza servicio. El usuario se registro correctamente");
 
         return Response.ok()
                 .status(Response.Status.CREATED)
+                .entity(userCreated)
                 .build();
     }
 

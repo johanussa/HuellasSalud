@@ -4,11 +4,12 @@ interface PropsButton {
     loading?: boolean;
     contain: string;
     type?: "submit" | "button" | "reset" | undefined;
+    handleClic?: () => void;
 }
 
-const ButtonComponent = ({ loading, contain, type = "button" }: PropsButton) => {
+const ButtonComponent = ({ loading, contain, type = "button", handleClic }: PropsButton) => {
     return (
-        <button className={styles.button} type={type} disabled={loading} >
+        <button className={styles.button} type={type} disabled={loading} onClick={handleClic} >
             {loading ? "CARGANDO..." : contain}
         </button>
     )

@@ -151,7 +151,7 @@ export const AccountSection = ({ loading }: { loading: boolean }) => (
             <li>Recibir alertas personalizadas para desparasitación, controles anuales y promociones exclusivas.</li>
         </ul>
         <aside>
-            <Link to={loading ? "" : "/registro"}>
+            <Link to={loading ? "" : "/registro-usuario"}>
                 <ButtonComponent contain="CREAR CUENTA" />
             </Link>
         </aside>

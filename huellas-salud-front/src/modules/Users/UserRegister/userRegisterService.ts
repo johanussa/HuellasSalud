@@ -1,15 +1,18 @@
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { User } from "../../../services/typesHS";
+import { toast } from "react-toastify";
+import { CreateUserModalProps, User, UserData } from "../../../services/typesHS";
+import axiosInstance from "../../../context/axiosInstance";
+import axios from "axios";
 
-const PATH_BASE = 'http://localhost:8089/internal/user';
+export const useUserRegister = ({ setModalCreate, setUsersData }: CreateUserModalProps) => {
 
-export const useUserRegister = () => {
+    const fileInput = useRef<HTMLInputElement>(null);
 
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [previewImg, setPreviewImg] = useState<string | undefined>();
+    const [fileName, setFileName] = useState<string>("Cargar imagen de perfil");
 
     const {
         register,
@@ -33,16 +36,12 @@ export const useUserRegister = () => {
             cellPhone: formatPhoneNumber(userData.cellPhone)
         }
 
-        const payload = { data: formattedUser }
+        const payload = { data: formattedUser };
 
         toast.info(`Creando registro del usuario ${formattedUser.lastName.toUpperCase()}... ⏳`, { autoClose: 1200 });
 
-        const { data } = await axios.post<User>(`${PATH_BASE}/register`, payload, {
-            headers: {
-                "Content-type": "application/json",
-                "Accept": "application/json"
-            }
-        });
+        const { data } = await axiosInstance.post<UserData>("user/register", payload);
+        setUsersData && setUsersData(prev => [...(prev ?? []), data])
 
         return data;
     };
@@ -73,9 +72,43 @@ export const useUserRegister = () => {
             toast.success("¡Usuario registrado con éxito! 🎉");
             setErrorMsg("");
             reset();
+            setModalCreate && setModalCreate(false);
         } catch (error) { handleError(error); }
         finally { setLoading(false); }
     };
 
-    return { errorMsg, handleCreateUserSubmit: onSubmit, loading, register, errors, handleSubmit };
+    const handleChangeImg = (event: ChangeEvent<HTMLInputElement>) => {
+
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const maxSize = 4 * 1024 * 1024;
+        const validTypes = ["image/jpeg", "image/png", "image/webp"];
+
+        if (!validTypes.includes(file.type)) {
+            alert('Sólo se permiten JPG, PNG o WEBP');
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert('La imagen debe pesar ≤ 4 MB');
+            return;
+        }
+
+        setPreviewImg(URL.createObjectURL(file));
+        setFileName(file.name);
+    }
+
+    return {
+        errorMsg,
+        handleCreateUserSubmit: onSubmit,
+        loading,
+        register,
+        errors,
+        handleSubmit,
+        fileName,
+        fileInput,
+        previewImg,
+        handleChangeImg
+    };
 }

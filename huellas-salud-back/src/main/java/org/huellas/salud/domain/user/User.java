@@ -33,8 +33,8 @@ public class User implements Serializable {
     @Schema(example = "Julian Andres")
     @NotBlank(message = "El campo name no puede ser nulo o vacío")
     @Size(min = 3, max = 40, message = "El campo name debe contener entre 3 y 40 caracteres")
-    @Pattern(regexp = "^[a-zA-Z]+( [a-zA-Z]+)*$", message = "El nombre no debe contener valores numéricos, ni " +
-            "caracteres especiales, ni espacios vacíos al inicio o al final")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$", message = "El nombre no debe contener " +
+            "valores numéricos, ni caracteres especiales, ni espacios vacíos al inicio o al final")
     @Null(message = "No debe ingresar el nombre para obtener data de usuario", groups = ValidationGroups.Post_Get.class)
     private String name;
 
@@ -43,8 +43,8 @@ public class User implements Serializable {
     @NotBlank(message = "El campo lastName no puede ser nulo o vacío")
     @Size(min = 3, max = 40, message = "El campo lastName debe contener entre 3 y 40 caracteres")
     @Null(message = "No debe ingresar el campo apellido", groups = ValidationGroups.Post_Get.class)
-    @Pattern(regexp = "^[a-zA-Z]+( [a-zA-Z]+)*$", message = "El apellido no debe contener valores numéricos, ni " +
-            "caracteres especiales, ni espacios vacíos al inicio o al final")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$", message = "El apellido no debe contener " +
+            "valores numéricos, ni caracteres especiales, ni espacios vacíos al inicio o al final")
     private String lastName;
 
     @BsonProperty("correo")

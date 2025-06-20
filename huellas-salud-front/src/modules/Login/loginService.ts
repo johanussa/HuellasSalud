@@ -1,4 +1,4 @@
-import { AuthContext, FormState, GetUserData, InputErrors, LoginRequest } from "../../services/typesHS";
+import { AuthContext, FormState, UserData, InputErrors, LoginRequest } from "../../services/typesHS";
 import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -76,7 +76,7 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
             }
         }
 
-        const { data } = await axios.post<GetUserData>(`${PATH_BASE}/login`, loginBody, {
+        const { data } = await axios.post<UserData>(`${PATH_BASE}/login`, loginBody, {
             headers: { "Content-type": "application/json" }
         });
 

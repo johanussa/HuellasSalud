@@ -62,11 +62,12 @@
 }
 
 .filterSelect,
-.fieldGroup select {
+.fieldGroup select,
+.btnCreateUser {
+    width: 180px;
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: white;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s;
@@ -83,6 +84,18 @@
     outline: none;
     border-color: #4a90e2;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.btnCreateUser {
+    background-image: none;
+    background-color: #000;
+    color: #FFF;
+    transition: all 0.3s;
+    padding-right: 15px;
+}
+
+.btnCreateUser:hover {
+    background-color: #166184;
 }
 
 /* Estilos de la tabla */
@@ -169,7 +182,6 @@
     justify-content: center;
     color: white;
     font-weight: bold;
-    font-size: 1rem;
 }
 
 .userDetails {
@@ -285,7 +297,7 @@
     color: #8e24aa;
 }
 
-/* Estilos Modal editar usuario */
+/* Estilos Modal usuario */
 .overlay {
     position: fixed;
     top: 0;
@@ -308,17 +320,17 @@
     animation: fadeIn 0.3s ease;
 }
 
-.backgroundModalEdit {
-    border-radius: 16px 16px 0 0;
-    height: 110px;
-    background: linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 50%, rgba(0, 212, 255, 1) 100%);
-}
-
-.modal form {
+.modal .formEditUser {
     padding: 20px 30px 25px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+}
+
+.backgroundModalEdit {
+    border-radius: 16px 16px 0 0;
+    height: 110px;
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 50%, rgba(0, 212, 255, 1) 100%);
 }
 
 .imgDataUser .initialsAvatar {
@@ -379,6 +391,7 @@
 
 .fieldGroup input,
 .fieldGroup select {
+    width: 100%;
     padding: 10px 12px;
     font-size: 14px;
     border-radius: 8px;
@@ -387,7 +400,7 @@
 
 .fieldGroup input:disabled {
     background: #f1f1f1;
-    color: #888;
+    color: #696969;
 }
 
 .buttonGroup {

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { GetUserData, User } from "../../../services/typesHS";
+import { UserData, User } from "../../../services/typesHS";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -11,7 +11,7 @@ export const useUserService = () => {
 
     const api = {
         getUsers: async () => {
-            const { data } = await axiosInstance.get<GetUserData[]>("/user/list-users");
+            const { data } = await axiosInstance.get<UserData[]>("/user/list-users");
             return data;
         },
         updateUser: async (user: User) => {
@@ -32,7 +32,7 @@ export const useUserService = () => {
         setLoading(true);
         toast.info("Cargando usuarios... ⌛", { autoClose: 1000 });
         try {
-            const users: GetUserData[] = await api.getUsers();
+            const users: UserData[] = await api.getUsers();
             toast.success("¡Usuarios cargados con éxito! 🎉", { autoClose: 1500 });
             return users;
         } catch (error) {

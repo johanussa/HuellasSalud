@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
-import { GetUserData } from "../../../services/typesHS";
-import { UserFilters, UserTable } from "./userComponents";
+import { UserData } from "../../../services/typesHS";
+import { CreateUserModal, UserFilters, UserTable } from "./userComponents";
 import { useUserService } from "./usersService";
 import styles from "./users.module.css";
 
 const Users = () => {
 
-  const [usersData, setUsersData] = useState<GetUserData[] | undefined>([]);
+  const [isModalCreateOpen, setIsModalCreateOpen] = useState<boolean>(false);
+  const [usersData, setUsersData] = useState<UserData[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [roleFilter, setRoleFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -47,11 +48,15 @@ const Users = () => {
           searchTerm={searchTerm}
           roleFilter={roleFilter}
           statusFilter={statusFilter}
+          setModalCreateClose={setIsModalCreateOpen}
           onSearchChange={setSearchTerm}
           onRoleFilterChange={setRoleFilter}
           onStatusFilterChange={setStatusFilter}
         />
         <UserTable users={filteredUsers} setUsersData={setUsersData} />
+        {isModalCreateOpen && (
+          <CreateUserModal setModalCreate={setIsModalCreateOpen} setUsersData={setUsersData} />
+        )}
       </section>
     </main>
   )

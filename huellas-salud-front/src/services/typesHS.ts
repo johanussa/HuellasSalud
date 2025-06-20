@@ -116,7 +116,7 @@ export interface InputErrors {
     password: boolean;
 }
 
-export interface GetUserData {
+export interface UserData {
     data: User;
     meta: Meta;
     token?: string;
@@ -131,6 +131,7 @@ export interface InputFieldUserRegister {
     label: string;
     type?: HTMLInputTypeAttribute;
     idInput: keyof User;
+    isAdmin: boolean;
     required?: boolean;
     inputFull?: boolean;
     register: UseFormRegister<User>;
@@ -141,14 +142,15 @@ export interface UserFiltersProps {
     searchTerm: string;
     roleFilter: string;
     statusFilter: string;
+    setModalCreateClose: (close: boolean) => void;
     onSearchChange: (value: string) => void;
     onRoleFilterChange: (value: string) => void;
     onStatusFilterChange: (value: string) => void;
 }
 
 export interface UserTableProps {
-    users: GetUserData[] | undefined;
-    setUsersData: React.Dispatch<React.SetStateAction<GetUserData[] | undefined>>;
+    users: UserData[] | undefined;
+    setUsersData: React.Dispatch<React.SetStateAction<UserData[] | undefined>>;
 }
 
 interface AuthContextType {
@@ -182,4 +184,13 @@ export interface InputEditProps {
     label: string;
     value: string | undefined;
     isEditable?: boolean;
+}
+
+export interface FormUserProps extends CreateUserModalProps {
+    isAdmin: boolean;
+}
+
+export interface CreateUserModalProps {
+    setModalCreate?: (close: boolean) => void;
+    setUsersData?: React.Dispatch<React.SetStateAction<UserData[] | undefined>>;
 }
