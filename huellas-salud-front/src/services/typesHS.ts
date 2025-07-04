@@ -42,7 +42,7 @@ export interface Product {
 }
 
 export interface User {
-    image?: string;
+    mediaFile?: MediaFile;
     name: string;
     lastName: string;
     documentType: "CC" | "CE" | "TI" | "NIT" | "PASAPORTE";
@@ -77,6 +77,12 @@ export interface Meta {
     lastUpdate: string;
     ipAddress: string;
     source: string;
+}
+
+export interface MediaFile {
+    fileName: string;
+    contentType: string;
+    attachment: string;
 }
 
 export interface CategoryCard {

@@ -27,6 +27,7 @@ const Users = () => {
     return usersData?.filter(({ data: user }) => {
 
       const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        || user.lastName.toLowerCase().includes(searchTerm.toLowerCase())
         || user.email.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesRole = roleFilter === 'ALL' || user.role === roleFilter;

@@ -89,11 +89,13 @@ public class MediaFileApi {
         LOG.infof("@uploadAvatarUser API > Inicia servicio de carga de imagen para entity type: %s y " +
                 "entity Id: %s", entityType, entityId);
 
-        mediaFileService.saveFile(entityType, entityId, mediaUploadForm);
+        MediaFile mediaFile = mediaFileService.saveFile(entityType, entityId, mediaUploadForm);
 
         LOG.infof("@uploadAvatarUser API > Finaliza servicio de carga de imagen para entity type: %s y " +
                 "entity Id: %s", entityType, entityId);
 
-        return Response.ok().status(Response.Status.NO_CONTENT).build();
+        return Response.ok().status(Response.Status.CREATED)
+                .entity(mediaFile)
+                .build();
     }
 }

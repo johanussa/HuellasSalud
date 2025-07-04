@@ -160,7 +160,9 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
 
 export const UserAvatar = ({ user }: { user: User }) => {
 
-    if (user.image) return (<img src={user.image} alt={user.name} />);
+    if (user.mediaFile) {
+        return (<img src={`data:${user.mediaFile.contentType};base64,${user.mediaFile.attachment}`} alt={user.name} />);
+    }
 
     const initials = user.name.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase();
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#A37AFC', '#FFA07A'];

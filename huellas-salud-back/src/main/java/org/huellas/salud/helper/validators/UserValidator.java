@@ -15,7 +15,7 @@ public class UserValidator implements ConstraintValidator<ValidUserInterface, Us
     @Override
     public boolean isValid(UserMsg value, ConstraintValidatorContext context) {
 
-        Log.debugf("@isValid > Inicia validacion del usuario con la data: %s", value);
+        Log.debugf("@isValid > Inicia validacion del usuario con id: %s", value.getData().getDocumentNumber());
 
         User user = value.getData();
 

@@ -24,6 +24,7 @@ public class UserSerializer extends JsonSerializer<User> {
         jsonGenerator.writeStringField("address", user.getAddress());
         jsonGenerator.writeStringField("role", user.getRole());
         jsonGenerator.writeBooleanField("active", Objects.requireNonNullElse(user.getActive(), false));
+        jsonGenerator.writeObjectField("mediaFile", user.getMediaFile());
 
         jsonGenerator.writeEndObject();
     }

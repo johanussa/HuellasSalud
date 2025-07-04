@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CreateUserModalProps, User, UserData } from "../../../services/typesHS";
+import { CreateUserModalProps, MediaFile, User, UserData } from "../../../services/typesHS";
 import axiosInstance from "../../../context/axiosInstance";
 import axios from "axios";
 
@@ -40,10 +40,29 @@ export const useUserRegister = ({ setModalCreate, setUsersData }: CreateUserModa
 
         toast.info(`Creando registro del usuario ${formattedUser.lastName.toUpperCase()}... ⏳`, { autoClose: 1200 });
 
-        const { data } = await axiosInstance.post<UserData>("user/register", payload);
-        setUsersData && setUsersData(prev => [...(prev ?? []), data])
+        const file = fileInput.current?.files?.[0];
+        const { data: createdUser } = await axiosInstance.post<UserData>("user/register", payload);
 
-        return data;
+        if (file && createdUser?.data?.documentNumber) {
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const { data: mediaFile } = await axiosInstance.post<MediaFile>(
+                    `/avatar-user/USER/${createdUser.data.documentNumber}`,
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                );
+                createdUser.data.mediaFile = mediaFile;
+            } catch (err) {
+                console.error("Error subiendo imagen de perfil:", err);
+                toast.error("Usuario creado, pero falló el envío de imagen");
+            }
+        }
+
+        setUsersData && setUsersData(prev => [...(prev ?? []), createdUser]);
+        return createdUser;
     };
 
     const handleError = (error: unknown) => {
@@ -86,12 +105,12 @@ export const useUserRegister = ({ setModalCreate, setUsersData }: CreateUserModa
         const validTypes = ["image/jpeg", "image/png", "image/webp"];
 
         if (!validTypes.includes(file.type)) {
-            alert('Sólo se permiten JPG, PNG o WEBP');
+            toast.info('Sólo se permiten imágenes en formato JPG, PNG o WEBP');
             return;
         }
 
         if (file.size > maxSize) {
-            alert('La imagen debe pesar ≤ 4 MB');
+            toast.error('La imagen no debe pesar más de 4 MB');
             return;
         }
 

@@ -44,7 +44,7 @@ public class MediaFileService {
         return mediaFile.getData();
     }
 
-    public void saveFile(String entityType, String entityId, MediaUploadForm mediaUploadForm) throws HSException {
+    public MediaFile saveFile(String entityType, String entityId, MediaUploadForm mediaUploadForm) throws HSException {
 
         LOG.info("@saveFile SERV > Inicia servicio de guardado del archivo de la imagen del usuario");
 
@@ -69,13 +69,15 @@ public class MediaFileService {
                     .meta(utils.getMetaToCreateUser())
                     .build());
 
+            LOG.info("@saveFile SERV > Finaliza servicio de guardado del archivo de la imagen del usuario");
+
+            return mediaFile;
+
         } catch (Exception ex) {
 
             LOG.errorf(ex, "@saveFile SERV > Se presento un error al guardar imagen en la base de datos");
 
             throw new HSException(Response.Status.INTERNAL_SERVER_ERROR, "Error al guardar imagen en base datos");
         }
-
-        LOG.info("@saveFile SERV > Finaliza servicio de guardado del archivo de la imagen del usuario");
     }
 }

@@ -12,9 +12,11 @@ import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.jwt.JwtService;
 import org.huellas.salud.helper.utils.Utils;
+import org.huellas.salud.repositories.MediaFileRepository;
 import org.huellas.salud.repositories.UserRepository;
 import org.jboss.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.LoggerFactory;
 
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 @ApplicationScoped
 public class UserService {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserService.class);
     private final Logger LOG = Logger.getLogger(UserService.class);
 
     @Inject
@@ -36,6 +39,9 @@ public class UserService {
 
     @Inject
     UserRepository userRepository;
+
+    @Inject
+    MediaFileRepository mediaFileRepository;
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
 
@@ -48,7 +54,7 @@ public class UserService {
 
         validatePassword(userMsg.getData().getPassword(), userMongo.getData().getPassword(), userEmailOrDocument);
 
-        userMongo.setData(getUserDto(userMongo));
+        userMongo.setData(getUserDto(userMongo, true));
 
         LOG.infof("@getRegisteredUserInMongo SERV > Finaliza ejecucion de servicio. La informacion del " +
                 "usuario que se obtuvo es: %s. Inicia generacion del token del usuario", userMongo);
@@ -63,8 +69,8 @@ public class UserService {
         LOG.infof("@getUserRegister SERV > Se consulta usuario con correo o numero documento: %s", userEmailOrDocument);
 
         Optional<UserMsg> userMsg = isEmail(userEmailOrDocument)
-                ? userRepository.getOneUserByEmail(userEmailOrDocument)
-                : userRepository.getOneUserByDocument(userEmailOrDocument);
+                ? userRepository.findUserDataByEmail(userEmailOrDocument)
+                : userRepository.findUserByDocumentNumber(userEmailOrDocument);
 
         return userMsg.orElseThrow(() -> {
 
@@ -134,7 +140,7 @@ public class UserService {
         LOG.infof("@saveUserDataInMongo SERV > El usuario con documento: %s y correo: %s se creo correctamente " +
                 "en la base de datos", userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
 
-        userMsg.setData(getUserDto(userMsg));
+        userMsg.setData(getUserDto(userMsg, false));
 
         return userMsg;
     }
@@ -232,7 +238,7 @@ public class UserService {
         }
     }
 
-    private UserDTO getUserDto(UserMsg userMsg) {
+    private UserDTO getUserDto(UserMsg userMsg, boolean searchImg) {
 
         UserDTO userDTO = new UserDTO();
 
@@ -246,6 +252,11 @@ public class UserService {
         userDTO.setAddress(userMsg.getData().getAddress());
         userDTO.setCellPhone(userMsg.getData().getCellPhone());
 
+        if (searchImg) {
+            mediaFileRepository.getMediaByEntityTypeAndId("USER", userMsg.getData().getDocumentNumber())
+                    .ifPresent(media -> userDTO.setMediaFile(media.getData()));
+        }
+
         return userDTO;
     }
 
@@ -255,7 +266,7 @@ public class UserService {
                 "un DTO para asi retornar solo los datos necesarios");
 
         return userRepository.getRegisteredUsersMongo().stream()
-                .peek(userMsg -> userMsg.setData(getUserDto(userMsg)))
+                .peek(userMsg -> userMsg.setData(getUserDto(userMsg, true)))
                 .toList();
     }
 

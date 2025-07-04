@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.huellas.salud.domain.mediaFile.MediaFile;
 import org.huellas.salud.helper.validators.ValidationGroups;
 
 import java.io.Serializable;
@@ -86,4 +87,6 @@ public class User implements Serializable {
     @Schema(example = "usuario@correo.com")
     @NotBlank(message = "El campo emailOrDoc no puede ser nulo o vacío", groups = ValidationGroups.Post_Get.class)
     private String emailOrDoc;
+
+    private MediaFile mediaFile;
 }
