@@ -1,5 +1,6 @@
 package org.huellas.salud.domain.product;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ import org.huellas.salud.helper.utils.ConvertFormatJSON;
 @NoArgsConstructor
 @AllArgsConstructor
 @MongoEntity(collection = "ProductoMsg")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductMsg {
 
     @Schema(hidden = true)

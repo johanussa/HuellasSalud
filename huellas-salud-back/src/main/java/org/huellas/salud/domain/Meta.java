@@ -1,10 +1,7 @@
 package org.huellas.salud.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -31,6 +28,18 @@ public class Meta implements Serializable {
     @Schema(example = "http://localhost:8089/internal/API_PATH")
     private String source;
 
+    @BsonProperty("nombreUsuarioCreo")
+    @Schema(example = "Juan Esteban Martinez Lopez")
+    private String nameUserCreated;
+
+    @BsonProperty("correoUsuarioCreo")
+    @Schema(example = "usuario@correo.com")
+    private String emailUserCreated;
+
+    @BsonProperty("rolUsuarioCreo")
+    @Schema(example = "ADMINISTRADOR")
+    private String roleUserCreated;
+
     @BsonProperty("nombreUsuarioActualizo")
     @Schema(example = "John Alexander Suarez Mendez")
     private String nameUserUpdated;
@@ -42,4 +51,7 @@ public class Meta implements Serializable {
     @BsonProperty("rolUsuarioActualizo")
     @Schema(example = "ADMINISTRADOR")
     private String roleUserUpdated;
+
+    @Schema(example = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImpZCI6Ii1L")
+    private String tokenRaw;
 }

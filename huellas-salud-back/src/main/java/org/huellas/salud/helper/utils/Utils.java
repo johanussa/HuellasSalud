@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import org.huellas.salud.domain.Meta;
+import org.huellas.salud.helper.jwt.JwtService;
 import org.jboss.logging.Logger;
 
 import java.net.InetAddress;
@@ -19,6 +20,9 @@ public class Utils {
     private static final Logger LOG = Logger.getLogger(Utils.class);
 
     @Inject
+    JwtService jwtService;
+
+    @Inject
     Provider<HttpServerRequest> httpServerRequestProvider;
 
     public String capitalizeWords(String input) {
@@ -30,16 +34,18 @@ public class Utils {
                 .collect(Collectors.joining(" "));
     }
 
-    public Meta getMetaToCreateUser() throws UnknownHostException {
+    public Meta getMetaToEntity() throws UnknownHostException {
 
-        LOG.info("@getMetaToCreateUser SERV > Inicia estructura de objeto meta con informacion de creacion de usuario");
-
-        // TODO - Falta tomar información de quien creó el usuario desde el token
+        LOG.info("@getMetaToCreateUser SERV > Inicia estructura de los metadatos de la entidad");
 
         return Meta.builder()
                 .creationDate(LocalDateTime.now())
                 .source(httpServerRequestProvider.get().absoluteURI())
                 .ipAddress(InetAddress.getLocalHost().getHostAddress())
+                .nameUserCreated(jwtService.getCurrentUserName())
+                .emailUserCreated(jwtService.getCurrentUserEmail())
+                .roleUserCreated(jwtService.getCurrentUserRole())
+                .tokenRaw("Bearer " + jwtService.getJsonWebToken().getRawToken())
                 .build();
     }
 }

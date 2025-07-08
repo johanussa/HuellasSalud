@@ -29,7 +29,13 @@ const AppRoutes = () => {
         </ProtectedRoute>
       ),
     },
-    { path: "/mascotas", element: <Pets /> },
+    {
+      path: "/mascotas", element: (
+        <ProtectedRoute requiredRole={["CLIENTE", "ADMINISTRADOR"]}>
+          <Pets />
+        </ProtectedRoute>
+      )
+    },
     { path: "/historial", element: <History /> },
     { path: "/contacto", element: <Contact /> },
     { path: "/servicios", element: <Services /> }

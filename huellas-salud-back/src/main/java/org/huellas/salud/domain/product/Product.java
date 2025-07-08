@@ -16,7 +16,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Product implements Serializable {
 
-    @BsonProperty("id")
+    @BsonProperty("idProducto")
+    @Schema(example = "6785666d-a30b-4bac-beae-95e2ca308931")
     @Null(message = "No debe ingresar el valor del campo idProduct", groups = ValidationGroups.Post.class)
     private String idProduct;
 
@@ -32,12 +33,13 @@ public class Product implements Serializable {
     private String category;
 
     @BsonProperty("descripcion")
+    @Schema(example = "Dog Chow Alta Proteína para perros Adultos 7.5 Kg")
     @NotBlank(message = "El valor del campo description no puede ser nulo o vacío")
     @Size(min = 10, max = 200, message = "El campo description debe contener entre 10 y 200 caracteres")
     private String description;
 
     @BsonProperty("precio")
-    @Schema(example = "57.000")
+    @Schema(example = "57000")
     @NotNull(message = "El valor del campo price no debe ser nulo")
     @Positive(message = "El valor del campo precio debe ser mayor a 0")
     private Double price;

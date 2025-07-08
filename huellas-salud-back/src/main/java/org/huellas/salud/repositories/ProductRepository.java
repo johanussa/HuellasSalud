@@ -15,7 +15,7 @@ public class ProductRepository implements PanacheMongoRepository<ProductMsg> {
     public Optional<ProductMsg> getProductByBarCode(String barCode) {
 
         LOG.debugf("@getProductByBarCode REPO > Inicia busqueda del registro del producto en mongo con el " +
-                "codigo de barras numero: %s", barCode);
+                "numero de codigo de barras: %s", barCode);
 
         return find("data.codigoBarras = ?1", barCode).firstResultOptional();
     }

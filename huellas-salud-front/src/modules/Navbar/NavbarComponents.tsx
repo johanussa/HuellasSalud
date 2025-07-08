@@ -51,15 +51,19 @@ export const NavLinks = ({ setOptionHover, setShowSubMenu }: NavLinkProps) => {
             />
             <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
             <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
-
             {
                 hasRole(user, ["ADMINISTRADOR"]) && (
                     <ListItemNav path="/usuarios" name="Usuarios" icon="fa-solid fa-users" />
                 )
             }
-
-            <ListItemNav path="/mascotas" name="Mascotas" icon="fa-solid fa-paw" />
-            <ListItemNav path="/historial" name="Historial" icon="fa-solid fa-notes-medical" />
+            {
+                hasRole(user, ["ADMINISTRADOR", "CLIENTE"]) && (
+                    <>
+                        <ListItemNav path="/mascotas" name="Mascotas" icon="fa-solid fa-paw" />
+                        <ListItemNav path="/historial" name="Historial" icon="fa-solid fa-notes-medical" />
+                    </>
+                )
+            }
             <ListItemNav path="/contacto" name="Contacto" icon="fa-solid fa-mobile-screen-button" />
         </ul>
     );

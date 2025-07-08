@@ -16,7 +16,6 @@ import org.huellas.salud.repositories.MediaFileRepository;
 import org.huellas.salud.repositories.UserRepository;
 import org.jboss.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
-import org.slf4j.LoggerFactory;
 
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -28,7 +27,6 @@ import java.util.regex.Pattern;
 @ApplicationScoped
 public class UserService {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserService.class);
     private final Logger LOG = Logger.getLogger(UserService.class);
 
     @Inject
@@ -317,7 +315,7 @@ public class UserService {
         LOG.infof("@formatUserDataToCreateUser SERV > Finaliza formato al nombre del usuario con data: %s. " +
                 "Inicia estructura del objeto meta con la informacion de auditoria", userMsg.getData());
 
-        userMsg.setMeta(utils.getMetaToCreateUser());
+        userMsg.setMeta(utils.getMetaToEntity());
 
         LOG.infof("@formatUserDataToCreateUser SERV > Finaliza estructura del objeto meta correctamente. " +
                 "Finaliza formato de datos del usuario con correo: %s.", user.getEmail());

@@ -22,7 +22,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.validators.ValidationGroups;

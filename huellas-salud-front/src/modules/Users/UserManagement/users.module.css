@@ -1,6 +1,5 @@
 /* Reset y estilos base */
 .mainContainer {
-    height: 100vh;
     background-color: #f5f7fa;
     color: #333;
     line-height: 1.5;
@@ -344,6 +343,7 @@
     position: absolute;
     top: 70px;
     left: 40px;
+    object-fit: cover;
 }
 
 .sectionMetaUser {

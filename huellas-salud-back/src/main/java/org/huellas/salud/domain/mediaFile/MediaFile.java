@@ -13,22 +13,27 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @AllArgsConstructor
 public class MediaFile {
 
+    @Schema(example = "41525378")
     @BsonProperty("identificador")
     private String entityId;
 
-    @Schema(example = "User")
+    @Schema(example = "USER")
     @BsonProperty("tipoEntidad")
     private String entityType;
 
     @BsonProperty("NombreArchivo")
+    @Schema(example = "avatar.webp")
     private String fileName;
 
     @BsonProperty("tipoContenido")
+    @Schema(example = "image/webp")
     private String contentType;
 
     @BsonProperty("tipoArchivo")
+    @Schema(example = "image")
     private String fileType;
 
     @BsonProperty("Adjunto")
+    @Schema(example = "UklGRvhiAABXRUJQVlA4IOxiAABwXgKdASpMBKMCPu10slQpv7")
     private String attachment;
 }

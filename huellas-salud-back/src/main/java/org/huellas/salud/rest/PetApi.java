@@ -1,5 +1,6 @@
 package org.huellas.salud.rest;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +32,7 @@ public class PetApi {
     PetService petService;
 
     @POST
+    @PermitAll
     @Path("/create")
     @Tag(name = "Gestión de mascotas")
     public Response createPetData(
@@ -55,6 +57,7 @@ public class PetApi {
     }
 
     @GET
+    @PermitAll
     @Path("/list-pets")
     @Tag(name = "Gestión de mascotas")
     public Response getListPets() {
@@ -71,6 +74,7 @@ public class PetApi {
     }
 
     @GET
+    @PermitAll
     @Path("/owners-pets/{idOwner}")
     @Tag(name = "Gestión de mascotas")
     public Response getListPetsOfOwner(
@@ -96,6 +100,7 @@ public class PetApi {
     }
 
     @PUT
+    @PermitAll
     @Path("/update")
     @Tag(name = "Gestión de mascotas")
     public Response updatePetData(
@@ -120,6 +125,7 @@ public class PetApi {
     }
 
     @DELETE
+    @PermitAll
     @Path("/delete")
     @Tag(name = "Gestión de mascotas")
     public Response deletePetData(
