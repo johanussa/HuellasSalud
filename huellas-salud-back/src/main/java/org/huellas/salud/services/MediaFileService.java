@@ -66,7 +66,7 @@ public class MediaFileService {
 
             mediaFileRepository.persist(MediaFileMsg.builder()
                     .data(mediaFile)
-                    .meta(utils.getMetaToCreateUser())
+                    .meta(utils.getMetaToEntity())
                     .build());
 
             LOG.info("@saveFile SERV > Finaliza servicio de guardado del archivo de la imagen del usuario");

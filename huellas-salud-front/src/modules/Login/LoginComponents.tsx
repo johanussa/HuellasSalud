@@ -123,7 +123,7 @@ export const GoogleLoginButton = ({ loading }: { loading: boolean }) => (
 
 export const ForgotPasswordSection = () => (
     <section className={styles.forgetPass}>
-        <a className={styles.linkForget}>¿Olvidaste tu contraseña?</a>
+        <Link to={"/recuperar-contrasena"} className={styles.linkForget}>¿Olvidaste tu contraseña?</Link>
     </section>
 );
 

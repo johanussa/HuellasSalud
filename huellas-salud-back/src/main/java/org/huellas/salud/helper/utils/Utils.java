@@ -36,7 +36,7 @@ public class Utils {
 
     public Meta getMetaToEntity() throws UnknownHostException {
 
-        LOG.info("@getMetaToCreateUser SERV > Inicia estructura de los metadatos de la entidad");
+        LOG.info("@getMetaToEntity SERV > Inicia estructura de los metadatos de la entidad");
 
         return Meta.builder()
                 .creationDate(LocalDateTime.now())

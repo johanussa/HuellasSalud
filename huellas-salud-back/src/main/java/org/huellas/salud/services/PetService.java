@@ -53,7 +53,7 @@ public class PetService {
         petData.setName(utils.capitalizeWords(petData.getName()));
         petData.setBreed(Objects.requireNonNullElse(petData.getBreed(), defaultBreed));
 
-        petMsg.setMeta(utils.getMetaToCreateUser());
+        petMsg.setMeta(utils.getMetaToEntity());
         petData.setIdPet(UUID.randomUUID().toString());
 
         LOG.infof("@savePetDataMongo SERV > Finaliza formato de la data. Se realiza el registro de la mascota " +

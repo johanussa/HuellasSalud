@@ -208,7 +208,8 @@
 }
 
 /* Olvido contraseña */
-.forgetPass a {
+.linkForget {
+    color: #FFF;
     text-decoration: none;
 }
 
@@ -220,7 +221,7 @@
 
 .forgetPass .linkForget:hover {
     cursor: pointer;
-    color: #00000090;
+    color: #FFFFFF90;
 }
 
 @keyframes shake {

@@ -12,6 +12,7 @@ import Services from "./modules/Services/Services";
 import UserRegister from "./modules/Users/UserRegister/UserRegister";
 import Users from "./modules/Users/UserManagement/Users";
 import ProtectedRoute from "./context/ProtectedRoute";
+import PasswordRecovery from "./modules/PasswordRecovery/PasswordRecovery";
 
 const AppRoutes = () => {
 
@@ -21,6 +22,7 @@ const AppRoutes = () => {
     { path: "/registro-usuario", element: <UserRegister /> },
     { path: "/productos", element: <Products /> },
     { path: "/productos-admin", element: <ProductsAdmin /> },
+    { path: "/recuperar-contrasena", element: <PasswordRecovery /> },
     {
       path: "/usuarios",
       element: (
