@@ -236,7 +236,7 @@ public class UserService {
         }
     }
 
-    private UserDTO getUserDto(UserMsg userMsg, boolean searchImg) {
+    public UserDTO getUserDto(UserMsg userMsg, boolean searchImg) {
 
         UserDTO userDTO = new UserDTO();
 

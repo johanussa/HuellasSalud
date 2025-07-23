@@ -1,6 +1,7 @@
 package org.huellas.salud.rest;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -23,6 +24,7 @@ public class MailApi {
     MailService mailService;
 
     @GET
+    @Transactional
     @Tag(name = "Envío email")
     @Path("/password-recovery/{userEmail}")
     @Operation(

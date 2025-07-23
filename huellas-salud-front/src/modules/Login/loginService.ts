@@ -3,10 +3,10 @@ import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import axiosInstance from "../../context/axiosInstance";
 
 const MIN_CREDENTIAL_LENGTH: number = 8;
 const DEFAULT_ERROR_MSG: string = "ㅤ";
-const PATH_BASE = 'http://localhost:8089/internal/user';
 
 export const useLoginService = (setLoading: (show: boolean) => void) => {
 
@@ -76,14 +76,12 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
             }
         }
 
-        const { data } = await axios.post<UserData>(`${PATH_BASE}/login`, loginBody, {
-            headers: { "Content-type": "application/json" }
-        });
+        const { data } = await axiosInstance.post<UserData>("user/login", loginBody);
 
         login(data.token || "", data.data);
 
         toast.success(`¡Inicio de sesión exitoso! 🎉. Bienvenid@ ${data.data.name}`, { autoClose: 2000 });
-        navigate("/", { replace: true});
+        navigate("/", { replace: true });
     }
 
     const handleLoginError = (error: unknown) => {
