@@ -7,8 +7,8 @@ import { fieldsFormPet, petFieldsTable, pets } from "./dataPet";
 const Pets = () => {
 
   const [petSelected, setPetSelected] = useState<Pet>({
-    id: 0, name: "", type: "", breed: "", age: 0, weight: 0, treatments: "",
-    description: "", status: "", vaccines: "", surgeries: "", styrofoam: false
+    id: "0", name: "", type: "Perro", breed: "", age: 0, weight: 0, treatments: [""],
+    description: "", status: "Activo", vaccines: [""], surgeries: [""], styrofoam: false
   });
 
   const [showEdit, setShowEdit] = useState<boolean>(false);
