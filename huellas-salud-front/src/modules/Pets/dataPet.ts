@@ -1,3 +1,5 @@
+import { Pet } from "../../services/typesHS";
+
 export const fieldsFormPet = [
     {
         label: "Nombre",
@@ -73,9 +75,9 @@ export const petFieldsTable = [
     "Acciones"
 ];
 
-export const pets = [
+export const pets: Pet[] = [
     {
-        id: 1,
+        id: "1",
         name: "Firulais",
         type: "Perro",
         breed: "Labrador",
@@ -84,12 +86,12 @@ export const pets = [
         styrofoam: true,
         description: "Perro juguetón y cariñoso",
         status: "Activo",
-        vaccines: "Vacuna rabia, vacuna parvovirus",
-        surgeries: "Ninguna",
-        treatments: "Ninguno"
+        vaccines: ["Vacuna rabia", "Vacuna parvovirus"],
+        surgeries: ["Ninguna"],
+        treatments: ["Ninguno"]
     },
     {
-        id: 2,
+        id: "2",
         name: "Miau",
         type: "Gato",
         breed: "Siames",
@@ -98,8 +100,8 @@ export const pets = [
         styrofoam: false,
         description: "Gato tranquilo y cariñoso",
         status: "Inactivo",
-        vaccines: "Vacuna rabia, vacuna leucemia felina",
-        surgeries: "Ninguna",
-        treatments: "Ninguno"
+        vaccines: ["Vacuna rabia", "Vacuna leucemia felina"],
+        surgeries: ["Ninguna"],
+        treatments: ["Ninguno"]
     }
 ];

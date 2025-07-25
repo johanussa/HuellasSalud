@@ -3,6 +3,7 @@ package org.huellas.salud.rest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.huellas.salud.domain.email.PasswordRecovery;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.validators.ValidationGroups;
@@ -202,6 +204,35 @@ public class UserApi {
 
         LOG.infof("@updateUserData API > Finaliza ejecucion de servicio de actualizacion de usuario. El " +
                 "registro se actualizo con la data: %s", userMsg.getData().getDocumentNumber(), userMsg);
+
+        return Response.ok()
+                .status(Response.Status.NO_CONTENT)
+                .build();
+    }
+
+    @PUT
+    @Transactional
+    @Path("/update-password")
+    @Tag(name = "Gestión de usuarios")
+    @Operation(
+            summary = "Actualizar contraseña",
+            description = "Permite cambiar la contraseña del usuario por la opción de recuperación de contraseña"
+    )
+    public Response updatePassword(
+            @RequestBody(
+                    name = "passwordRecovery",
+                    description = "Información del usuario",
+                    required = true
+            )
+            @NotNull(message = "Debe ingresar la información para actualizar la contraseña")
+            @Valid PasswordRecovery passwordRecovery
+    ) throws HSException {
+
+        LOG.infof("@updatePassword API > Inicia servicio de cambio de contrasena con la data: %s", passwordRecovery);
+
+        userService.updateUserPassword(passwordRecovery);
+
+        LOG.info("@updatePassword API > Finaliza servicio de cambio de contrasena del usuario");
 
         return Response.ok()
                 .status(Response.Status.NO_CONTENT)

@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.huellas.salud.domain.Meta;
+import org.huellas.salud.domain.email.PasswordRecovery;
+import org.huellas.salud.domain.email.PasswordRecoveryEmail;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
@@ -27,13 +29,16 @@ import java.util.regex.Pattern;
 @ApplicationScoped
 public class UserService {
 
-    private final Logger LOG = Logger.getLogger(UserService.class);
+    private static final Logger LOG = Logger.getLogger(UserService.class);
 
     @Inject
     Utils utils;
 
     @Inject
     JwtService jwtService;
+
+    @Inject
+    MailService mailService;
 
     @Inject
     UserRepository userRepository;
@@ -198,6 +203,27 @@ public class UserService {
         LOG.infof("@deleteUserDataInMongo SERV > El registro del usuario con numero de documento: %s y correo: " +
                 "%s se elimino correctamente de mongo. Finaliza ejecucion del servicio para eliminar usuario y se " +
                 "elimino %s registro de la base de datos", documentNumber, emailUser, deleted);
+    }
+
+    public void updateUserPassword(PasswordRecovery passwordRecovery) throws HSException {
+
+        LOG.info("@updateUserPassword SERV > Inicia servicio de actualizacion de contrasena de usuario");
+
+        PasswordRecoveryEmail recovery = mailService.getPasswordRecovery(passwordRecovery.getData().approvalCode());
+
+        LOG.infof("@updateUserPassword SERV > Se obtuvo el registro: %s", recovery);
+
+        User user = recovery.getDataUser();
+        UserMsg userMsg = getUserByDocumentNumber(user.getDocumentNumber(), user.getEmail());
+
+        LOG.infof("@updateUserPassword SERV > Usuario obtenido: %s", user);
+
+        user.setPassword(passwordRecovery.getData().newPassword());
+        validatePasswordEncrypted(user);
+
+        userMsg.getData().setPassword(user.getPassword());
+
+        LOG.infof("@updateUserPassword SERV > Contrasena actualizada. ID usuario: %s", user.getDocumentNumber());
     }
 
     private UserMsg getUserByDocumentNumber(String documentNumber, String email) throws HSException {

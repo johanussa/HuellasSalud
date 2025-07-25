@@ -59,14 +59,14 @@ export interface User {
 export interface Pet {
     id: string;
     name: string;
-    type: "perro" | "gato" | "ave" | "roedor" | "reptil" | "otro";
+    type: "Perro" | "Gato" | "Ave" | "Roedor" | "Reptil" | "Otro";
     breed: string;
-    owner: User;
+    owner?: User;
     age: number;
     weight: number;
     styrofoam: boolean;
     description: string;
-    status: "activo" | "inactivo" | "pendiente";
+    status: "Activo" | "Inactivo" | "Pendiente";
     vaccines: string[];
     surgeries: string[];
     treatments: string[];

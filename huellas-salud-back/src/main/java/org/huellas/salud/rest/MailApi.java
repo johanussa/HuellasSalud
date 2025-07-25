@@ -50,4 +50,34 @@ public class MailApi {
 
         return Response.ok().status(Response.Status.NO_CONTENT).build();
     }
+
+    @PUT
+    @Transactional
+    @Tag(name = "Validar token")
+    @Path("/validate-token/{token}")
+    @Operation(
+            summary = "Validar token",
+            description = "Permite validar token de recuperación de contraseña"
+    )
+    public Response validateTokenRecovery(
+            @Parameter(
+                    name = "approvalCode",
+                    description = "Código de aprobación generado para recuperar contraseña",
+                    example = "a12501a8-3f2d-4b31-807a-285ea4be8982-1753239660434",
+                    required = true
+            )
+            @NotBlank(message = "El código de aprobación no puede ser nulo o vacío")
+            @PathParam("approvalCode") String approvalCode
+    ) throws HSException {
+
+        LOG.infof("@validateTokenRecovery API > Inicia validacion del codigo de aprobacion: %s", approvalCode);
+
+        boolean isValid = mailService.validateTokenRecovery(approvalCode);
+
+        LOG.infof("@validateTokenRecovery API > Finaliza validacion del codigo de aprobacion: %s. El " +
+                "codigo es valido ? %s", approvalCode, isValid);
+
+        return Response.ok().build();
+    }
+
 }

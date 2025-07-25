@@ -7,8 +7,8 @@ import { Pet } from "../../services/typesHS";
 const History = () => {
 
   const [petSelected, setPetSelected] = useState<Pet>({
-    id: 0, name: "", type: "", breed: "", age: 0, weight: 0, treatments: "",
-    description: "", status: "", vaccines: "", surgeries: "", styrofoam: false
+    id: "0", name: "", type: "Perro", breed: "", age: 0, weight: 0, treatments: [""],
+    description: "", status: "Activo", vaccines: [""], surgeries: [""], styrofoam: false
   });
   const [detailPet, setDetailPet] = useState<boolean>(false);
   const [viewListPet, setViewListPet] = useState<boolean>(true);

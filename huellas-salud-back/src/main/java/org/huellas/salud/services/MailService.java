@@ -9,7 +9,6 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.huellas.salud.domain.email.EmailDelivery;
 import org.huellas.salud.domain.email.PasswordRecoveryEmail;
-import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.templates.PasswordRecoveryTemplate;
@@ -51,39 +50,60 @@ public class MailService {
         LOG.infof("@sendEmailRecoveryPass SERV > Inicia el servicio para enviar el correo de recuperacion de " +
                 "contrasena al usuario con email: %s. Inicia busqueda del registro del usuario", userEmail);
 
-        UserMsg userMsg = userRepository.findUserDataByEmail(userEmail).orElseThrow(() -> {
+        UserMsg userMsg = getUserByEmail(userEmail);
 
-            LOG.errorf("@sendEmailRecoveryPass SERV > El usuario con correo: %s no esta registrado", userEmail);
+        LOG.infof("@sendEmailRecoveryPass SERV > El usuario obtenido fue: %s. Inicia envio de correo", userMsg);
 
-            return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userEmail +
-                    " No se encuentra registrado en la base de datos");
-        });
-
-        String resetLink = getResetLink(userMsg);
-        String userName = userMsg.getData().getName() + " " + userMsg.getData().getLastName();
-        String textContent = PasswordRecoveryTemplate.getTextContent(userName, resetLink);
-        String htmlContent = PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink);
-
-        sendEmail(userEmail, htmlContent, textContent);
+        sendEmail(userEmail, userMsg);
 
         LOG.info("@sendEmailRecoveryPass SERV > Finaliza servicio de envio de correo de recupracion de contrasena");
     }
 
-    private void sendEmail(String userEmail, String htmlContent, String textContent) throws HSException {
+    public boolean validateTokenRecovery(String approvalCode) throws HSException {
+
+        LOG.info("@validateTokenRecovery SERV > Inicia servicio de validacion del codigo de recuperacion");
+
+        PasswordRecoveryEmail recovery = getPasswordRecovery(approvalCode);
+
+        LOG.infof("@validateTokenRecovery SERV > Se encontro el siguiente registro: %s", recovery);
+
+        boolean isValid = recovery.getEffectiveDate().isAfter(LocalDateTime.now()) && !recovery.isRecovered();
+
+        if (!isValid) {
+
+            LOG.errorf("@validateTokenRecovery SERV > El codigo de aprobacion invalido, ya ha sido utilizado " +
+                    "o ha expirado: %s", approvalCode);
+
+            throw new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña es inválido");
+        }
+
+        LOG.infof("@validateTokenRecovery SERV > El codigo de aprobacion: %s es aun valido", approvalCode);
+
+        recovery.setRecovered(true);
+
+        return true;
+    }
+
+    private UserMsg getUserByEmail(String userEmail) throws HSException {
+
+        return userRepository.findUserDataByEmail(userEmail).orElseThrow(() -> {
+
+            LOG.errorf("@getUserByEmail SERV > El usuario con correo: %s no esta registrado", userEmail);
+
+            return new HSException(Response.Status.NOT_FOUND, "El usuario con correo: " + userEmail +
+                    " No se encuentra registrado en la base de datos");
+        });
+    }
+
+    private void sendEmail(String userEmail, UserMsg userMsg) throws HSException {
         try {
             LOG.infof("@sendEmail SERV > Inicia servicio de envio de correo al email: %s", userEmail);
 
             Resend resend = new Resend(resendApiKey);
 
-            CreateEmailOptions options = CreateEmailOptions.builder()
-                    .from(domainResend)
-                    .to(List.of(userEmail))
-                    .subject("Recuperación de contraseña - Huellas & Salud")
-                    .html(htmlContent)
-                    .text(textContent)
-                    .build();
-
+            CreateEmailOptions options = buildCreateEmailOptions(userEmail, userMsg);
             CreateEmailResponse response = resend.emails().send(options);
+
             String description = "Correo entregado correctamente. ID: " + response.getId();
 
             saveEmailDelivery(description, userEmail, "OK");
@@ -92,14 +112,27 @@ public class MailService {
 
         } catch (Exception ex) {
 
-            LOG.errorf(ex, "@sendEmailRecoveryPass SERV > Se presento un error al intentar enviar el correo " +
-                    "de recuperar contrasena al usuario con email: %s", userEmail);
+            LOG.errorf(ex, "@sendEmailRecoveryPass SERV > Error al enviar correo a: %s", userEmail);
 
-            String description = "Error en envío de correo. " + ex.getMessage();
+            String description = "Error en envío de correo: " + ex.getMessage();
             saveEmailDelivery(description, userEmail, "ERROR");
 
-            throw new HSException(Response.Status.INTERNAL_SERVER_ERROR, "Error al enviar correo de recuperacion");
+            throw new HSException(Response.Status.INTERNAL_SERVER_ERROR, "Error al enviar correo de recuperación");
         }
+    }
+
+    private CreateEmailOptions buildCreateEmailOptions(String userEmail, UserMsg userMsg) {
+
+        String resetLink = getResetLink(userMsg);
+        String userName = userMsg.getData().getName() + " " + userMsg.getData().getLastName();
+
+        return CreateEmailOptions.builder()
+                .from(domainResend)
+                .to(List.of(userEmail))
+                .subject("Recuperación de contraseña - Huellas & Salud")
+                .html(PasswordRecoveryTemplate.getTextContent(userName, resetLink))
+                .text(PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink))
+                .build();
     }
 
     private void saveEmailDelivery(String description, String userEmail, String status) {
@@ -147,4 +180,13 @@ public class MailService {
         return resetLink;
     }
 
+    public PasswordRecoveryEmail getPasswordRecovery(String approvalCode) throws HSException {
+
+        return passwordRecoveryRepository.findByIdOptional(approvalCode).orElseThrow(() -> {
+
+            LOG.errorf("@getPasswordRecovery SERV > No hay registros con codigo de aprobacion: %s", approvalCode);
+
+            return new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña no existe");
+        });
+    }
 }
