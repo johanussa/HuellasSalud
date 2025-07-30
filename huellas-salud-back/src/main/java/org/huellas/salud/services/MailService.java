@@ -76,10 +76,7 @@ public class MailService {
 
             throw new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña es inválido");
         }
-
         LOG.infof("@validateTokenRecovery SERV > El codigo de aprobacion: %s es aun valido", approvalCode);
-
-        recovery.setRecovered(true);
 
         return true;
     }
@@ -130,8 +127,8 @@ public class MailService {
                 .from(domainResend)
                 .to(List.of(userEmail))
                 .subject("Recuperación de contraseña - Huellas & Salud")
-                .html(PasswordRecoveryTemplate.getTextContent(userName, resetLink))
-                .text(PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink))
+                .html(PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink))
+                .text(PasswordRecoveryTemplate.getTextContent(userName, resetLink))
                 .build();
     }
 
@@ -161,7 +158,7 @@ public class MailService {
         LOG.info("@getResetLink SERV > Inicia obtencion del link de recuperacion de contrasena");
 
         String token = UUID.randomUUID() + "-" + Instant.now().toEpochMilli();
-        String resetLink = "http://localhost:8089/reset-password?approvalCode=" + token;
+        String resetLink = "http://localhost:5173/reset-password?approvalCode=" + token;
 
         PasswordRecoveryEmail recoveryEmail = PasswordRecoveryEmail.builder()
                 .approvalCode(token)

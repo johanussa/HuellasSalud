@@ -1,8 +1,8 @@
 package org.huellas.salud.rest;
 
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -24,7 +24,6 @@ public class MailApi {
     MailService mailService;
 
     @GET
-    @Transactional
     @Tag(name = "Envío email")
     @Path("/password-recovery/{userEmail}")
     @Operation(
@@ -52,9 +51,8 @@ public class MailApi {
     }
 
     @PUT
-    @Transactional
-    @Tag(name = "Validar token")
-    @Path("/validate-token/{token}")
+    @Tag(name = "Validar Código de aprobación")
+    @Path("/validate-token/{approvalCode}")
     @Operation(
             summary = "Validar token",
             description = "Permite validar token de recuperación de contraseña"

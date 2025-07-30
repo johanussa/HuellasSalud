@@ -3,7 +3,6 @@ package org.huellas.salud.rest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -211,7 +210,6 @@ public class UserApi {
     }
 
     @PUT
-    @Transactional
     @Path("/update-password")
     @Tag(name = "Gestión de usuarios")
     @Operation(
@@ -228,7 +226,7 @@ public class UserApi {
             @Valid PasswordRecovery passwordRecovery
     ) throws HSException {
 
-        LOG.infof("@updatePassword API > Inicia servicio de cambio de contrasena con la data: %s", passwordRecovery);
+        LOG.info("@updatePassword API > Inicia servicio de cambio de contrasena del usuario");
 
         userService.updateUserPassword(passwordRecovery);
 

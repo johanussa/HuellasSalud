@@ -1,10 +1,15 @@
-import styles from './login.module.css';
+import styles from "./login.module.css";
 import logoLogin from "../../assets/Huellas&Salud_3.png";
-import { AccountSection, Divider, ForgotPasswordSection, GoogleLoginButton, LoginForm } from './loginComponents';
-import { useState } from 'react';
+import {
+  AccountSection,
+  Divider,
+  ForgotPasswordSection,
+  GoogleLoginButton,
+  LoginForm,
+} from "./loginComponents";
+import { useState } from "react";
 
 const Login = () => {
-
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
@@ -15,7 +20,11 @@ const Login = () => {
       <section className={styles.sectionForm}>
         <aside className={styles.containerForm}>
           <picture>
-            <img className={styles.logoLogin} src={logoLogin} alt="Huellas & Salud" />
+            <img
+              className={styles.logoLogin}
+              src={logoLogin}
+              alt="Huellas & Salud"
+            />
           </picture>
           <p className={styles.titleLogin}>Inicio de Sesión</p>
           <LoginForm loading={loading} setLoading={setLoading} />
@@ -25,7 +34,7 @@ const Login = () => {
         </aside>
       </section>
     </main>
-  )
-}
+  );
+};
 
 export default Login;

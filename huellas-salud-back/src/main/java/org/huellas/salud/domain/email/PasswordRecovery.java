@@ -9,9 +9,9 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Data
 public class PasswordRecovery {
 
+    @Valid
     private UserPassRecovery data;
 
-    @Valid
     public record UserPassRecovery(
 
             @Schema(example = "password")

@@ -7,7 +7,7 @@ import java.time.Year;
 @NoArgsConstructor
 public final class PasswordRecoveryTemplate {
 
-    public static String PASS_RECOVERY_TEMPLATE = """
+    public static final String PASS_RECOVERY_TEMPLATE = """
             <!DOCTYPE html>
                     <html>
                     <head>
@@ -35,7 +35,8 @@ public final class PasswordRecoveryTemplate {
                                         Restablecer contraseña
                                     </a>
                                 </div>
-                                <p style="color: #718096; font-size: 13px; margin-bottom: 20px;">Si no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña permanecerá igual.</p>
+                                <p style="color: #718096; font-size: 13px; margin-bottom: 5px;">Si no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña permanecerá igual.</p>
+                                <p style="color: #718096; font-size: 13px; margin: 0 0 20px;">De lo contrario, este enlace solo se podrá utilizar una sola vez.</p>
                                 <div style="border-top: 1px solid #e2e8f0; padding-top: 15px;">
                                     <p style="color: #718096; margin-bottom: 8px;">⏰ Este enlace expirará en 24 horas.</p>
                                     <p style="color: #718096;">\uD83D\uDD12 Por seguridad, no compartas este correo.</p>
@@ -73,11 +74,11 @@ public final class PasswordRecoveryTemplate {
                     </html>""";
 
     private static final String TEXT_CONTENT = """
-            "Hola %s,\\n\\n" +
-                    "Para restablecer tu contraseña en Huellas & Salud, visita este enlace:\\n" +
-                    "%s\\n\\n" +
-                    "Este enlace expirará en 24 horas.\\n" +
-                    "© %d Huellas & Salud\"""";
+            "Hola %s," +
+            "Para restablecer tu contraseña en Huellas & Salud, visita el siguiente enlace:" +
+            "%s" +
+            "Este enlace expirará en 24 horas." +
+            "© %d Huellas & Salud""";
 
     public static String getTextContent(String userName, String recoveryLink) {
         return String.format(
@@ -90,10 +91,12 @@ public final class PasswordRecoveryTemplate {
 
     public static String formatPasswordRecovery(String userName, String recoveryLink) {
 
-        PASS_RECOVERY_TEMPLATE = PASS_RECOVERY_TEMPLATE.replace("{nombre}", userName);
-        PASS_RECOVERY_TEMPLATE = PASS_RECOVERY_TEMPLATE.replace("{link}", recoveryLink);
-        PASS_RECOVERY_TEMPLATE = PASS_RECOVERY_TEMPLATE.replace("{date}", String.valueOf(Year.now().getValue()));
+        String template = PASS_RECOVERY_TEMPLATE;
 
-        return PASS_RECOVERY_TEMPLATE;
+        template = template.replace("{nombre}", userName);
+        template = template.replace("{link}", recoveryLink);
+        template = template.replace("{date}", String.valueOf(Year.now().getValue()));
+
+        return template;
     }
 }

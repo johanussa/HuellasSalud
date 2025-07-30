@@ -15,6 +15,7 @@ import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.jwt.JwtService;
 import org.huellas.salud.helper.utils.Utils;
 import org.huellas.salud.repositories.MediaFileRepository;
+import org.huellas.salud.repositories.PasswordRecoveryRepository;
 import org.huellas.salud.repositories.UserRepository;
 import org.jboss.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -45,6 +46,9 @@ public class UserService {
 
     @Inject
     MediaFileRepository mediaFileRepository;
+
+    @Inject
+    PasswordRecoveryRepository passwordRecoveryRepository;
 
     public UserMsg getRegisteredUserInMongo(UserMsg userMsg) throws HSException {
 
@@ -222,6 +226,15 @@ public class UserService {
         validatePasswordEncrypted(user);
 
         userMsg.getData().setPassword(user.getPassword());
+
+        LOG.infof("@updateUserPassword SERV > Inicia actualizacion del usuario: %s en mongo", user.getDocumentNumber());
+
+        userRepository.update(userMsg);
+
+        LOG.info("@updateUserPassword SERV > Inicia actualizacion de registro de recuperacion de contrasena");
+
+        recovery.setRecovered(true);
+        passwordRecoveryRepository.update(recovery);
 
         LOG.infof("@updateUserPassword SERV > Contrasena actualizada. ID usuario: %s", user.getDocumentNumber());
     }
