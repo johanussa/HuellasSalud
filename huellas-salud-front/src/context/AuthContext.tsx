@@ -3,6 +3,7 @@ import { AuthContext, JwtPayload, User } from "../services/typesHS";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosInstance";
+import { toast } from "react-toastify";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const decoded = jwtDecode<JwtPayload>(token);
             return decoded.exp < Date.now() / 1000;
         } catch (error) {
-            console.error("Error decoding token:", error);
+            toast.error("Error decoding token:" + error);
             return true;
         }
     };

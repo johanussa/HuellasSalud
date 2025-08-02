@@ -1,4 +1,4 @@
-package org.huellas.salud.domain.email;
+package org.huellas.salud.domain.mail;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

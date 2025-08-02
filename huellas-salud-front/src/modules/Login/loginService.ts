@@ -98,7 +98,6 @@ export const useLoginService = (setLoading: (show: boolean) => void) => {
         } else if (error instanceof Error) {
             errorMessage = error.message;
         }
-        console.error("Error en la petición:", error);
         toast.error(`${errorMessage} ❌`);
     }
 

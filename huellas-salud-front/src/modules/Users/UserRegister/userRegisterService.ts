@@ -56,7 +56,6 @@ export const useUserRegister = ({ setModalCreate, setUsersData }: CreateUserModa
                 );
                 createdUser.data.mediaFile = mediaFile;
             } catch (err) {
-                console.error("Error subiendo imagen de perfil:", err);
                 toast.error("Usuario creado, pero falló el envío de imagen");
             }
         }
@@ -78,7 +77,6 @@ export const useUserRegister = ({ setModalCreate, setUsersData }: CreateUserModa
         } else if (error instanceof Error) {
             errorMessage = error.message;
         }
-        console.error("Error en registro: ", error);
         toast.error(`${errorMessage} ❌`);
     }
 

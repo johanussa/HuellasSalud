@@ -6,8 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.huellas.salud.domain.Meta;
-import org.huellas.salud.domain.email.PasswordRecovery;
-import org.huellas.salud.domain.email.PasswordRecoveryEmail;
+import org.huellas.salud.domain.mail.PasswordRecovery;
+import org.huellas.salud.domain.mail.PasswordRecoveryEmail;
 import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserDTO;
 import org.huellas.salud.domain.user.UserMsg;
@@ -59,6 +59,9 @@ public class UserService {
 
         UserMsg userMongo = getUserRegister(userEmailOrDocument);
 
+        LOG.infof("@getRegisteredUserInMongo SERV > Informacion de usuario obtenida: %s", userMongo);
+
+        validateUserStatus(userEmailOrDocument, userMongo.getData());
         validatePassword(userMsg.getData().getPassword(), userMongo.getData().getPassword(), userEmailOrDocument);
 
         userMongo.setData(getUserDto(userMongo, true));
@@ -89,27 +92,6 @@ public class UserService {
         });
     }
 
-    private boolean isEmail(String value) {
-
-        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        return Pattern.compile(regex).matcher(value).matches();
-    }
-
-    private void validatePassword(String inputPassword, String storedHash, String userEmailOrDocument) throws HSException {
-
-        LOG.infof("@validatePassword SERV > Inicia servicio de validacion del password ingresado del usuario " +
-                "con correo o numero documento: %s", userEmailOrDocument);
-
-        if (!BCrypt.checkpw(inputPassword, storedHash)) {
-
-            LOG.errorf("@getRegisteredUserInMongo SERV > El password ingresado no es valido para el usuario " +
-                    "con correo: %s", userEmailOrDocument);
-
-            throw new HSException(Response.Status.BAD_REQUEST, "Error en los recursos suministrados");
-        }
-    }
-
     @CacheResult(cacheName = "users-list-cache")
     public List<UserMsg> getListRegisteredUser() {
 
@@ -134,8 +116,7 @@ public class UserService {
 
         validatePasswordEncrypted(userMsg.getData());
 
-        LOG.info("@saveUserDataInMongo SERV > Encriptación de contraseña validada. Inicia formato al nombre de " +
-                "usuario, el estado y se agrega la metadata");
+        LOG.info("@saveUserDataInMongo SERV > Encriptación de contraseña validada. Inicia formato de datos de usuario");
 
         formatUserDataToCreateUser(userMsg);
 
@@ -148,6 +129,12 @@ public class UserService {
                 "en la base de datos", userMsg.getData().getDocumentNumber(), userMsg.getData().getEmail());
 
         userMsg.setData(getUserDto(userMsg, false));
+
+        LOG.info("@saveUserDataInMongo SERV > Inicia servicio de envio de correo de confirmacion de cuenta");
+
+        mailService.sendConfirmationEmail(userMsg.getData());
+
+        LOG.info("@saveUserDataInMongo SERV > Finaliza servicio de registro de usuario");
 
         return userMsg;
     }
@@ -239,7 +226,7 @@ public class UserService {
         LOG.infof("@updateUserPassword SERV > Contrasena actualizada. ID usuario: %s", user.getDocumentNumber());
     }
 
-    private UserMsg getUserByDocumentNumber(String documentNumber, String email) throws HSException {
+    public UserMsg getUserByDocumentNumber(String documentNumber, String email) throws HSException {
 
         return userRepository.findUserByDocumentNumber(documentNumber).orElseThrow(() -> {
 
@@ -273,6 +260,19 @@ public class UserService {
             LOG.infof("@validateUserEmail SERV > No se encontro registro de usuario con ese correo. Se continua " +
                     "con la actualizacion de usuario. Correo antiguo: %s. Correo nuevo: %s", emailMongo, emailUpdate);
         }
+    }
+
+    private void validateUserStatus(String emailOrDocument, User user) throws HSException {
+
+        LOG.infof("@validateUserStatus SERV > Inicia validacion del estado del usuario con ID: %s", emailOrDocument);
+
+        if (!user.getActive()) {
+
+            LOG.errorf("@validateUserStatus SERV > El usuario con ID: %s esta en estado INACTIVO", emailOrDocument);
+
+            throw new HSException(Response.Status.CONFLICT, "EL usuario no se encuentra activo");
+        }
+        LOG.infof("@validateUserStatus SERV > El usuario con ID: %s se encuentra activo", emailOrDocument);
     }
 
     public UserDTO getUserDto(UserMsg userMsg, boolean searchImg) {
@@ -383,5 +383,26 @@ public class UserService {
         metaMongo.setRoleUserUpdated(jwtService.getCurrentUserRole());
 
         LOG.infof("@updateUserDataInformation SERV > Finaliza actualizacion de datos de usuario con id: %s", idUser);
+    }
+
+    private boolean isEmail(String value) {
+
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        return Pattern.compile(regex).matcher(value).matches();
+    }
+
+    private void validatePassword(String inputPassword, String storedHash, String userEmailOrDocument) throws HSException {
+
+        LOG.infof("@validatePassword SERV > Inicia servicio de validacion del password ingresado del usuario " +
+                "con correo o numero documento: %s", userEmailOrDocument);
+
+        if (!BCrypt.checkpw(inputPassword, storedHash)) {
+
+            LOG.errorf("@getRegisteredUserInMongo SERV > El password ingresado no es valido para el usuario " +
+                    "con correo: %s", userEmailOrDocument);
+
+            throw new HSException(Response.Status.BAD_REQUEST, "Error en los recursos suministrados");
+        }
     }
 }

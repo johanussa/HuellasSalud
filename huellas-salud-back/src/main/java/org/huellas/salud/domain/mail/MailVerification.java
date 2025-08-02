@@ -1,4 +1,4 @@
-package org.huellas.salud.domain.email;
+package org.huellas.salud.domain.mail;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.Builder;

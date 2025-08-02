@@ -27,7 +27,6 @@ import java.util.List;
 public class JwtService {
 
     private static final Logger LOG = Logger.getLogger(JwtService.class);
-
     private static final String ISSUER = "http://localhost";
 
     private PrivateKey privateKey;
@@ -86,10 +85,12 @@ public class JwtService {
     }
 
     public String getCurrentUserName() {
+        if (jsonWebToken.getClaim("name") == null) return null;
         return jsonWebToken.getClaim("name") + " " + jsonWebToken.getClaim("lastName");
     }
 
     public String getCurrentUserRole() {
+        if (jsonWebToken == null || jsonWebToken.getGroups() == null) return null;
         return jsonWebToken.getGroups().stream().findFirst().orElse("");
     }
 }

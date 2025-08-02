@@ -7,11 +7,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.huellas.salud.domain.email.EmailDelivery;
-import org.huellas.salud.domain.email.PasswordRecoveryEmail;
+import org.huellas.salud.domain.mail.ContextEmailConfirm;
+import org.huellas.salud.domain.mail.EmailConfirmation;
+import org.huellas.salud.domain.mail.EmailDelivery;
+import org.huellas.salud.domain.mail.PasswordRecoveryEmail;
+import org.huellas.salud.domain.user.User;
 import org.huellas.salud.domain.user.UserMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.templates.PasswordRecoveryTemplate;
+import org.huellas.salud.repositories.EmailConfirmationRepository;
 import org.huellas.salud.repositories.EmailDeliveryRepository;
 import org.huellas.salud.repositories.PasswordRecoveryRepository;
 import org.huellas.salud.repositories.UserRepository;
@@ -45,6 +49,9 @@ public class MailService {
     @Inject
     PasswordRecoveryRepository passwordRecoveryRepository;
 
+    @Inject
+    EmailConfirmationRepository emailConfirmationRepository;
+
     public void sendEmailRecoveryPass(String userEmail) throws HSException {
 
         LOG.infof("@sendEmailRecoveryPass SERV > Inicia el servicio para enviar el correo de recuperacion de " +
@@ -54,7 +61,16 @@ public class MailService {
 
         LOG.infof("@sendEmailRecoveryPass SERV > El usuario obtenido fue: %s. Inicia envio de correo", userMsg);
 
-        sendEmail(userEmail, userMsg);
+        String subject = "Recuperación de contraseña - Huellas & Salud";
+        String type = "RECUPERACION_CONTRASEÑA";
+        String resetLink = getResetLink(userMsg);
+        String userName = userMsg.getData().getName() + " " + userMsg.getData().getLastName();
+        String html = PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink);
+        String text = PasswordRecoveryTemplate.getTextContentPassRecovery(userName, resetLink);
+
+        CreateEmailOptions options = buildCreateEmailOptions(userEmail, html, text, subject);
+
+        sendEmail(options, subject, type);
 
         LOG.info("@sendEmailRecoveryPass SERV > Finaliza servicio de envio de correo de recupracion de contrasena");
     }
@@ -67,18 +83,27 @@ public class MailService {
 
         LOG.infof("@validateTokenRecovery SERV > Se encontro el siguiente registro: %s", recovery);
 
-        boolean isValid = recovery.getEffectiveDate().isAfter(LocalDateTime.now()) && !recovery.isRecovered();
+        boolean isValid = recovery.getValidityDate().isAfter(LocalDateTime.now()) && !recovery.isRecovered();
+
+        isCodeValid(isValid, approvalCode);
+
+        return true;
+    }
+
+    private void isCodeValid(boolean isValid, String approvalCode) throws HSException {
+
+        LOG.infof("@isCodeValid SERV > Inicia validacion del codigo de aprobacion. Es valido? %s", isValid);
 
         if (!isValid) {
 
-            LOG.errorf("@validateTokenRecovery SERV > El codigo de aprobacion invalido, ya ha sido utilizado " +
-                    "o ha expirado: %s", approvalCode);
+            LOG.errorf("@isCodeValid SERV > El codigo de aprobacion: %s es invalido, ya ha sido utilizado " +
+                    "o ha expirado", approvalCode);
 
-            throw new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña es inválido");
+            throw new HSException(Response.Status.NOT_FOUND, "El enlace de verificación no es válido o ya fue " +
+                    "utilizado. Por seguridad, los enlaces de verificación solo pueden usarse una vez y tienen " +
+                    "un tiempo limitado de validez. Por favor, solicita uno nuevo");
         }
-        LOG.infof("@validateTokenRecovery SERV > El codigo de aprobacion: %s es aun valido", approvalCode);
-
-        return true;
+        LOG.infof("@isCodeValid SERV > El codigo de aprobacion: %s es valido", approvalCode);
     }
 
     private UserMsg getUserByEmail(String userEmail) throws HSException {
@@ -92,18 +117,18 @@ public class MailService {
         });
     }
 
-    private void sendEmail(String userEmail, UserMsg userMsg) throws HSException {
+    private void sendEmail(CreateEmailOptions options, String subject, String type) throws HSException {
+
+        String userEmail = options.getTo().stream().findFirst().orElse("");
+
+        LOG.infof("@sendEmail SERV > Inicia servicio de envio de correo al email: %s", userEmail);
+
         try {
-            LOG.infof("@sendEmail SERV > Inicia servicio de envio de correo al email: %s", userEmail);
-
             Resend resend = new Resend(resendApiKey);
-
-            CreateEmailOptions options = buildCreateEmailOptions(userEmail, userMsg);
             CreateEmailResponse response = resend.emails().send(options);
-
             String description = "Correo entregado correctamente. ID: " + response.getId();
 
-            saveEmailDelivery(description, userEmail, "OK");
+            saveEmailDelivery(description, userEmail, "OK", subject, type);
 
             LOG.infof("@sendEmailRecoveryPass SERV > Correo enviado correctamente. Respuesta: %s", response.getId());
 
@@ -112,27 +137,24 @@ public class MailService {
             LOG.errorf(ex, "@sendEmailRecoveryPass SERV > Error al enviar correo a: %s", userEmail);
 
             String description = "Error en envío de correo: " + ex.getMessage();
-            saveEmailDelivery(description, userEmail, "ERROR");
+            saveEmailDelivery(description, userEmail, "ERROR", subject, type);
 
             throw new HSException(Response.Status.INTERNAL_SERVER_ERROR, "Error al enviar correo de recuperación");
         }
     }
 
-    private CreateEmailOptions buildCreateEmailOptions(String userEmail, UserMsg userMsg) {
-
-        String resetLink = getResetLink(userMsg);
-        String userName = userMsg.getData().getName() + " " + userMsg.getData().getLastName();
+    private CreateEmailOptions buildCreateEmailOptions(String userEmail, String html, String text, String subject) {
 
         return CreateEmailOptions.builder()
                 .from(domainResend)
                 .to(List.of(userEmail))
-                .subject("Recuperación de contraseña - Huellas & Salud")
-                .html(PasswordRecoveryTemplate.formatPasswordRecovery(userName, resetLink))
-                .text(PasswordRecoveryTemplate.getTextContent(userName, resetLink))
+                .subject(subject)
+                .html(html)
+                .text(text)
                 .build();
     }
 
-    private void saveEmailDelivery(String description, String userEmail, String status) {
+    private void saveEmailDelivery(String description, String userEmail, String status, String subject, String type) {
 
         LOG.infof("@saveEmailDelivery SERV > Inicia guardado de registro para el envio del email: %s", userEmail);
 
@@ -142,8 +164,8 @@ public class MailService {
                 .recipient(List.of(userEmail))
                 .dateOfShipment(LocalDateTime.now())
                 .status(status)
-                .subject("Recuperación de contraseña - Huellas & Salud")
-                .type("RECUPERACION_CONTRASEÑA")
+                .subject(subject)
+                .type(type)
                 .build();
 
         LOG.infof("@saveEmailDelivery SERV > Se almacena el siguiente registro: %s", emailDelivery);
@@ -163,8 +185,8 @@ public class MailService {
         PasswordRecoveryEmail recoveryEmail = PasswordRecoveryEmail.builder()
                 .approvalCode(token)
                 .resetLink(resetLink)
-                .recoveryDate(LocalDateTime.now())
-                .effectiveDate(LocalDateTime.now().plusHours(24))
+                .requestDate(LocalDateTime.now())
+                .validityDate(LocalDateTime.now().plusHours(24))
                 .dataUser(userService.getUserDto(user, false))
                 .build();
 
@@ -185,5 +207,115 @@ public class MailService {
 
             return new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña no existe");
         });
+    }
+
+    public void sendConfirmationEmail(User user) throws HSException {
+
+        String userEmail = user.getEmail();
+
+        LOG.infof("@sendConfirmationEmail SERV > Inicia servicio de envio de correo de confirmacion de " +
+                "cuenta al cliente con correo: %s", userEmail);
+
+        String approvalLink = getApprovalLink(user);
+        String userName = user.getName() + " " + user.getLastName();
+        String type = "CONFIRMACION_CORREO";
+        String subject = "Confirmación de correo - Huellas & Salud";
+        String html = PasswordRecoveryTemplate.formatConfirmEmail(userName, approvalLink);
+        String text = PasswordRecoveryTemplate.getTextContentConfirmEmail(userName, approvalLink);
+
+        userEmail = "johanuss0405@gmail.com";
+
+        CreateEmailOptions options = buildCreateEmailOptions(userEmail, html, text, subject);
+
+        sendEmail(options, subject, type);
+
+        LOG.infof("@sendConfirmationEmail SERV > Finaliza servicio de envio de correo de confirmacion de " +
+                "cuenta al cliente con correo: %s", userEmail);
+    }
+
+    private String getApprovalLink(User user) {
+
+        LOG.info("@getApprovalLink SERV > Inicia obtencion y guardado de codigo de aprobacion para confirmacion de correo");
+
+        String token = UUID.randomUUID() + "-" + Instant.now().toEpochMilli();
+        String approvalLink = "http://localhost:8089/internal/confirm-email/" + token;
+
+        EmailConfirmation emailConfirmation = EmailConfirmation.builder()
+                .context(ContextEmailConfirm.builder()
+                        .approvalCode(token)
+                        .validityDate(LocalDateTime.now().plusDays(3))
+                        .requestDate(LocalDateTime.now())
+                        .confirmationLink(approvalLink)
+                        .build())
+                .data(user)
+                .build();
+
+        LOG.infof("@getApprovalLink SERV > Inicia guardado en base de datos de la data: %s", emailConfirmation);
+
+        emailConfirmationRepository.persist(emailConfirmation);
+
+        LOG.info("@getApprovalLink SERV > El registro se almaceno correctamente se retorna link de aprobacion");
+
+        return approvalLink;
+    }
+
+    public String confirmUserEmail(String approvalCode) throws HSException {
+
+        LOG.info("@confirmUserEmail SERV > Inicia servicio de validacion del codigo de aprobacion");
+
+        EmailConfirmation emailConfirmation = getEmailConfirmation(approvalCode);
+
+        LOG.infof("@confirmUserEmail SERV > Se obtuvo el siguiente registro: %s", emailConfirmation);
+
+        boolean isValid = emailConfirmation.getContext().getValidityDate().isAfter(LocalDateTime.now())
+                && !emailConfirmation.getContext().isConfirmed();
+
+        isCodeValid(isValid, approvalCode);
+
+        LOG.info("@confirmUserEmail SERV > Inicia actualizacion de confirmacion");
+
+        updateEmailConfirmation(emailConfirmation);
+
+        LOG.info("@confirmUserEmail SERV > Inicia actualizacion del estado del usuario");
+
+        updateUserStatus(emailConfirmation);
+
+        LOG.info("@confirmUserEmail SERV > El estado del usuario fue activado correctamente");
+
+        return emailConfirmation.getData().getName() + " " + emailConfirmation.getData().getLastName();
+    }
+
+    private EmailConfirmation getEmailConfirmation(String approvalCode) throws HSException {
+
+        return emailConfirmationRepository.getEmailConfirmByCode(approvalCode).orElseThrow(() -> {
+
+            LOG.error("@getEmailConfirmation SERV > No se encontro registro de confirmacion de email de usuario");
+
+            return new HSException(Response.Status.NOT_FOUND, "No se encontró registro de confirmación de correo electrónico");
+        });
+    }
+
+    private void updateUserStatus(EmailConfirmation emailConfirmation) throws HSException {
+
+        User user = emailConfirmation.getData();
+        UserMsg userMsg = userService.getUserByDocumentNumber(user.getDocumentNumber(), user.getEmail());
+
+        userMsg.getData().setActive(true);
+        userMsg.getMeta().setLastUpdate(LocalDateTime.now());
+
+        LOG.infof("@updateUserStatus SERV > Se actualiza usuario con la data: %s", userMsg);
+
+        userRepository.update(userMsg);
+    }
+
+    private void updateEmailConfirmation(EmailConfirmation emailConfirmation) {
+
+        emailConfirmation.getData().setActive(true);
+        emailConfirmation.getContext().setConfirmed(true);
+        emailConfirmation.getContext().setConfirmationDate(LocalDateTime.now());
+
+        LOG.infof("@updateEmailConfirmation SERV > Se actualiza registro con la data: %s", emailConfirmation);
+
+        emailConfirmationRepository.update(emailConfirmation);
     }
 }
