@@ -191,6 +191,8 @@ public class UserService {
                     " y correo: " + emailUser + " No esta registrado en la base de datos");
         }
 
+        // TODO - Eliminar las mascotas asociadas al usuario eliminado
+
         LOG.infof("@deleteUserDataInMongo SERV > El registro del usuario con numero de documento: %s y correo: " +
                 "%s se elimino correctamente de mongo. Finaliza ejecucion del servicio para eliminar usuario y se " +
                 "elimino %s registro de la base de datos", documentNumber, emailUser, deleted);

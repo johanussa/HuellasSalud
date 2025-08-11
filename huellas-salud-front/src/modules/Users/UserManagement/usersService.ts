@@ -1,9 +1,9 @@
-import { toast } from "react-toastify";
-import { UserData, User } from "../../../services/typesHS";
 import { useState } from "react";
-import Swal from "sweetalert2";
-import axios from "axios";
+import { toast } from "react-toastify";
+import { UserData, User } from "../../../helper/typesHS";
+import { handleError } from "../../../helper/utils";
 import axiosInstance from "../../../context/axiosInstance";
+import Swal from "sweetalert2";
 
 export const useUserService = () => {
 
@@ -75,6 +75,7 @@ export const useUserService = () => {
             cancelButtonText: "Cancelar",
         });
         if (result.isConfirmed) {
+            user.active = !user.active;
             handleUpdateUser(user);
             return true;
         }
@@ -96,24 +97,4 @@ export const useUserService = () => {
     }
 
     return { handleGetUsers, loading, confirmUpdate, confirmDelete };
-}
-
-const handleError = (error: unknown, message: string) => {
-    let errorMessage = message;
-
-    if (axios.isAxiosError(error)) {
-
-        const { response, message } = error;
-
-        if (response?.data?.title) {
-            const detail = response.data.detail ? `. ${response.data.detail}` : "";
-            errorMessage = `${response.data.title}${detail}`;
-        } else if (response?.status === 401) {
-            errorMessage = "No tienes permisos para realizar esta acción";
-        } else {
-            errorMessage = message || "Error en la comunicación con el servidor";
-        }
-    } else if (error instanceof Error) errorMessage = error.message;
-
-    toast.error(`${errorMessage} ❌`);
 }

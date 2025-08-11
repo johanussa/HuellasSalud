@@ -24,7 +24,7 @@
     top: 0;
     left: 0;
     display: grid;
-    grid-template-columns: .8fr 4fr 1.2fr;
+    grid-template-columns: .7fr 5fr 1.2fr;
     z-index: 1;
 }
 

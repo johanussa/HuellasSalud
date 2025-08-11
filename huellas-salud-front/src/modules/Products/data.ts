@@ -1,4 +1,4 @@
-import { Product } from "../../services/typesHS";
+import { Product } from "../../helper/typesHS";
 
 export const productos = [{
     image: "../../assets/Huellas&Salud_1.png",

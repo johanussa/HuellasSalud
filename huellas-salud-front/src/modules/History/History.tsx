@@ -2,7 +2,7 @@ import styles from "./history.module.css";
 import imgPet from "../../assets/simba.webp";
 import { useState } from "react";
 import { fieldsFormPet, pets } from "../Pets/dataPet";
-import { Pet } from "../../services/typesHS";
+import { Pet } from "../../helper/typesHS";
 
 const History = () => {
 

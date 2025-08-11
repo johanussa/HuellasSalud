@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum PetSexEnum {
 
-    _0_MACHO("Macho"),
-    _1_HEMBRA("Hembra"),
-    _2_INDETERMINADO("Indeterminado");
+    _0_MACHO("MACHO"),
+    _1_HEMBRA("HEMBRA"),
+    _2_INDETERMINADO("INDETERMINADO");
 
     private final String value;
 

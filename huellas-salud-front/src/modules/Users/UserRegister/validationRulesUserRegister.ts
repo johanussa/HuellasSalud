@@ -1,5 +1,5 @@
 import { RegisterOptions } from "react-hook-form";
-import { User } from "../../../services/typesHS";
+import { User } from "../../../helper/typesHS";
 
 type ValidationRules = {
     [key in keyof User]?: RegisterOptions<User, key>;

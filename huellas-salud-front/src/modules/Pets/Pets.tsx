@@ -1,144 +1,211 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { sexOptions, species, statusOptions } from "../Users/UserManagement/usersUtils";
+import { SearchBar } from "../Users/UserManagement/userComponents";
+import { usePetService } from "./petService";
+import { Meta, Pet, PetCardProps, PetData } from "../../helper/typesHS";
+import defaultPetImage from "../../assets/simba.webp";
 import styles from "./pets.module.css";
-import imgPrd from "../../assets/Huellas&Salud_3.png";
-import { Pet } from "../../services/typesHS";
-import { fieldsFormPet, petFieldsTable, pets } from "./dataPet";
 
 const Pets = () => {
 
-  const [petSelected, setPetSelected] = useState<Pet>({
-    id: "0", name: "", type: "Perro", breed: "", age: 0, weight: 0, treatments: [""],
-    description: "", status: "Activo", vaccines: [""], surgeries: [""], styrofoam: false
-  });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sexFilter, setSexFilter] = useState<string>("ALL");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [speciesFilter, setSpeciesFilter] = useState<string>("ALL");
+  const [petsData, setPetsData] = useState<PetData[] | undefined>([]);
 
-  const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [showDelete, setShowDelete] = useState<boolean>(false);
-  const [showAdd, setShowAdd] = useState<boolean>(false);
+  const { loading, handleGetPets } = usePetService();
 
-  const handlerCloseModal = () => {
-    setShowEdit(false);
-    setShowDelete(false);
-    setShowAdd(false);
-  }
+  useEffect(() => {
+    const fetchPetData = async () => {
+      const data = await handleGetPets();
+      setPetsData(data);
+    };
+    fetchPetData();
+  }, []);
+
+  const filteredPets = useMemo(() => {
+    return petsData?.filter(({ data: pet }) => {
+
+      const matchesSearch = pet.name.toLowerCase().includes(searchTerm.toLowerCase())
+        || pet.idOwner.includes(searchTerm.toLowerCase())
+        || pet.breed.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesSpecies = speciesFilter === 'ALL' || pet.species === speciesFilter;
+
+      const matchesSex = sexFilter === 'ALL'
+        || (sexFilter === 'MACHO' && pet.sex === 'MACHO')
+        || (sexFilter === 'HEMBRA' && pet.sex === 'HEMBRA')
+        || (sexFilter === "INDETERMINADO" && pet.sex === "INDETERMINADO");
+
+      const matchesStatus = statusFilter === 'ALL'
+        || (statusFilter === 'ACTIVE' && pet.isActive)
+        || (statusFilter === 'INACTIVE' && !pet.isActive);
+
+      return matchesSearch && matchesSpecies && matchesSex && matchesStatus;
+    });
+  }, [petsData, searchTerm, speciesFilter, sexFilter, statusFilter]);
+
+  if (loading) return (<div style={{ marginTop: "125px" }}>Cargando mascotas...</div>);
 
   return (
-    <main className={styles.petsSection}>
-      <div className={styles.title}>
-        <h2>Panel de administración - Mascotas</h2>
-      </div>
-      <button className={styles.addBtn} onClick={() => { setShowAdd(true); }}>
-        Agregar Mascota <i className="fa-solid fa-dog" />
-      </button>
-      <section>
-        <div className={styles.formGroup}>
-          <label htmlFor="searchTerm">Buscar mascota</label>
-          <input
-            type="text"
-            id="searchTerm"
-            placeholder="Buscar por nombre, tipo, raza o dueño"
-          />
-        </div>
-        <aside>
-          <button className={styles.addBtn} style={{ marginRight: "1rem" }}>
-            Buscar <i className="fa-solid fa-search" />
-          </button>
-          <button className={styles.addBtn}>
-            Mostrar todos <i className="fa-solid fa-cat" />
-          </button>
-        </aside>
-      </section>
-      <section className={styles.tableContainer}>
-        <table className={styles.petsTable}>
-          <thead>
-            <tr>
-              {petFieldsTable.map((field) => (<th key={field}>{field}</th>))}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              pets.map((pet) => (
-                <tr key={pet.id}>
-                  <td style={{ fontWeight: "bold" }}>{pet.id}</td>
-                  <td>{pet.name}</td>
-                  <td>{pet.type}</td>
-                  <td>{pet.breed}</td>
-                  <td>{pet.age}</td>
-                  <td>{pet.weight}</td>
-                  <td>{pet.styrofoam ? "Si" : "No"}</td>
-                  <td>{pet.status}</td>
-                  <td className={styles.actions}>
-                    <button className={styles.editBtn} title="Editar mascota" onClick={() => { setPetSelected(pet); setShowEdit(true); }}>
-                      <i className="fa-solid fa-pencil" />
-                    </button>
-                    <button className={styles.deleteBtn} title="Eliminar mascota" onClick={() => { setShowDelete(true); }}>
-                      <i className="fa-solid fa-trash" />
-                    </button>
-                    <button className={styles.editBtn} title="Cambiar estado">
-                      <i className="fa-solid fa-arrows-rotate" />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </section>
-      <section className={(showEdit || showDelete || showAdd) ? styles.modalEdit : ""}>
-        {showEdit && <CompForm title="Edición de mascota" nameBtn="Actualizar mascota" pet={petSelected} handlerCloseModal={handlerCloseModal} />}
-        {showDelete && <div className={styles.deleteUser} >
-          <h1>Eliminar mascota</h1>
-          <h3 className={styles.deleteMsg}>¿Seguro que quieres eliminar la mascota de nombre Firulais?</h3>
-          <div className={styles.buttons}>
-            <button className={styles.btnConfirmDelete}>Sí, eliminar</button>
-            <button className={styles.btnCancelDelete} onClick={() => { setShowDelete(prev => !prev) }} >No, cancelar</button>
-          </div>
-        </div>}
-        {showAdd && <CompForm title="Crear mascota" nameBtn="Crear mascota" handlerCloseModal={handlerCloseModal} />}
+    <main className={styles.petsContainer}>
+      <section className={styles.sectionPets}>
+        <h1 className={styles.headerTitle}>Panel de administración - Mascotas</h1>
+        <PetsFilters
+          searchTerm={searchTerm}
+          sexFilter={sexFilter}
+          speciesFilter={speciesFilter}
+          statusFilter={statusFilter}
+          setSearchTerm={setSearchTerm}
+          setSexFilter={setSexFilter}
+          setSpeciesFilter={setSpeciesFilter}
+          setStatusFilter={setStatusFilter}
+        />
+        <PetCard pets={filteredPets} setPetsData={setPetsData} />
       </section>
     </main>
   );
 }
 
-interface CompFormProps {
-  title: string;
-  nameBtn: string;
-  pet?: Pet;
-  handlerCloseModal?: () => void;
-}
+const PetCard = ({ pets, setPetsData }: PetCardProps) => {
 
-const CompForm = ({ title, nameBtn, pet, handlerCloseModal }: CompFormProps) => {
+  if (!pets || pets.length === 0) return (<h2>No hay mascotas registradas</h2>);
+
+  const { confirmUpdate, confirmDelete } = usePetService();
+
+  const changePetStatus = async (pet: Pet, meta: Meta) => {    
+    if (await confirmUpdate(pet)) meta.lastUpdate = new Date().toString();
+  }
+
+  const deletePet = async (pet: Pet) => {
+    const idPet = await confirmDelete(pet);
+    if (idPet) setPetsData(prev => prev?.filter(p => p.data.idPet !== idPet));
+  };
 
   return (
-    <div className={styles.editPet}>
-      <h1 className={styles.editionTitle}>{title}</h1>
-      <div className={styles.image}>
-        <div className={styles.imagePet}>
-          <img src={imgPrd} alt="ImageProduct" />
-        </div>
-        <button>Cargar imagen</button>
-      </div>
-      <div className={styles.information}>
-        {
-          fieldsFormPet.map((field) => (
-            <div key={field.id} className={styles.dataForm}>
-              <label htmlFor={field.id}>{field.label}</label>
-              <input
-                type={field.type}
-                id={field.id}
-                placeholder={field.placeholder}
-                value={pet ? pet[field.id as keyof Pet] as string : ""} />
+    <main className={styles.cardPetsContainer}>
+      {pets && pets?.map(({ data: pet, meta }) => (
+        <section className={styles.card} key={pet.idPet}>
+          <aside className={styles.cardImageContainer}>
+            <img
+              src={getPetImage(pet)}
+              alt={pet.name}
+              className={styles.cardImage}
+            />
+            <span className={`${styles.statusIndicator} ${pet.isActive ? styles.active : styles.inactive}`}>
+              {pet.isActive ? 'Activo' : 'Inactivo'}
+            </span>
+          </aside>
+          <aside className={styles.cardContent}>
+            <section className={styles.actions}>
+              <button
+                title="Eliminar"
+                className={`${styles.btn} ${styles.delete}`}
+                onClick={() => deletePet(pet)}
+              >
+                <i className="fa-regular fa-trash-can" />
+              </button>
+              <button
+                title="Cambiar Estado"
+                className={`${styles.btn} ${styles.toggleStatus}`}
+                onClick={() => changePetStatus(pet, meta)}
+              >
+                <i className="fa-solid fa-arrows-rotate" />
+              </button>
+            </section>
+            <h3 className={styles.petName}>{pet.name}</h3>
+            <div className={styles.petInfo}>
+              <span className={styles.petSpecies}>{pet.species}</span>
+              <span className={styles.petSex}>{pet.sex}</span>
+              {pet.sterilized && <span className={styles.sterilized}>✂</span>}
             </div>
-          ))
-        }
-      </div>
-      <div className={styles.button}>
-        <button className={styles.updateBtn}>{nameBtn}</button>
-      </div>
-      <div className={styles.modalClose} onClick={handlerCloseModal} >
-        <i className={`fa-solid fa-square-xmark ${styles.btnClose}`}></i>
-      </div>
-    </div>
+            <div className={styles.petDetails}>
+              <p><strong>Id propietario:</strong> {pet.idOwner}</p>
+              <p><strong>Edad:</strong> {pet.age}</p>
+              <p><strong>Raza:</strong> {pet.breed || 'Sin definir'}</p>
+              <p><strong>Peso:</strong> {pet.weight}</p>
+              <p><strong>Fecha registro:</strong> {new Date(meta.creationDate).toLocaleDateString()}</p>
+            </div>
+          </aside>
+        </section>
+      ))}
+    </main>
   );
+};
+
+const getPetImage = (pet: Pet) => {
+  if (pet.mediaFile) {
+    return `data:${pet.mediaFile.contentType};base64,${pet.mediaFile.attachment}`;
+  }
+  return defaultPetImage;
 }
+
+interface PetsFiltersProps {
+  searchTerm: string;
+  sexFilter: string;
+  speciesFilter: string;
+  statusFilter: string;
+  setSearchTerm: (term: string) => void;
+  setSexFilter: (filter: string) => void;
+  setStatusFilter: (filter: string) => void;
+  setSpeciesFilter: (filter: string) => void;
+}
+
+const PetsFilters = ({
+  searchTerm,
+  sexFilter,
+  speciesFilter,
+  statusFilter,
+  setSearchTerm,
+  setSexFilter,
+  setStatusFilter,
+  setSpeciesFilter
+}: PetsFiltersProps) => (
+  <section className={styles.filters}>
+    <SearchBar
+      placeholder="Buscar por nombre, raza o Id propietario..."
+      searchTerm={searchTerm}
+      onSearchChange={setSearchTerm}
+    />
+    <aside className={styles.selectFilters}>
+      <button className={styles.btnCreateUser} onClick={() => { }}>Registrar mascota</button>
+      <select
+        value={speciesFilter}
+        onChange={(e) => setSpeciesFilter(e.target.value)}
+        className={styles.filterSelect}
+      >
+        <option value="ALL">Todas las especies</option>
+        {species.filter(species => species !== 'ALL').map(species => (
+          <option key={species} value={species}>
+            {species.charAt(0) + species.slice(1).toLowerCase()}
+          </option>
+        ))}
+      </select>
+      <select
+        value={sexFilter}
+        onChange={(e) => setSexFilter(e.target.value)}
+        className={styles.filterSelect}
+      >
+        {sexOptions.map(sex => (
+          <option key={sex.value} value={sex.value}>
+            {sex.label}
+          </option>
+        ))}
+      </select>
+      <select
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+        className={styles.filterSelect}
+      >
+        {statusOptions.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </aside>
+  </section>
+);
 
 export default Pets;

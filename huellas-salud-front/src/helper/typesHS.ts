@@ -1,6 +1,8 @@
-import { createContext, HTMLInputTypeAttribute } from "react";
+import { createContext, Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
+type Sex = "MACHO" | "HEMBRA" | "INDETERMINADO";
+type Species = "PERRO" | "GATO" | "AVE" | "ROEDOR" | "REPTIL" | "PESCADO";
 export type Role = "ADMINISTRADOR" | "VETERINARIO" | "CLIENTE" | "RECEPCIONISTA";
 
 export interface ListItemNavProps extends NavLinkProps {
@@ -42,7 +44,6 @@ export interface Product {
 }
 
 export interface User {
-    mediaFile?: MediaFile;
     name: string;
     lastName: string;
     documentType: "CC" | "CE" | "TI" | "NIT" | "PASAPORTE";
@@ -50,26 +51,30 @@ export interface User {
     address: string;
     email: string;
     password: string;
-    confirmPassword?: string;
     cellPhone: string;
     role: Role;
+    confirmPassword?: string;
     active?: boolean;
+    mediaFile?: MediaFile;
 }
 
 export interface Pet {
-    id: string;
+    idPet: string;
+    idOwner: string;
     name: string;
-    type: "Perro" | "Gato" | "Ave" | "Roedor" | "Reptil" | "Otro";
+    species: Species;
     breed: string;
-    owner?: User;
+    sex: Sex;
     age: number;
     weight: number;
-    styrofoam: boolean;
+    sterilized: boolean;
+    disability: string;
     description: string;
-    status: "Activo" | "Inactivo" | "Pendiente";
+    isActive: boolean;
     vaccines: string[];
     surgeries: string[];
     treatments: string[];
+    mediaFile?: MediaFile;
 }
 
 export interface Meta {
@@ -77,6 +82,12 @@ export interface Meta {
     lastUpdate: string;
     ipAddress: string;
     source: string;
+    nameUserCreated?: string;
+    emailUserCreated?: string;
+    roleUserCreated?: string;
+    nameUserUpdated?: string;
+    emailUserUpdated?: string;
+    roleUserUpdated?: string;
 }
 
 export interface MediaFile {
@@ -128,6 +139,11 @@ export interface UserData {
     token?: string;
 }
 
+export interface PetData {
+    data: Pet;
+    meta: Meta;
+}
+
 export interface LoginFormProps {
     loading: boolean;
     setLoading: (loading: boolean) => void;
@@ -156,7 +172,12 @@ export interface UserFiltersProps {
 
 export interface UserTableProps {
     users: UserData[] | undefined;
-    setUsersData: React.Dispatch<React.SetStateAction<UserData[] | undefined>>;
+    setUsersData: Dispatch<SetStateAction<UserData[] | undefined>>;
+}
+
+export interface PetCardProps { 
+    pets: PetData[] | undefined;
+    setPetsData: Dispatch<SetStateAction<PetData[] | undefined>>;
 }
 
 interface AuthContextType {
@@ -198,5 +219,11 @@ export interface FormUserProps extends CreateUserModalProps {
 
 export interface CreateUserModalProps {
     setModalCreate?: (close: boolean) => void;
-    setUsersData?: React.Dispatch<React.SetStateAction<UserData[] | undefined>>;
+    setUsersData?: Dispatch<SetStateAction<UserData[] | undefined>>;
+}
+
+export interface SearchBarProps {
+    placeholder: string;
+    searchTerm: string;
+    onSearchChange: (value: string) => void;
 }

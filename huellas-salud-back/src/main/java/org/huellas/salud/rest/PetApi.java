@@ -1,6 +1,7 @@
 package org.huellas.salud.rest;
 
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -57,18 +58,17 @@ public class PetApi {
     }
 
     @GET
-    @PermitAll
     @Path("/list-pets")
+    @RolesAllowed("ADMINISTRADOR")
     @Tag(name = "Gestión de mascotas")
     public Response getListPets() {
 
-        LOG.debug("@getListPets API > Inicia ejecucion del servicio para obtener el listado de los registros de las " +
-                "mascotas en base de datos");
+        LOG.debug("@getListPets API > Inicia servicio para obtener listado de registros de mascotas en base de datos");
 
         List<PetMsg> pets = petService.getListPetMsg();
 
-        LOG.debugf("@getListPets API > Finaliza ejecucion del servicio para obtener el listado de las mascotas " +
-                "registradas en base de datos. Se obtuvo: %s resultados", pets.size());
+        LOG.debugf("@getListPets API > Finaliza servicio para obtener listado de mascotas registradas. Se obtuvo: " +
+                "%s resultados", pets.size());
 
         return Response.ok().entity(pets).build();
     }

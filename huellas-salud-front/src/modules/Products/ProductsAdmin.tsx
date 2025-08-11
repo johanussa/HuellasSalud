@@ -2,7 +2,7 @@ import { fieldsForm, productosAdmin } from "./data";
 import styles from "./productsAdmin.module.css";
 import imgPrd from "../../assets/Comida_Gato.webp";
 import { useState } from "react";
-import { Product } from "../../services/typesHS";
+import { Product } from "../../helper/typesHS";
 
 const ProductsAdmin = () => {
 

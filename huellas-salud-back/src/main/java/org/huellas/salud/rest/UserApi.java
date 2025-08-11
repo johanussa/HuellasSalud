@@ -110,13 +110,12 @@ public class UserApi {
     )
     public Response getListUsers() {
 
-        LOG.info("@getListUsers API > Inicia ejecucion del servicio para obtener el listado de todos los usuarios " +
-                "registrados en mongo");
+        LOG.info("@getListUsers API > Inicia servicio para obtener listado de todos los usuarios registrados en mongo");
 
         List<UserMsg> users = userService.getListRegisteredUser();
 
-        LOG.infof("@getListUsers API > Finaliza ejecucion del servicio para obtener el listado de todos los " +
-                "usuarios registrados en mongo. Se encontraron: %s registros", users.size());
+        LOG.infof("@getListUsers API > Finaliza servicio para obtener listado de todos los usuarios " +
+                "registrados. Se encontraron: %s registros", users.size());
 
         return Response.ok().entity(users).build();
     }

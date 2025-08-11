@@ -1,4 +1,4 @@
-import { CategoryGroup, CategoryCard, SubMenuProps } from "../../services/typesHS";
+import { CategoryGroup, CategoryCard, SubMenuProps } from "../../helper/typesHS";
 import prdPopularCat from "../../assets/Comida_Gato.webp";
 import prdPopularDog from "../../assets/TratamientosEspecializados.webp";
 import prdPopularOther from "../../assets/PeluqueriaBienestar.webp";

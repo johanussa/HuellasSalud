@@ -1,4 +1,4 @@
-import { Pet } from "../../services/typesHS";
+import { Pet } from "../../helper/typesHS";
 
 export const fieldsFormPet = [
     {
@@ -61,18 +61,6 @@ export const fieldsFormPet = [
         id: "treatments",
         placeholder: "Tratamientos realizados a la mascota"
     }
-];
-
-export const petFieldsTable = [
-    "#",
-    "Nombre",
-    "Tipo",
-    "Raza",
-    "Edad",
-    "Peso",
-    "Estirilizado",
-    "Estado",
-    "Acciones"
 ];
 
 export const pets: Pet[] = [

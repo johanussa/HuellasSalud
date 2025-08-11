@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CreateUserModalProps, MediaFile, User, UserData } from "../../../services/typesHS";
+import { CreateUserModalProps, MediaFile, User, UserData } from "../../../helper/typesHS";
 import axiosInstance from "../../../context/axiosInstance";
 import axios from "axios";
 

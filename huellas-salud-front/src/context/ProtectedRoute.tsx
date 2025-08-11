@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../services/typesHS";
+import { AuthContext } from "../helper/typesHS";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children, requiredRole }: { children: JSX.Element, requiredRole: string[] }) => {

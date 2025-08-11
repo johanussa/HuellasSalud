@@ -1,4 +1,4 @@
-import { User } from "../../../services/typesHS";
+import { User } from "../../../helper/typesHS";
 
 export const tableColumns: string[] = [
     "Nombre",
@@ -8,31 +8,54 @@ export const tableColumns: string[] = [
     "Teléfono",
     "Correo",
     "Estado",
-    "Acciones"
+    "Acciones",
 ];
 
 const optionsDate: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "2-digit",
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
 };
 
 export const formatDate = (date: string | Date): string => {
-    return new Date(date).toLocaleString("en-US", optionsDate)
+    return new Date(date)
+        .toLocaleString("en-US", optionsDate)
         .replaceAll("/", "-")
         .replace(",", " -");
-}
+};
 
-export const roles = ['ADMINISTRADOR', 'CLIENTE', 'VETERINARIO', 'RECEPCIONISTA'];
+export const roles = [
+    "ADMINISTRADOR",
+    "CLIENTE",
+    "VETERINARIO",
+    "RECEPCIONISTA",
+];
+
+export const species = [
+    "ALL",
+    "PERRO",
+    "GATO",
+    "ROEDOR",
+    "AVE",
+    "REPTIL",
+    "PESCADO",
+];
+
+export const sexOptions = [
+    { value: "ALL", label: "Todos los géneros" },
+    { value: "MACHO", label: "Macho" },
+    { value: "HEMBRA", label: "Hembra" },
+    { value: "INDETERMINADO", label: "Indeterminado" },
+];
 
 export const statusOptions = [
-    { value: 'all', label: 'Todos los estados' },
-    { value: 'active', label: 'Activo' },
-    { value: 'inactive', label: 'Inactivo' }
+    { value: "ALL", label: "Todos los estados" },
+    { value: "ACTIVE", label: "Activo" },
+    { value: "INACTIVE", label: "Inactivo" },
 ];
 
 export const userEmpty: User = {
@@ -44,12 +67,12 @@ export const userEmpty: User = {
     email: "",
     cellPhone: "",
     password: "",
-    role: "ADMINISTRADOR"
-}
+    role: "ADMINISTRADOR",
+};
 
 export const metaEmpty = {
     creationDate: "",
     ipAddress: "",
     source: "",
-    lastUpdate: ""
-}
+    lastUpdate: "",
+};

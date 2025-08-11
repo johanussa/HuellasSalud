@@ -1,12 +1,16 @@
 package org.huellas.salud.services;
 
+import io.quarkus.cache.CacheInvalidateAll;
+import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.huellas.salud.domain.Meta;
 import org.huellas.salud.domain.pet.Pet;
 import org.huellas.salud.domain.pet.PetMsg;
 import org.huellas.salud.helper.exceptions.HSException;
+import org.huellas.salud.helper.jwt.JwtService;
 import org.huellas.salud.helper.utils.Utils;
 import org.huellas.salud.repositories.PetRepository;
 import org.jboss.logging.Logger;
@@ -26,11 +30,15 @@ public class PetService {
     Utils utils;
 
     @Inject
+    JwtService jwtService;
+
+    @Inject
     PetRepository petRepository;
 
     @ConfigProperty(name = "PARAMETER.HUELLAS_SALUD.DEFAULT_BREED")
     String defaultBreed;
 
+    @CacheInvalidateAll(cacheName = "pets-list-cache")
     public void savePetDataMongo(PetMsg petMsg) throws HSException, UnknownHostException {
 
         LOG.infof("@savePetDataMongo SERV > Inicia ejecucion de servicio para almacenar el registro de una " +
@@ -65,6 +73,7 @@ public class PetService {
                 "ejecucion de servicio para almacenar el registro de una mascota con la data: %s", petMsg);
     }
 
+    @CacheResult(cacheName = "pets-list-cache")
     public List<PetMsg> getListPetMsg() {
 
         LOG.info("@getListPetMsg SERV > Inicia ejecucion del servicio para obtener listado de las mascotas desde " +
@@ -91,35 +100,29 @@ public class PetService {
         return pets;
     }
 
+    @CacheInvalidateAll(cacheName = "pets-list-cache")
     public void updatePetDataInMongo(PetMsg petMsg) throws HSException {
 
         LOG.infof("@updatePetDataInMongo SERV > Inicia ejecucion del servicio para actualizar registro de la " +
-                "mascota con el id: %s en mongo. Data a modificar: %s", petMsg.getData().getIdPet(), petMsg);
+                "mascota con el id: %s. Data a modificar: %s", petMsg.getData().getIdPet(), petMsg);
 
-        PetMsg petMsgMongo = petRepository.findPetById(petMsg.getData().getIdPet()).orElseThrow(() -> {
-
-            LOG.errorf("@updatePetDataInMongo SERV > La mascota con el identificador: %s NO esta registrada en " +
-                    "mongo. Solicitud invalida no se puede modificar el registro", petMsg.getData().getIdPet());
-
-            return new HSException(Response.Status.NOT_FOUND, "No se encontró el registro de la mascota con " +
-                    "identificador: " + petMsg.getData().getIdPet() + " en la base de datos");
-        });
+        PetMsg petMsgMongo = getPetMsg(petMsg.getData().getIdPet());
 
         LOG.infof("@updatePetDataInMongo SERV > La mascota con documento: %s si esta registrada. Inicia la " +
                 "actualizacion del registro de la mascota con data: %s", petMsg.getData().getIdPet(), petMsg);
 
-        petMsgMongo.getMeta().setLastUpdate(LocalDateTime.now());
-        setPetInformation(petMsg.getData().getIdPet(), petMsg.getData(), petMsgMongo.getData());
+        setPetInformation(petMsg.getData().getIdPet(), petMsg.getData(), petMsgMongo);
 
         LOG.infof("@updatePetDataInMongo SERV > Finaliza edicion de la informacion de la mascota con id: %s. " +
                 "Inicia actualizacion en mongo con la data: %s", petMsg.getData().getIdPet(), petMsg);
 
         petRepository.update(petMsgMongo);
 
-        LOG.infof("@updatePetDataInMongo SERV > Finaliza actualizacion del registro de la mascota con id: %s en " +
-                "mongo. Finaliza ejecucion de servicio de actualizacion de la mascota", petMsg.getData().getIdPet());
+        LOG.infof("@updatePetDataInMongo SERV > Finaliza actualizacion del registro de la mascota con id: %s. " +
+                "Finaliza ejecucion de servicio de actualizacion", petMsg.getData().getIdPet());
     }
 
+    @CacheInvalidateAll(cacheName = "pets-list-cache")
     public void deletePetDataInMongo(String identifierPet, String idOwner) throws HSException {
 
         LOG.infof("@deletePetDataInMongo SERV > Inicia ejecucion del servicio para eliminar el registro de la " +
@@ -142,12 +145,15 @@ public class PetService {
                 "correctamente", identifierPet, idOwner);
     }
 
-    private void setPetInformation(String idPet, Pet petRequest, Pet petMongo) {
+    private void setPetInformation(String idPet, Pet petRequest, PetMsg petMsgMongo) {
 
         LOG.infof("@setPetInformation SERV > Inicia set de los datos de la mascota con id: %s", idPet);
 
+        Pet petMongo = petMsgMongo.getData();
+        Meta metaMongo = petMsgMongo.getMeta();
+
         petMongo.setAge(petRequest.getAge());
-        petMongo.setName(petRequest.getName());
+        petMongo.setName(utils.capitalizeWords(petRequest.getName()));
         petMongo.setWeight(petRequest.getWeight());
         petMongo.setSterilized(petRequest.isSterilized());
         petMongo.setDisability(petRequest.getDisability());
@@ -157,6 +163,23 @@ public class PetService {
         petMongo.setTreatments(petRequest.getTreatments());
         petMongo.setSurgeries(petRequest.getSurgeries());
 
+        metaMongo.setLastUpdate(LocalDateTime.now());
+        metaMongo.setNameUserUpdated(jwtService.getCurrentUserName());
+        metaMongo.setEmailUserUpdated(jwtService.getCurrentUserEmail());
+        metaMongo.setRoleUserUpdated(jwtService.getCurrentUserRole());
+
         LOG.infof("@setPetInformation SERV > Finaliza set de los datos de la mascota con id: %s", idPet);
+    }
+
+    private PetMsg getPetMsg(String idPet) throws HSException {
+
+        return petRepository.findPetById(idPet).orElseThrow(() -> {
+
+            LOG.errorf("@updatePetDataInMongo SERV > La mascota con el identificador: %s NO esta registrada" +
+                    ". Solicitud invalida no se puede modificar el registro", idPet);
+
+            return new HSException(Response.Status.NOT_FOUND, "No se encontró el registro de la mascota con " +
+                    "identificador: " + idPet + " en la base de datos");
+        });
     }
 }

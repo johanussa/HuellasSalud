@@ -1,9 +1,9 @@
-import { CreateUserModalProps, EditUserModalProps, InputEditProps, Meta, Role, User, UserFiltersProps, UserTableProps } from "../../../services/typesHS";
+import React, { memo, useCallback, useState } from "react";
+import { CreateUserModalProps, EditUserModalProps, InputEditProps, Meta, Role, SearchBarProps, User, UserFiltersProps, UserTableProps } from "../../../helper/typesHS";
 import { formatDate, metaEmpty, roles, statusOptions, tableColumns, userEmpty } from "./usersUtils";
 import { useUserService } from "./usersService";
-import styles from "./users.module.css";
-import React, { memo, useCallback, useState } from "react";
 import { FormUser } from "../UserRegister/userRegisterComponenets";
+import styles from "./users.module.css";
 
 export const UserFilters = ({
     searchTerm,
@@ -15,18 +15,14 @@ export const UserFilters = ({
     onStatusFilterChange
 }: UserFiltersProps) => (
     <section className={styles.filters}>
-        <aside className={styles.searchBar}>
-            <i className={`fa-solid fa-magnifying-glass ${styles.searchIcon}`}></i>
-            <input
-                type="text"
-                placeholder="Buscar por nombre o email..."
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
-            />
-        </aside>
+        <SearchBar
+            placeholder="Buscar por nombre o email..."
+            searchTerm={searchTerm}
+            onSearchChange={onSearchChange}
+        />
 
         <aside className={styles.selectFilters}>
-            <button className={styles.btnCreateUser} onClick={() => setModalCreateClose(true)}>Crear usuario</button>
+            <button className={styles.btnCreateUser} onClick={() => setModalCreateClose(true)}>Registrar usuario</button>
             <select
                 value={roleFilter}
                 onChange={(e) => onRoleFilterChange(e.target.value)}
@@ -55,6 +51,18 @@ export const UserFilters = ({
     </section>
 );
 
+export const SearchBar = ({ placeholder, searchTerm, onSearchChange }: SearchBarProps) => (
+    <aside className={styles.searchBar}>
+        <i className={`fa-solid fa-magnifying-glass ${styles.searchIcon}`}></i>
+        <input
+            type="text"
+            placeholder={placeholder}
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+        />
+    </aside>
+);
+
 export const UserTable = ({ users, setUsersData }: UserTableProps) => {
 
     const { confirmDelete, confirmUpdate } = useUserService();
@@ -63,10 +71,8 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
     const [metaSelected, setMetaSelected] = useState<Meta>(metaEmpty);
     const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false);
 
-    const changeUserStatus = (user: User, meta: Meta) => {
-        user.active = !user.active;
-        meta.lastUpdate = new Date().toString();
-        confirmUpdate(user, "estado");
+    const changeUserStatus = async (user: User, meta: Meta) => {
+        if (await confirmUpdate(user, "estado")) meta.lastUpdate = new Date().toString();
     }
 
     const deleteUser = async (user: User) => {
@@ -123,18 +129,21 @@ export const UserTable = ({ users, setUsersData }: UserTableProps) => {
                             <td>
                                 <aside className={styles.actions}>
                                     <button
+                                        title="Editar"
                                         className={`${styles.btn} ${styles.edit}`}
                                         onClick={() => handleEditUser(user, meta)}
                                     >
                                         <i className="fa-regular fa-pen-to-square" />
                                     </button>
                                     <button
+                                        title="Eliminar"
                                         className={`${styles.btn} ${styles.delete}`}
                                         onClick={() => deleteUser(user)}
                                     >
                                         <i className="fa-regular fa-trash-can" />
                                     </button>
                                     <button
+                                        title="Cambiar Estado"
                                         className={`${styles.btn} ${styles.toggleStatus}`}
                                         onClick={() => changeUserStatus(user, meta)}
                                     >

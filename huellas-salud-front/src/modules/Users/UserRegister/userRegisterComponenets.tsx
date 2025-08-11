@@ -1,4 +1,4 @@
-import { FormUserProps, InputFieldUserRegister, User } from "../../../services/typesHS";
+import { FormUserProps, InputFieldUserRegister, User } from "../../../helper/typesHS";
 import { SocialMediaIcons } from "../../Login/loginComponents";
 import { RegisterOptions } from "react-hook-form";
 import { validationRules } from "./validationRulesUserRegister";

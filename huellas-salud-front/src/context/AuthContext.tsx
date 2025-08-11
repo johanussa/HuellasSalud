@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { AuthContext, JwtPayload, User } from "../services/typesHS";
+import { AuthContext, JwtPayload, User } from "../helper/typesHS";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosInstance";

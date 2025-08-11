@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { AuthContext, ListItemNavProps, NavLinkProps, SubMenuProps, User } from "../../services/typesHS";
+import { AuthContext, ListItemNavProps, NavLinkProps, SubMenuProps, User } from "../../helper/typesHS";
 import { MENU_DATA } from "./navbarData";
 import { UserAvatar } from "../Users/UserManagement/userComponents";
 import imgHS1 from "../../assets/HS_LOGO_WHITE.jpg";

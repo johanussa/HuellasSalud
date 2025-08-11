@@ -1,4 +1,4 @@
-import { AuthContext, FormState, UserData, InputErrors, LoginRequest } from "../../services/typesHS";
+import { AuthContext, FormState, UserData, InputErrors, LoginRequest } from "../../helper/typesHS";
 import { ChangeEvent, FormEvent, useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
