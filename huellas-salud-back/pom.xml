@@ -120,6 +120,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <jvmArgs>
+                        -Djava.net.preferIPv4Stack=true
+                        -Djava.net.preferIPv4Addresses=true
+                    </jvmArgs>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

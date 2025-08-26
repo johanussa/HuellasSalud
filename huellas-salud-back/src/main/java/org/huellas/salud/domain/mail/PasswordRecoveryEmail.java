@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @MongoEntity(collection = "CorreoRecuperacion")
 public class PasswordRecoveryEmail {
 
-    @BsonId
     @BsonProperty("codigoAprobacion")
     private String approvalCode;
 

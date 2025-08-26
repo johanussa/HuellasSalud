@@ -75,6 +75,31 @@ public class PetApi {
 
     @GET
     @PermitAll
+    @Path("/{idPet}")
+    @Tag(name = "Gestión de mascotas")
+    public Response getPet(
+            @Parameter(
+                    name = "idPet",
+                    description = "Identificador de la mascota",
+                    required = true,
+                    example = "faf32d41-65b2-431b-a468-0dbc6650ae47"
+            )
+            @NotBlank(message = "Debe ingresar el identificador unico de la mascota")
+            @PathParam("idPet") String idPet
+    ) {
+        LOG.debugf("@getPet API > Inicia ejecución del servicio para obtener la mascota con id: %s", idPet);
+
+        PetMsg pet = petService.getPetById(idPet);
+
+        LOG.debugf("@getPet API > Finaliza ejecución del servicio para obtener la mascota con id: %s. Se obtuvo: %s",
+                idPet, pet != null ? "éxito" : "no encontrada");
+
+
+        return Response.ok().entity(pet).build();
+    }
+
+    @GET
+    @PermitAll
     @Path("/owners-pets/{idOwner}")
     @Tag(name = "Gestión de mascotas")
     public Response getListPetsOfOwner(

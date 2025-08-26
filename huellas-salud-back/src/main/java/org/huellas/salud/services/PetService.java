@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.Optional;
 
 @ApplicationScoped
 public class PetService {
@@ -85,6 +86,25 @@ public class PetService {
                 "obtener listado de las mascotas desde mongo. Se obtuvo: %s registros", pets.size());
 
         return pets;
+    }
+
+    public PetMsg getPetById(String idPet) {
+        LOG.infof("@getListPetsByOwner SERV > Inicia ejecucion del servicio para obtener la mascota con id:" +
+                " %s. Inicia consulta a mongo", idPet);
+
+        Optional<PetMsg> optionalPet = petRepository.findPetById(idPet);
+
+        if (optionalPet.isEmpty()) {
+            LOG.warnf("@getPetById SERV > No se encontro ninguna mascota con id: %s", idPet);
+            return null; // o puedes lanzar una NotFoundException
+        }
+
+        PetMsg pet = optionalPet.get();
+
+        LOG.infof("@getListPetsByOwner SERV > Finaliza consulta de mascota en mongo. Se obtuvo el registro " +
+                "de la mascota con el id: %s", idPet);
+
+        return pet;
     }
 
     public List<PetMsg> getListPetsByOwner(String idOwner) {

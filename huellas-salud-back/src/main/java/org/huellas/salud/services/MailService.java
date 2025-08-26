@@ -201,8 +201,12 @@ public class MailService {
 
     public PasswordRecoveryEmail getPasswordRecovery(String approvalCode) throws HSException {
 
-        return passwordRecoveryRepository.findByIdOptional(approvalCode).orElseThrow(() -> {
+        if (approvalCode == null || approvalCode.isBlank()) {
+            LOG.warn("@getPasswordRecovery SERV > Se recibió un approvalCode vacío");
+            throw new HSException(Response.Status.BAD_REQUEST, "El código de recuperación no puede estar vacío");
+        }
 
+        return passwordRecoveryRepository.findByApprovalCode(approvalCode).orElseThrow(() -> {
             LOG.errorf("@getPasswordRecovery SERV > No hay registros con codigo de aprobacion: %s", approvalCode);
 
             return new HSException(Response.Status.NOT_FOUND, "El código de recuperación de contraseña no existe");
@@ -223,7 +227,7 @@ public class MailService {
         String html = PasswordRecoveryTemplate.formatConfirmEmail(userName, approvalLink);
         String text = PasswordRecoveryTemplate.getTextContentConfirmEmail(userName, approvalLink);
 
-        userEmail = "johanuss0405@gmail.com";
+        userEmail = "supersanti0814@gmail.com";
 
         CreateEmailOptions options = buildCreateEmailOptions(userEmail, html, text, subject);
 

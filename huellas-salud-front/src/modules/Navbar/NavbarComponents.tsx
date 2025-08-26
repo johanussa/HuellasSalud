@@ -42,13 +42,13 @@ export const NavLinks = ({ setOptionHover, setShowSubMenu }: NavLinkProps) => {
                 setOptionHover={setOptionHover}
                 setShowSubMenu={setShowSubMenu}
             />
-            <ListItemNav
+            {/* <ListItemNav
                 path="/mascotas/otras-mascotas"
                 name="Otras Mascotas"
                 icon="fa-solid fa-horse-head"
                 setOptionHover={setOptionHover}
                 setShowSubMenu={setShowSubMenu}
-            />
+            /> */}
             <ListItemNav path="/productos" name="Productos" icon="fa-solid fa-boxes-stacked" />
             <ListItemNav path="/servicios" name="Servicios" icon="fa-solid fa-house-laptop" />
             {
@@ -186,7 +186,7 @@ export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
                     </li>
                 </ul>
             </aside>
-            <aside className={styles.optionMain}>
+            {/* <aside className={styles.optionMain}>
                 {data.options.map((optCat) => (
                     <section key={optCat.name}>
                         {option === "Otras Mascotas" && (<img src={imgHS2} alt={optCat.name} />)}
@@ -196,7 +196,7 @@ export const SubMenu = ({ option, setShowSubMenu }: SubMenuProps) => {
                         </ul>
                     </section>
                 ))}
-            </aside>
+            </aside> */}
             <aside className={styles.optionBrands}>
                 <ul>
                     <li><strong>Marcas populares</strong></li>

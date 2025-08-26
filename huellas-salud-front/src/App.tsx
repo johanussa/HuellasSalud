@@ -40,6 +40,14 @@ const AppRoutes = () => {
         </ProtectedRoute>
       )
     },
+    // {
+    // path: "/mascotas/:id", // ruta dinámica para detalle
+    // element: (
+    //   <ProtectedRoute requiredRole={["CLIENTE", "ADMINISTRADOR"]}>
+    //     <PetDetail />
+    //   </ProtectedRoute>
+    //   ),
+    // },
     { path: "/historial", element: <History /> },
     { path: "/contacto", element: <Contact /> },
     { path: "/servicios", element: <Services /> }

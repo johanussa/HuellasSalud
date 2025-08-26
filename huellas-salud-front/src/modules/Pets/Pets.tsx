@@ -5,6 +5,7 @@ import { usePetService } from "./petService";
 import { Meta, Pet, PetCardProps, PetData } from "../../helper/typesHS";
 import defaultPetImage from "../../assets/simba.webp";
 import styles from "./pets.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Pets = () => {
 
@@ -70,6 +71,13 @@ const Pets = () => {
 
 const PetCard = ({ pets, setPetsData }: PetCardProps) => {
 
+  const navigate = useNavigate();
+
+  const goToPetDetail = (idPet: String) => {
+    navigate(`/mascotas/${idPet}`);
+  };
+
+
   if (!pets || pets.length === 0) return (<h2>No hay mascotas registradas</h2>);
 
   const { confirmUpdate, confirmDelete } = usePetService();
@@ -86,7 +94,7 @@ const PetCard = ({ pets, setPetsData }: PetCardProps) => {
   return (
     <main className={styles.cardPetsContainer}>
       {pets && pets?.map(({ data: pet, meta }) => (
-        <section className={styles.card} key={pet.idPet}>
+        <section className={styles.card} key={pet.idPet} onClick={() => goToPetDetail(pet.idPet)}>
           <aside className={styles.cardImageContainer}>
             <img
               src={getPetImage(pet)}
