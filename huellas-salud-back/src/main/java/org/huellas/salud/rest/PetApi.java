@@ -49,12 +49,15 @@ public class PetApi {
         LOG.debugf("@createPetData API > Inicia ejecucion del servicio para crear el registro de una mascota " +
                 "en base de datos con la data: %s", petMsg.getData());
 
-        petService.savePetDataMongo(petMsg);
+        PetMsg petCreated = petService.savePetDataMongo(petMsg);
 
         LOG.debugf("@createPetData API > Finaliza ejecucion del servicio para crear el registro de una mascota " +
                 "en base de datos. Se registro la siguiente informacion: %s", petMsg);
 
-        return Response.status(Response.Status.CREATED).build();
+        return Response.ok()
+                .status(Response.Status.CREATED)
+                .entity(petCreated)
+                .build();
     }
 
     @GET

@@ -1,5 +1,5 @@
 import { FormUserProps, InputFieldUserRegister, User } from "../../../helper/typesHS";
-import { SocialMediaIcons } from "../../Login/loginComponents";
+import { SocialMediaIcons } from "../../Login/LoginComponents";
 import { RegisterOptions } from "react-hook-form";
 import { validationRules } from "./validationRulesUserRegister";
 import { useUserRegister } from "./userRegisterService";

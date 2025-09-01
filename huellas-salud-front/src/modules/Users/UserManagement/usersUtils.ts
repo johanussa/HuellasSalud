@@ -45,7 +45,7 @@ export const species = [
     "PESCADO",
 ];
 
-export const sexOptions = [
+export const sexOptionsFilter = [
     { value: "ALL", label: "Todos los géneros" },
     { value: "MACHO", label: "Macho" },
     { value: "HEMBRA", label: "Hembra" },

@@ -1,19 +1,189 @@
-import { useEffect, useMemo, useState } from "react";
-import { sexOptions, species, statusOptions } from "../Users/UserManagement/usersUtils";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { sexOptionsFilter, species, statusOptions } from "../Users/UserManagement/usersUtils";
 import { SearchBar } from "../Users/UserManagement/userComponents";
 import { usePetService } from "./petService";
-import { Meta, Pet, PetCardProps, PetData } from "../../helper/typesHS";
+import { Meta, Pet, PetCardProps, PetData, FormPetProps, CreatePetModalProps, InputFieldUserRegister, InputFieldPetRegister, Species, UserData } from "../../helper/typesHS";
 import defaultPetImage from "../../assets/simba.webp";
 import styles from "./pets.module.css";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
+import { fieldsFormPet } from "./dataPet";
+import { toast } from "react-toastify";
+import { usePetRegister } from "./petRegisterService";
+import ButtonComponent from "../../components/Button/Button";
+import { RegisterOptions } from "react-hook-form";
+import { validationRules } from "./validationRulesPetRegister";
+import { useUserService } from "../Users/UserManagement/usersService";
+
+// export const FormPetRegister = () => (
+//   <section className={styles.containerFormPet}>
+//     <FormPet />
+//   </section>
+// )
+export const CreatePetModal = ({ setModalCreatePet, setPetsData }: CreatePetModalProps) => {
+  return (
+    <main className={styles.overlay}>
+      <section className={styles.modal}>
+        <button className={styles.closeButton} onClick={() => setModalCreatePet && setModalCreatePet(false)}>x</button>
+        <section className={styles.backgroundModalEdit} />
+        <FormPet setModalCreatePet={setModalCreatePet} setPetsData={setPetsData} />
+      </section>
+    </main>
+  )
+}
+
+export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
+  const { handleGetUsers } = useUserService();
+  const [users, setUsers] = useState<UserData[] | undefined>([]);
+  
+    useEffect(() => {
+      const fetchUserData = async () => {
+        const data = await handleGetUsers();
+        setUsers(data);
+      };
+  
+      fetchUserData();
+    }, []);
+
+  const {
+    errorMsg, handleCreatePetSubmit, loading, register, errors,
+    handleSubmit, fileName, fileInput, previewImg, handleChangeImg
+  } = usePetRegister({ setModalCreatePet, setPetsData });
+
+  const handelClicCancel = () => setModalCreatePet && setModalCreatePet(false);
+
+  return (
+    <form
+      className={styles.formRegisterPet}
+      onSubmit={handleSubmit(handleCreatePetSubmit)}
+    >
+      <section className={styles.selectImg}>
+        <label
+          htmlFor="loadImg"
+          className={styles.initialsAvatar}
+          style={previewImg ? { backgroundImage: `url(${previewImg})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+        >
+          {!previewImg && (<i className="fa-solid fa-dog"></i>)}
+        </label>
+        <input
+          type="file"
+          name="image"
+          id="loadImg"
+          ref={fileInput}
+          onChange={handleChangeImg}
+          style={{ display: "none" }}
+        />
+        <span>{fileName}</span>
+      </section>
+      <aside>
+  <label>Propietario</label>
+  <select {...register("idOwner", { required: "Debe seleccionar un propietario" })}>
+    <option value="">Seleccione un usuario</option>
+    {users?.map(user => (
+      <option key={user.data.documentNumber} value={user.data.documentNumber}>
+        {user.data.name} {user.data.lastName}
+      </option>
+    ))}
+  </select>
+</aside>
+      <InputField label="Nombre de la mascota" idInput="name" register={register} errors={errors}/>
+      <InputField label="Raza de la mascota" idInput="breed" register={register} errors={errors}/>
+      <aside>
+        <label> Especie</label>
+        <select id="species" {...register("species", { required: "La especie es obligatoria" })}>
+          <option value="">Seleccione una especie</option>
+          {speciesOptions.map(specie =>
+            (<option key={specie.value} value={specie.value}>{specie.label}</option>)
+          )}
+        </select>
+      </aside>
+      <aside>
+        <label htmlFor="sex">Sexo</label>
+        <select
+          id="sex"
+          {...register("sex", { required: "El sexo es obligatorio" })}
+        >
+          <option value="">Seleccione un sexo</option>
+          {sexOptions.map((sex) => (
+            <option key={sex.value} value={sex.value}>
+              {sex.label}
+            </option>
+          ))}
+        </select>
+      </aside>
+      {/* Edad */}
+      <InputField
+        label="Edad (años)"
+        idInput="age"
+        type="number"
+        register={register}
+        errors={errors}
+      />
+
+      {/* Peso */}
+      <InputField
+        label="Peso (kg)"
+        idInput="weight"
+        type="number"
+        register={register}
+        errors={errors}
+      />
+
+      {/* Esterilizado */}
+      <aside>
+        <label htmlFor="sterilized">¿Está esterilizado?</label>
+        <select
+          id="sterilized"
+          {...register("sterilized", {
+            required: "Debes indicar si está esterilizado",
+          })}
+        >
+          <option value="">Seleccione una opción</option>
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+        {errors.sterilized && (
+          <p className={styles.errorMsg}>{errors.sterilized.message}</p>
+        )}
+      </aside>
+
+      {/* Discapacidad */}
+      <InputField
+        label="Discapacidad (opcional)"
+        idInput="disability"
+        register={register}
+        errors={errors}
+      />
+
+      {/* Descripción */}
+      <aside>
+        <label htmlFor="description">Descripción</label>
+        <textarea
+          id="description"
+          {...register("description", {
+            maxLength: {
+              value: 500,
+              message: "Máximo 500 caracteres",
+            },
+          })}
+        />
+        {errors.description && (
+          <p className={styles.errorMsg}>{errors.description.message}</p>
+        )}
+      </aside>
+      <ButtonComponent type="submit" contain={"Crear cuenta"} loading={loading} />
+    </form>
+  )
+}
 
 const Pets = () => {
 
+  const [isModalPetOpen, setIsModalPetOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [sexFilter, setSexFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [speciesFilter, setSpeciesFilter] = useState<string>("ALL");
   const [petsData, setPetsData] = useState<PetData[] | undefined>([]);
+  const [showAdd, setShowAdd] = useState<boolean>(false);
 
   const { loading, handleGetPets } = usePetService();
 
@@ -62,8 +232,10 @@ const Pets = () => {
           setSexFilter={setSexFilter}
           setSpeciesFilter={setSpeciesFilter}
           setStatusFilter={setStatusFilter}
+          setModalClosePet={setIsModalPetOpen}
         />
         <PetCard pets={filteredPets} setPetsData={setPetsData} />
+        {isModalPetOpen && (<CreatePetModal setModalCreatePet={setIsModalPetOpen} setPetsData={setPetsData} />)}
       </section>
     </main>
   );
@@ -72,17 +244,16 @@ const Pets = () => {
 const PetCard = ({ pets, setPetsData }: PetCardProps) => {
 
   const navigate = useNavigate();
+  const { confirmUpdate, confirmDelete } = usePetService();
 
   const goToPetDetail = (idPet: String) => {
     navigate(`/mascotas/${idPet}`);
   };
 
-
   if (!pets || pets.length === 0) return (<h2>No hay mascotas registradas</h2>);
 
-  const { confirmUpdate, confirmDelete } = usePetService();
 
-  const changePetStatus = async (pet: Pet, meta: Meta) => {    
+  const changePetStatus = async (pet: Pet, meta: Meta) => {
     if (await confirmUpdate(pet)) meta.lastUpdate = new Date().toString();
   }
 
@@ -90,7 +261,7 @@ const PetCard = ({ pets, setPetsData }: PetCardProps) => {
     const idPet = await confirmDelete(pet);
     if (idPet) setPetsData(prev => prev?.filter(p => p.data.idPet !== idPet));
   };
-
+  console.log(pets);
   return (
     <main className={styles.cardPetsContainer}>
       {pets && pets?.map(({ data: pet, meta }) => (
@@ -110,14 +281,20 @@ const PetCard = ({ pets, setPetsData }: PetCardProps) => {
               <button
                 title="Eliminar"
                 className={`${styles.btn} ${styles.delete}`}
-                onClick={() => deletePet(pet)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deletePet(pet);
+                }}
               >
                 <i className="fa-regular fa-trash-can" />
               </button>
               <button
                 title="Cambiar Estado"
                 className={`${styles.btn} ${styles.toggleStatus}`}
-                onClick={() => changePetStatus(pet, meta)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  changePetStatus(pet, meta);
+                }}
               >
                 <i className="fa-solid fa-arrows-rotate" />
               </button>
@@ -158,6 +335,7 @@ interface PetsFiltersProps {
   setSexFilter: (filter: string) => void;
   setStatusFilter: (filter: string) => void;
   setSpeciesFilter: (filter: string) => void;
+  setModalClosePet: (close: boolean) => void;
 }
 
 const PetsFilters = ({
@@ -168,7 +346,8 @@ const PetsFilters = ({
   setSearchTerm,
   setSexFilter,
   setStatusFilter,
-  setSpeciesFilter
+  setSpeciesFilter,
+  setModalClosePet
 }: PetsFiltersProps) => (
   <section className={styles.filters}>
     <SearchBar
@@ -177,7 +356,7 @@ const PetsFilters = ({
       onSearchChange={setSearchTerm}
     />
     <aside className={styles.selectFilters}>
-      <button className={styles.btnCreateUser} onClick={() => { }}>Registrar mascota</button>
+      <button className={styles.btnCreateUser} onClick={() => setModalClosePet(true)}>Registrar mascota</button>
       <select
         value={speciesFilter}
         onChange={(e) => setSpeciesFilter(e.target.value)}
@@ -195,7 +374,7 @@ const PetsFilters = ({
         onChange={(e) => setSexFilter(e.target.value)}
         className={styles.filterSelect}
       >
-        {sexOptions.map(sex => (
+        {sexOptionsFilter.map(sex => (
           <option key={sex.value} value={sex.value}>
             {sex.label}
           </option>
@@ -215,5 +394,52 @@ const PetsFilters = ({
     </aside>
   </section>
 );
+
+const InputField = ({
+    label,
+    type = "text",
+    idInput,
+    required = true,
+    inputFull = false,
+    register,
+    errors
+}: InputFieldPetRegister) => {
+
+    const fieldValidation = validationRules[idInput] as RegisterOptions<Pet, typeof idInput>;
+
+    return (
+        <section className={styles.inputField}>
+            <label htmlFor={idInput}>
+                {label}
+                {required && <span className={styles.required}>*</span>}
+            </label>
+            <input
+                className={`${errors[idInput] ? styles.errorInput : ''}`}
+                id={idInput}
+                type={type}
+                required={required}
+                {...register(idInput, fieldValidation)}
+            />
+            <span className={styles.validationError}>
+                {errors[idInput]?.message as string}
+            </span>
+        </section >
+    );
+};
+
+const speciesOptions = [
+  { value: "PERRO", label: "Perro"},
+  { value: "GATO", label: "Gato"},
+  { value: "ROEDOR", label: "Roedor"},
+  { value: "AVE", label: "Ave"},
+  { value: "REPTIL", label: "Reptil"},
+  { value: "PESCADO", label: "Pescado"}
+];
+
+const sexOptions = [
+    { value: "MACHO", label: "Macho" },
+    { value: "HEMBRA", label: "Hembra" },
+    { value: "INDETERMINADO", label: "Indeterminado" },
+];
 
 export default Pets;

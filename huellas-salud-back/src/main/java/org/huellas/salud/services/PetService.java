@@ -12,6 +12,7 @@ import org.huellas.salud.domain.pet.PetMsg;
 import org.huellas.salud.helper.exceptions.HSException;
 import org.huellas.salud.helper.jwt.JwtService;
 import org.huellas.salud.helper.utils.Utils;
+import org.huellas.salud.repositories.MediaFileRepository;
 import org.huellas.salud.repositories.PetRepository;
 import org.jboss.logging.Logger;
 
@@ -36,11 +37,14 @@ public class PetService {
     @Inject
     PetRepository petRepository;
 
+    @Inject
+    MediaFileRepository mediaFileRepository;
+
     @ConfigProperty(name = "PARAMETER.HUELLAS_SALUD.DEFAULT_BREED")
     String defaultBreed;
 
     @CacheInvalidateAll(cacheName = "pets-list-cache")
-    public void savePetDataMongo(PetMsg petMsg) throws HSException, UnknownHostException {
+    public PetMsg savePetDataMongo(PetMsg petMsg) throws HSException, UnknownHostException {
 
         LOG.infof("@savePetDataMongo SERV > Inicia ejecucion de servicio para almacenar el registro de una " +
                 "mascota con la data: %s. Inicia validacion de la informacion de la mascota", petMsg.getData());
@@ -72,6 +76,8 @@ public class PetService {
 
         LOG.infof("@savePetDataMongo SERV > La mascota se registro exitosamente en la base de datos. Finaliza " +
                 "ejecucion de servicio para almacenar el registro de una mascota con la data: %s", petMsg);
+
+        return petMsg;
     }
 
     @CacheResult(cacheName = "pets-list-cache")
@@ -81,6 +87,11 @@ public class PetService {
                 "mongo. Inicia consulta a mongo para obtener la informacion");
 
         List<PetMsg> pets = petRepository.getListPetsFromMongo();
+
+        pets.forEach(petMsg -> {
+            mediaFileRepository.getMediaByEntityTypeAndId("PET", petMsg.getData().getIdPet())
+                    .ifPresent(media -> petMsg.getData().setMediaFile(media.getData()));
+        });
 
         LOG.infof("@getListPetMsg SERV > Finaliza consulta en mongo. Finaliza ejecucion del servicio para " +
                 "obtener listado de las mascotas desde mongo. Se obtuvo: %s registros", pets.size());

@@ -223,7 +223,7 @@ const EditUserModal = ({ user, meta, setCloseModal, confirmUpdate }: EditUserMod
                     </section>
                 </section>
                 <form className={styles.formEditUser} onSubmit={handleUpdate}>
-                    <button className={styles.closeButton} onClick={() => setCloseModal(false)}>X</button>
+                    <button className={styles.closeButton} onClick={() => setCloseModal(false)}>x</button>
                     <InputEdit label="Tipo de Documento" value={user?.documentType} />
                     <InputEdit label="Número de Documento" value={user?.documentNumber} />
                     <InputEdit label="Teléfono" value={user?.cellPhone} />
@@ -257,7 +257,7 @@ export const CreateUserModal = ({ setModalCreate, setUsersData }: CreateUserModa
     return (
         <main className={styles.overlay}>
             <section className={styles.modal}>
-                <button className={styles.closeButton} onClick={() => setModalCreate && setModalCreate(false)}>X</button>
+                <button className={styles.closeButton} onClick={() => setModalCreate && setModalCreate(false)}>x</button>
                 <section className={styles.backgroundModalEdit} />
                 <FormUser isAdmin setModalCreate={setModalCreate} setUsersData={setUsersData} />
             </section>

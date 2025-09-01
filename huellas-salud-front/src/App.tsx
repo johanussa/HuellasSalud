@@ -5,7 +5,7 @@ import Login from "./modules/Login/Login";
 import Products from "./modules/Products/Products";
 import ProductsAdmin from "./modules/Products/ProductsAdmin";
 import Pets from "./modules/Pets/Pets";
-import History from "./modules/History/History";
+// import History from "./modules/History/History";
 import Home from "./modules/Home/Home";
 import Contact from "./modules/Contact/Contact";
 import Services from "./modules/Services/Services";
@@ -14,6 +14,7 @@ import Users from "./modules/Users/UserManagement/Users";
 import ProtectedRoute from "./context/ProtectedRoute";
 import PasswordRecovery from "./modules/PasswordRecovery/PasswordRecovery";
 import ResetPassword from "./modules/PasswordRecovery/ResetPassword";
+import PetDetails from "./modules/PetDetails/PetDetails";
 
 const AppRoutes = () => {
 
@@ -40,15 +41,15 @@ const AppRoutes = () => {
         </ProtectedRoute>
       )
     },
-    // {
-    // path: "/mascotas/:id", // ruta dinámica para detalle
-    // element: (
-    //   <ProtectedRoute requiredRole={["CLIENTE", "ADMINISTRADOR"]}>
-    //     <PetDetail />
-    //   </ProtectedRoute>
-    //   ),
-    // },
-    { path: "/historial", element: <History /> },
+    {
+    path: "/mascotas/:idPet", // ruta dinámica para detalle
+    element: (
+      <ProtectedRoute requiredRole={["CLIENTE", "ADMINISTRADOR"]}>
+        <PetDetails />
+      </ProtectedRoute>
+      ),
+    },
+    // { path: "/historial", element: <History /> },
     { path: "/contacto", element: <Contact /> },
     { path: "/servicios", element: <Services /> }
   ]);

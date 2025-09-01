@@ -1,8 +1,8 @@
 import { createContext, Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
-type Sex = "MACHO" | "HEMBRA" | "INDETERMINADO";
-type Species = "PERRO" | "GATO" | "AVE" | "ROEDOR" | "REPTIL" | "PESCADO";
+export type Sex = "MACHO" | "HEMBRA" | "INDETERMINADO";
+export type Species = "PERRO" | "GATO" | "AVE" | "ROEDOR" | "REPTIL" | "PESCADO";
 export type Role = "ADMINISTRADOR" | "VETERINARIO" | "CLIENTE" | "RECEPCIONISTA";
 
 export interface ListItemNavProps extends NavLinkProps {
@@ -226,4 +226,21 @@ export interface SearchBarProps {
     placeholder: string;
     searchTerm: string;
     onSearchChange: (value: string) => void;
+}
+
+export interface FormPetProps extends CreatePetModalProps { }
+
+export interface CreatePetModalProps {
+    setModalCreatePet?: (close: boolean) => void;
+    setPetsData?: Dispatch<SetStateAction<PetData[] | undefined>>;
+}
+
+export interface InputFieldPetRegister {
+    label: string;
+    type?: HTMLInputTypeAttribute;
+    idInput: keyof Pet;
+    required?: boolean;
+    inputFull?: boolean;
+    register: UseFormRegister<Pet>;
+    errors: FieldErrors<Pet>;
 }
