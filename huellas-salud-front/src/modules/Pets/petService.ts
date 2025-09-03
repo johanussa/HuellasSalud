@@ -10,6 +10,10 @@ export const usePetService = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const apiPets = {
+        getPetsOwner: async (ownerId: string) => {
+            const { data } = await axiosInstance.get<PetData[]>(`/pet/owners-pets/${ownerId}`,);
+            return data;
+        },
         getPets: async () => {
             const { data } = await axiosInstance.get<PetData[]>("/pet/list-pets");
             return data;
@@ -27,6 +31,21 @@ export const usePetService = () => {
             });
         }
     }
+
+    const handleGetPetsOwner = async (ownerId: string) => {
+        setLoading(true);
+        toast.info("Cargando tus mascotas... ⌛", { autoClose: 1000 });
+
+        try {
+            const pets: PetData[] = await apiPets.getPetsOwner(ownerId);
+            toast.success("¡Tus mascotas cargadas con éxito! 🎉", { autoClose: 1500 });
+            return pets;
+        } catch (error) {
+            handleError(error, "Error al consultar las mascotas del propietario");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleGetPets = async () => {
         setLoading(true);
@@ -99,6 +118,7 @@ export const usePetService = () => {
 
     return {
         loading,
+        handleGetPetsOwner,
         handleGetPets,
         confirmUpdate,
         confirmDelete

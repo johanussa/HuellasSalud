@@ -112,6 +112,9 @@ public class PetService {
 
         PetMsg pet = optionalPet.get();
 
+        mediaFileRepository.getMediaByEntityTypeAndId("PET", pet.getData().getIdPet())
+                .ifPresent(media -> pet.getData().setMediaFile(media.getData()));
+
         LOG.infof("@getListPetsByOwner SERV > Finaliza consulta de mascota en mongo. Se obtuvo el registro " +
                 "de la mascota con el id: %s", idPet);
 
@@ -124,6 +127,11 @@ public class PetService {
                 "mascotas del propietario con numero de documento: %s. Inicia consulta a mongo", idOwner);
 
         List<PetMsg> pets = petRepository.getListPetsByOwner(idOwner);
+
+        pets.forEach(petMsg -> {
+            mediaFileRepository.getMediaByEntityTypeAndId("PET", petMsg.getData().getIdPet())
+                    .ifPresent(media -> petMsg.getData().setMediaFile(media.getData()));
+        });
 
         LOG.infof("@getListPetsByOwner SERV > Finaliza consulta de mascotas en mongo. Se obtuvo: %s registros " +
                 "de mascotas relacionadas al propietario con numero de documento: %s", pets.size(), idOwner);

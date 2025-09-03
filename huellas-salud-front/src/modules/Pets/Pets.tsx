@@ -1,13 +1,11 @@
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { sexOptionsFilter, species, statusOptions } from "../Users/UserManagement/usersUtils";
 import { SearchBar } from "../Users/UserManagement/userComponents";
 import { usePetService } from "./petService";
-import { Meta, Pet, PetCardProps, PetData, FormPetProps, CreatePetModalProps, InputFieldUserRegister, InputFieldPetRegister, Species, UserData } from "../../helper/typesHS";
+import { Meta, Pet, PetCardProps, PetData, FormPetProps, CreatePetModalProps, InputFieldPetRegister, UserData, AuthContext } from "../../helper/typesHS";
 import defaultPetImage from "../../assets/simba.webp";
 import styles from "./pets.module.css";
-import { data, useNavigate } from "react-router-dom";
-import { fieldsFormPet } from "./dataPet";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { usePetRegister } from "./petRegisterService";
 import ButtonComponent from "../../components/Button/Button";
 import { RegisterOptions } from "react-hook-form";
@@ -19,6 +17,7 @@ import { useUserService } from "../Users/UserManagement/usersService";
 //     <FormPet />
 //   </section>
 // )
+
 export const CreatePetModal = ({ setModalCreatePet, setPetsData }: CreatePetModalProps) => {
   return (
     <main className={styles.overlay}>
@@ -32,17 +31,20 @@ export const CreatePetModal = ({ setModalCreatePet, setPetsData }: CreatePetModa
 }
 
 export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
+  const { user } = useContext(AuthContext);
   const { handleGetUsers } = useUserService();
   const [users, setUsers] = useState<UserData[] | undefined>([]);
-  
-    useEffect(() => {
-      const fetchUserData = async () => {
-        const data = await handleGetUsers();
-        setUsers(data);
-      };
-  
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const data = await handleGetUsers();
+      setUsers(data);
+    };
+    
+    if (user?.role === "ADMINISTRADOR" || user?.role === "VETERINARIO") {
       fetchUserData();
-    }, []);
+    }
+  }, []);
 
   const {
     errorMsg, handleCreatePetSubmit, loading, register, errors,
@@ -66,42 +68,58 @@ export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
         </label>
         <input
           type="file"
-          name="image"
           id="loadImg"
-          ref={fileInput}
+          {...register("mediaFile", {required: "Debe subir una imagen",})}
           onChange={handleChangeImg}
           style={{ display: "none" }}
         />
-        <span>{fileName}</span>
+        <section className={styles.textMediaFile}>
+          <span style={{display: "inline-block"}}>{fileName}</span>
+          {errors.mediaFile && (
+            <p className={styles.errorMsg}>{errors.mediaFile.message}</p>
+          )}
+        </section>
       </section>
-      <aside>
-  <label>Propietario</label>
-  <select {...register("idOwner", { required: "Debe seleccionar un propietario" })}>
-    <option value="">Seleccione un usuario</option>
-    {users?.map(user => (
-      <option key={user.data.documentNumber} value={user.data.documentNumber}>
-        {user.data.name} {user.data.lastName}
-      </option>
-    ))}
-  </select>
-</aside>
-      <InputField label="Nombre de la mascota" idInput="name" register={register} errors={errors}/>
-      <InputField label="Raza de la mascota" idInput="breed" register={register} errors={errors}/>
-      <aside>
-        <label> Especie</label>
-        <select id="species" {...register("species", { required: "La especie es obligatoria" })}>
+      <section className={`${styles.inputField}`}>
+        {(user?.role === "ADMINISTRADOR" || user?.role === "VETERINARIO") ? (
+          <>
+            <label>Propietario<span className={styles.required}>*</span></label>
+            <select className={`${errors.idOwner ? styles.errorInput : ''}`} {...register("idOwner", { required: "Debe seleccionar un propietario" })}>
+              <option value="">Seleccione un usuario</option>
+              {users?.map(user => (
+                <option key={user.data.documentNumber} value={user.data.documentNumber}>
+                  {user.data.name} {user.data.lastName}
+                </option>
+              ))}
+            </select>
+            {errors.idOwner && (
+              <p className={styles.errorMsg}>{errors.idOwner.message}</p>
+            )}
+          </>
+        ) : (
+          <>
+            <input type="hidden" id="idOwner" value={user?.documentNumber} {...register("idOwner")}></input>
+          </>
+        )}
+
+      </section>
+      <InputField label="Nombre de la mascota" idInput="name" register={register} errors={errors} />
+      <InputField label="Raza de la mascota" idInput="breed" register={register} errors={errors} />
+      <aside className={styles.inputField}>
+        <label>Especie<span className={styles.required}>*</span></label>
+        <select id="species" className={`${errors.species ? styles.errorInput : ''}`} {...register("species", { required: "La especie es obligatoria" })}>
           <option value="">Seleccione una especie</option>
           {speciesOptions.map(specie =>
             (<option key={specie.value} value={specie.value}>{specie.label}</option>)
           )}
         </select>
+        {errors.species && (
+              <p className={styles.errorMsg}>{errors.species.message}</p>
+            )}
       </aside>
-      <aside>
-        <label htmlFor="sex">Sexo</label>
-        <select
-          id="sex"
-          {...register("sex", { required: "El sexo es obligatorio" })}
-        >
+      <aside className={styles.inputField}>
+        <label htmlFor="sex">Sexo<span className={styles.required}>*</span></label>
+        <select id="sex" className={`${errors.sex ? styles.errorInput : ''}`}{...register("sex", { required: "El sexo es obligatorio" })}>
           <option value="">Seleccione un sexo</option>
           {sexOptions.map((sex) => (
             <option key={sex.value} value={sex.value}>
@@ -109,15 +127,12 @@ export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
             </option>
           ))}
         </select>
+        {errors.sex && (
+              <p className={styles.errorMsg}>{errors.sex.message}</p>
+            )}
       </aside>
       {/* Edad */}
-      <InputField
-        label="Edad (años)"
-        idInput="age"
-        type="number"
-        register={register}
-        errors={errors}
-      />
+      <InputField label="Edad (años)" idInput="age" type="number" register={register} errors={errors}/>
 
       {/* Peso */}
       <InputField
@@ -129,14 +144,10 @@ export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
       />
 
       {/* Esterilizado */}
-      <aside>
-        <label htmlFor="sterilized">¿Está esterilizado?</label>
+      <aside className={styles.inputField}>
+        <label htmlFor="sterilized">¿Está esterilizado?<span className={styles.required}>*</span></label>
         <select
-          id="sterilized"
-          {...register("sterilized", {
-            required: "Debes indicar si está esterilizado",
-          })}
-        >
+          id="sterilized" className={`${errors.sterilized ? styles.errorInput : ''}`} {...register("sterilized", {required: "Debes indicar si está esterilizado",})}>
           <option value="">Seleccione una opción</option>
           <option value="true">Sí</option>
           <option value="false">No</option>
@@ -148,21 +159,25 @@ export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
 
       {/* Discapacidad */}
       <InputField
-        label="Discapacidad (opcional)"
+        label="Discapacidad"
         idInput="disability"
         register={register}
         errors={errors}
       />
 
       {/* Descripción */}
-      <aside>
-        <label htmlFor="description">Descripción</label>
+      <aside className={styles.inputField}>
+        <label htmlFor="description">Descripción<span className={styles.required}>*</span></label>
         <textarea
           id="description"
           {...register("description", {
+            minLength: {
+              value: 10,
+              message: "Minimo 10 caracteres"
+            },
             maxLength: {
-              value: 500,
-              message: "Máximo 500 caracteres",
+              value: 200,
+              message: "Máximo 200 caracteres",
             },
           })}
         />
@@ -170,12 +185,15 @@ export const FormPet = ({ setModalCreatePet, setPetsData }: FormPetProps) => {
           <p className={styles.errorMsg}>{errors.description.message}</p>
         )}
       </aside>
-      <ButtonComponent type="submit" contain={"Crear cuenta"} loading={loading} />
+      <aside className={`${styles.containerButtons} ${styles.inputFull}`}>
+        <ButtonComponent type="submit" contain={"Crear mascota"} loading={loading} />
+      </aside>
     </form>
   )
 }
 
 const Pets = () => {
+  const { user } = useContext(AuthContext);
 
   const [isModalPetOpen, setIsModalPetOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -183,17 +201,27 @@ const Pets = () => {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [speciesFilter, setSpeciesFilter] = useState<string>("ALL");
   const [petsData, setPetsData] = useState<PetData[] | undefined>([]);
-  const [showAdd, setShowAdd] = useState<boolean>(false);
 
-  const { loading, handleGetPets } = usePetService();
+  const { loading, handleGetPets, handleGetPetsOwner } = usePetService();
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchPetData = async () => {
-      const data = await handleGetPets();
+      let data;
+
+      if (user.role === "ADMINISTRADOR" || user.role === "VETERINARIO") {
+        data = await handleGetPets();
+      } else {
+        data = await handleGetPetsOwner(user.documentNumber);
+      }
+
       setPetsData(data);
     };
+
     fetchPetData();
-  }, []);
+  }, [user]);  // 👈 aquí está user dentro de las llaves
+
 
   const filteredPets = useMemo(() => {
     return petsData?.filter(({ data: pet }) => {
@@ -242,6 +270,7 @@ const Pets = () => {
 }
 
 const PetCard = ({ pets, setPetsData }: PetCardProps) => {
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const { confirmUpdate, confirmDelete } = usePetService();
@@ -261,7 +290,6 @@ const PetCard = ({ pets, setPetsData }: PetCardProps) => {
     const idPet = await confirmDelete(pet);
     if (idPet) setPetsData(prev => prev?.filter(p => p.data.idPet !== idPet));
   };
-  console.log(pets);
   return (
     <main className={styles.cardPetsContainer}>
       {pets && pets?.map(({ data: pet, meta }) => (
@@ -277,28 +305,30 @@ const PetCard = ({ pets, setPetsData }: PetCardProps) => {
             </span>
           </aside>
           <aside className={styles.cardContent}>
-            <section className={styles.actions}>
-              <button
-                title="Eliminar"
-                className={`${styles.btn} ${styles.delete}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deletePet(pet);
-                }}
-              >
-                <i className="fa-regular fa-trash-can" />
-              </button>
-              <button
-                title="Cambiar Estado"
-                className={`${styles.btn} ${styles.toggleStatus}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  changePetStatus(pet, meta);
-                }}
-              >
-                <i className="fa-solid fa-arrows-rotate" />
-              </button>
-            </section>
+            {(user?.role === "ADMINISTRADOR" || user?.role === "VETERINARIO") && (
+              <section className={styles.actions}>
+                <button
+                  title="Eliminar"
+                  className={`${styles.btn} ${styles.delete}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deletePet(pet);
+                  }}
+                >
+                  <i className="fa-regular fa-trash-can" />
+                </button>
+                <button
+                  title="Cambiar Estado"
+                  className={`${styles.btn} ${styles.toggleStatus}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changePetStatus(pet, meta);
+                  }}
+                >
+                  <i className="fa-solid fa-arrows-rotate" />
+                </button>
+              </section>
+            )}
             <h3 className={styles.petName}>{pet.name}</h3>
             <div className={styles.petInfo}>
               <span className={styles.petSpecies}>{pet.species}</span>
@@ -396,50 +426,50 @@ const PetsFilters = ({
 );
 
 const InputField = ({
-    label,
-    type = "text",
-    idInput,
-    required = true,
-    inputFull = false,
-    register,
-    errors
+  label,
+  type = "text",
+  idInput,
+  required = true,
+  inputFull = false,
+  register,
+  errors
 }: InputFieldPetRegister) => {
 
-    const fieldValidation = validationRules[idInput] as RegisterOptions<Pet, typeof idInput>;
+  const fieldValidation = validationRules[idInput] as RegisterOptions<Pet, typeof idInput>;
 
-    return (
-        <section className={styles.inputField}>
-            <label htmlFor={idInput}>
-                {label}
-                {required && <span className={styles.required}>*</span>}
-            </label>
-            <input
-                className={`${errors[idInput] ? styles.errorInput : ''}`}
-                id={idInput}
-                type={type}
-                required={required}
-                {...register(idInput, fieldValidation)}
-            />
-            <span className={styles.validationError}>
-                {errors[idInput]?.message as string}
-            </span>
-        </section >
-    );
+  return (
+    <section className={styles.inputField}>
+      <label htmlFor={idInput}>
+        {label}
+        {required && <span className={styles.required}>*</span>}
+      </label>
+      <input
+        className={`${errors[idInput] ? styles.errorInput : ''}`}
+        id={idInput}
+        type={type}
+        required={required}
+        {...register(idInput, fieldValidation)}
+      />
+      <span className={styles.validationError}>
+        {errors[idInput]?.message as string}
+      </span>
+    </section >
+  );
 };
 
 const speciesOptions = [
-  { value: "PERRO", label: "Perro"},
-  { value: "GATO", label: "Gato"},
-  { value: "ROEDOR", label: "Roedor"},
-  { value: "AVE", label: "Ave"},
-  { value: "REPTIL", label: "Reptil"},
-  { value: "PESCADO", label: "Pescado"}
+  { value: "PERRO", label: "Perro" },
+  { value: "GATO", label: "Gato" },
+  { value: "ROEDOR", label: "Roedor" },
+  { value: "AVE", label: "Ave" },
+  { value: "REPTIL", label: "Reptil" },
+  { value: "PESCADO", label: "Pescado" }
 ];
 
 const sexOptions = [
-    { value: "MACHO", label: "Macho" },
-    { value: "HEMBRA", label: "Hembra" },
-    { value: "INDETERMINADO", label: "Indeterminado" },
+  { value: "MACHO", label: "Macho" },
+  { value: "HEMBRA", label: "Hembra" },
+  { value: "INDETERMINADO", label: "Indeterminado" },
 ];
 
 export default Pets;

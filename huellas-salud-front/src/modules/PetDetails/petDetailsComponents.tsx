@@ -12,7 +12,7 @@ export const PetDetails = ({ pet }: { pet: PetData }) => {
     <section className={styles.historyContainer}>
       <aside className={styles.photoPet}>
         <h1>{petData.name}</h1>
-        <img src={imgPet} alt="Foto" width="200" />
+        <img src={`data:${petData.mediaFile?.contentType};base64,${petData.mediaFile?.attachment}`}  alt={petData.name} width="200" />
       </aside>
       <aside className={styles.informationPet}>
         <section className={styles.options}>

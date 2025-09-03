@@ -91,18 +91,20 @@
 .historyContainer {
     margin: 3% auto;
     max-width: 1300px;
+    max-height: 500px;
     display: grid;
     grid-template-columns: 1.5fr 3fr;
+    overflow: hidden;
 }
 
 .photoPet {
     width: 100%;
-    height: 100%;
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    overflow: hidden;
 }
 
 .photoPet h1 {
@@ -111,8 +113,11 @@
 }
 
 .photoPet img {
-    width: 75%;
-    margin-left: -35px;
+    width: 75%;          
+    height: auto;
+    max-height: 85%;     
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .informationPet {
